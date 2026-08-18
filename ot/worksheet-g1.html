@@ -40,7 +40,7 @@ body{font-family:"Pretendard",-apple-system,"Malgun Gothic",sans-serif;color:#1b
 .motto span{display:block;font-size:9.5pt;font-weight:600;color:#5a6c92;margin-top:.6mm;letter-spacing:0}
 
 /* ── 문항 ── */
-.q{margin-top:5.4mm;break-inside:avoid}
+.q{margin-top:5.2mm;break-inside:avoid}
 .q > .n{display:flex;align-items:center;gap:2.5mm;margin-bottom:1.8mm}
 .q > .n i{font-style:normal;flex:none;width:6.4mm;height:6.4mm;border-radius:50%;background:#1b1b1b;color:#fff;
  font-size:10pt;font-weight:800;display:flex;align-items:center;justify-content:center}
@@ -53,8 +53,12 @@ body{font-family:"Pretendard",-apple-system,"Malgun Gothic",sans-serif;color:#1b
 
 .hint{font-size:9pt;color:#6b6b6b;margin:1mm 0 1.6mm;line-height:1.45}
 .hint b{color:#a05c2c}
+.tools{display:flex;flex-wrap:wrap;gap:1mm;margin:0 0 1.4mm}
+.tools .lb{font-size:8.5pt;color:#6b6b6b;font-weight:700;align-self:center;margin-right:.6mm}
+.tools span{font-size:9pt;font-weight:700;color:#2c4477;background:#f2f5fb;
+ border:1pt solid #b9c6de;border-radius:8mm;padding:.6mm 2.4mm}
 
-.checks{display:grid;grid-template-columns:1fr 1fr;gap:1.4mm 4mm;margin-bottom:2mm}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:1.1mm 4mm;margin-bottom:1.8mm}
 .checks label{display:flex;align-items:center;gap:2mm;font-size:10.5pt}
 .checks label i{font-style:normal;flex:none;width:4.4mm;height:4.4mm;border:1.4pt solid #555;border-radius:1mm}
 .checks label.wide{grid-column:1 / -1}
@@ -114,8 +118,8 @@ body{font-family:"Pretendard",-apple-system,"Malgun Gothic",sans-serif;color:#1b
 
  <div class="q">
   <div class="n"><i>2</i><b>요즘 내가 진짜 궁금한 것 하나</b><em>물음표로 끝나게</em></div>
-  <p class="hint">과학이 아니어도 됩니다. <b>엉뚱해 보이는 질문도 좋은 질문</b>입니다.
-   답을 알고 쓰는 게 아니라, 답이 궁금해서 쓰는 겁니다.</p>
+  <p class="hint">과학이 아니어도 됩니다. <b>엉뚱해 보이는 질문도 좋은 질문</b>입니다. 막히면 아래 도구를 하나 골라 보세요.</p>
+  <div class="tools"><span class="lb">질문 도구</span><span>관찰</span><span>의미</span><span>의심</span><span>비교</span><span>원인과 결과</span><span>조건 변화</span><span>확장</span></div>
   <div class="lines"><div></div><div></div><div></div></div>
  </div>
 

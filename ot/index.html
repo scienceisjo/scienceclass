@@ -153,6 +153,37 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
  text-decoration:none;background:var(--brass);border:2px solid var(--brass-dk);border-bottom-width:5px;
  color:#fff;border-radius:14px;padding:11px 24px;transition:.15s}
 .nextbar a:hover{background:var(--brass-hi);color:var(--ink)}
+
+/* 질문 도구 상자 7개 */
+.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.3vw,14px);width:100%}
+.tl{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(10px,1.6vw,16px);text-align:left;display:flex;flex-direction:column;gap:5px}
+.tl .tk{font-family:var(--jua);font-size:clamp(16px,2.2vw,24px);color:var(--q)}
+.tl .ts{font-size:clamp(12px,1.5vw,15px);color:var(--ink-dim);line-height:1.35}
+.tl .rv{font-size:clamp(11.5px,1.45vw,14.5px);align-self:flex-start;padding:.15em .5em;min-width:0}
+.tl .rv.on{font-size:clamp(12px,1.5vw,15px);color:var(--accent);line-height:1.35;text-align:left}
+
+/* 질문 사다리 */
+.ladder{display:grid;gap:clamp(5px,.9vw,9px);width:100%;max-width:900px}
+.rung{display:flex;align-items:center;gap:clamp(8px,1.4vw,14px);background:var(--paper-hi);
+ border:1.5px solid var(--line);border-radius:13px;padding:clamp(7px,1.2vw,13px) clamp(10px,1.6vw,18px);text-align:left}
+.rung .rl{flex:none;font-size:clamp(11px,1.4vw,13.5px);color:var(--ink-mute);width:clamp(76px,9vw,116px);line-height:1.3}
+.rung .rq{font-family:var(--jua);font-size:clamp(14px,1.95vw,21px);line-height:1.35}
+.rung.last{border-color:var(--q);border-width:2px;background:#eef2fa}
+.rung.last .rq{color:var(--q)}
+.rung.first{opacity:.72}
+
+/* 세 바구니 */
+.baskets{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(9px,1.6vw,18px);width:100%}
+.bk{border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;gap:6px;background:var(--paper-hi)}
+.bk .be{font-size:clamp(24px,4vw,40px);line-height:1}
+.bk .bt{font-family:var(--jua);font-size:clamp(15px,2.1vw,23px);line-height:1.3}
+.bk .bd{font-size:clamp(12px,1.5vw,15.5px);color:var(--ink-dim);line-height:1.4}
+.bk.mid{border-color:var(--q);background:#eef2fa}
+.bk.mid .bt{color:var(--q)}
+
+@media (max-width:900px){ .tools{grid-template-columns:repeat(2,1fr)} .baskets{grid-template-columns:1fr} }
 .sub{font-size:clamp(14px,1.9vw,18px);color:var(--ink-mute)}
 
 blockquote{background:var(--paper-hi);border:2px solid var(--line);border-left:8px solid var(--q);
@@ -247,7 +278,7 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
 <header>
  <div class="brand">과학을 왜 배우는 걸까<span class="dot">?</span></div>
  <div class="dots" id="dots"></div>
- <div class="counter" id="counter">1 / 18</div>
+ <div class="counter" id="counter">1 / 21</div>
  <div class="hbtns">
   <button class="btn small" id="noteBtn" title="교사 노트 (N)">🧑‍🏫</button>
   <button class="btn small" id="fsBtn" title="전체화면 (F)">⛶</button>
@@ -423,6 +454,54 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
     <span>질문을 키우는 방법</span>
    </div>
    <div class="vidslot" id="vidBox"></div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>도구 상자 · 40초</b> · 외우게 하지 마세요. “질문이 안 떠오를 땐 머리를 쥐어짜는 게 아니라 도구를 하나 고르는 거야”만 전하면 됩니다. 예시는 두어 개만 눌러서 열어 주세요(A키=전부). 학습지 2번 쓸 때 다시 이 화면을 띄워 두면 좋습니다. · 원본: 「우리 모둠의 질문 만들기」 질문 도구 상자">
+  <div class="wrap">
+   <div class="eyebrow">하나 · 질문하는 방법</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">질문이 안 떠오를 땐 <em>도구</em>를 고른다</h2>
+   <div class="tools">
+    <div class="tl"><span class="tk">관찰</span><span class="ts">눈에 보인 것을 그대로 묻기</span><span class="rv" data-a="“막대를 가까이 했을 때 캔은 어떻게 움직였나요?”">예시 ▸</span></div>
+    <div class="tl"><span class="tk">의미</span><span class="ts">그게 무슨 뜻인지 묻기</span><span class="rv" data-a="“여기서 대전됐다는 건 무슨 뜻인가요?”">예시 ▸</span></div>
+    <div class="tl"><span class="tk">의심</span><span class="ts">정말 그런지 되묻기</span><span class="rv" data-a="“정말 문지르지 않아도 끌려오나요?”">예시 ▸</span></div>
+    <div class="tl"><span class="tk">비교</span><span class="ts">둘을 견주어 묻기</span><span class="rv" data-a="“캔 대신 종이컵이면 어떻게 다를까요?”">예시 ▸</span></div>
+    <div class="tl"><span class="tk">원인과 결과</span><span class="ts">왜 그렇게 됐는지 묻기</span><span class="rv" data-a="“왜 가까이 할수록 더 세게 끌릴까요?”">예시 ▸</span></div>
+    <div class="tl"><span class="tk">조건 변화</span><span class="ts">바꾸면 어떻게 될지 묻기</span><span class="rv" data-a="“거리를 두 배로 하면 어떻게 될까요?”">예시 ▸</span></div>
+    <div class="tl"><span class="tk">확장</span><span class="ts">다른 데도 그런지 묻기</span><span class="rv" data-a="“이 원리가 쓰이는 물건이 또 있나요?”">예시 ▸</span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>사다리 · 40초</b> · 다섯 칸을 다 읽지 마세요. 맨 위와 맨 아래만 읽고 “같은 궁금증인데 아래로 갈수록 해 볼 수 있는 질문이 된다”만 짚으면 충분합니다. 핵심 한마디 — <b>처음부터 잘 쓸 필요 없다.</b> 학습지 2번을 두려워하지 않게 만드는 장입니다. · 원본: 학생 질문 중심 교과 수업 설계(「식물과 에너지」)">
+  <div class="wrap">
+   <div class="eyebrow">둘 · 질문을 키우는 방법</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">질문은 <em>고쳐 쓰면서</em> 자란다</h2>
+   <div class="ladder">
+    <div class="rung first"><span class="rl">넓은 질문</span><span class="rq">식물은 어떻게 자라나요?</span></div>
+    <div class="rung"><span class="rl">좀 더 구체화</span><span class="rq">식물은 빛이 없으면 어떻게 되나요?</span></div>
+    <div class="rung"><span class="rl">관찰 가능하게</span><span class="rq">빛이 없으면 식물의 키는 어떻게 변할까요?</span></div>
+    <div class="rung"><span class="rl">대상을 좁혀</span><span class="rq">빛의 유무에 따라 방울토마토의 키는 어떻게 달라질까요?</span></div>
+    <div class="rung last"><span class="rl">탐구 질문</span><span class="rq">빛의 유무는 방울토마토의 키 성장에 어떤 영향을 줄까요?</span></div>
+   </div>
+   <p class="punch" style="font-size:clamp(17px,2.9vw,32px)">처음부터 잘 쓸 필요 없다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>세 바구니 · 40초</b> · 등급이 아니라는 걸 꼭 말해 주세요 — “어느 바구니가 더 좋은 게 아니라 답을 찾는 방법이 다를 뿐이야.” 그리고 예고 — “오늘 쓴 질문을 다음 시간에 모둠끼리 이 세 바구니로 나눠 볼 거야.” 세 번째 바구니가 이 반의 분위기를 바꿉니다. · 원본: 「우리 모둠의 질문 만들기」 5단계">
+  <div class="wrap">
+   <div class="eyebrow">셋 · 질문에도 종류가 있다</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">세 개의 <em>바구니</em></h2>
+   <div class="baskets">
+    <div class="bk"><span class="be">📚</span><span class="bt">찾아보면 아는 것</span><span class="bd">책·인터넷에 이미 답이 있는 질문</span></div>
+    <div class="bk mid"><span class="be">🔬</span><span class="bt">해 봐야 아는 것</span><span class="bd">직접 재고 바꿔 봐야 답이 나오는 질문</span></div>
+    <div class="bk"><span class="be">🌌</span><span class="bt">아직 아무도 모르는 것</span><span class="bd">지금 과학으로도 답이 없는 질문</span></div>
+   </div>
+   <p class="lead">어느 바구니가 더 낫다는 뜻이 아니다.<br>답을 찾는 <b>방법</b>이 다를 뿐이다.</p>
+   <p class="sub">오늘 쓴 질문은 다음 시간에 모둠끼리 이 세 바구니로 나눠 본다.</p>
   </div>
  </section>
 
