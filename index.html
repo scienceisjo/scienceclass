@@ -213,6 +213,32 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .phint{font-size:12.3px;color:var(--ink-mute);margin-top:12px;line-height:1.85}
 .phint b{color:var(--ink-dim)}
 .pempty{text-align:center;padding:30px 18px;color:var(--ink-mute);font-size:13.5px;line-height:1.9}
+
+/* ── 클라우드 막대 ── */
+.cbar{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:14px;
+ border:1.5px solid var(--line);background:var(--paper-hi);flex-wrap:wrap}
+.cbar.in{border-color:var(--leaf);background:rgba(47,125,85,.07)}
+.cbar .ci{font-size:21px;flex:none}
+.cbar .ct{flex:1;min-width:150px}
+.cbar .ct b{display:block;font-family:var(--jua);font-weight:400;font-size:14.5px}
+.cbar.in .ct b{color:var(--leaf)}
+.cbar .ct small{display:block;font-size:12px;color:var(--ink-mute);margin-top:1px;word-break:break-all}
+.cstat{flex:none;font-size:11.5px;padding:4px 11px;border-radius:99px;border:1px solid var(--line);
+ color:var(--ink-mute);background:var(--paper-hi);white-space:nowrap}
+.cstat.saving{border-color:var(--sun);color:#a06318;background:rgba(224,145,43,.1)}
+.cstat.saved{border-color:var(--leaf);color:var(--leaf);background:rgba(47,125,85,.1)}
+.cstat.err{border-color:#b3423a;color:#b3423a;background:rgba(179,66,58,.09)}
+.cform{margin-top:10px;padding:14px;border:1.5px dashed var(--line);border-radius:14px;background:var(--paper-hi)}
+.cform label{display:block;font-size:12.5px;color:var(--ink-mute);margin-bottom:4px}
+.cform input{width:100%;font-family:var(--body);font-size:15px;padding:10px 12px;border-radius:10px;
+ border:1.5px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:10px}
+.cform input:focus{outline:none;border-color:var(--leaf)}
+.cform .crow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cform .cgo{font-family:var(--jua);font-size:14.5px;padding:10px 22px;border-radius:11px;border:none;
+ background:var(--leaf);color:#f2fbf5;cursor:pointer}
+.cform .cgo[disabled]{opacity:.55;cursor:default}
+.cerr{font-size:12.5px;color:#b3423a;margin-top:8px;line-height:1.7}
+.cnote{font-size:12px;color:var(--ink-mute);margin-top:9px;line-height:1.7}
 </style>
 </head>
 <body>
@@ -313,6 +339,8 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
   <p class="vlead">칸을 누르면 그 반이 그 차시를 마친 것으로 표시됩니다(수업한 날짜도 함께 기록돼요).
     차시는 표 오른쪽 <b>＋</b>로 늘리고, 차시 이름을 눌러 고치고, <b>✕</b>로 지울 수 있습니다.</p>
 
+  <div id="pCloud"></div>
+
   <div class="ptabs" id="pTabs"></div>
 
   <div class="ptools" id="pTools">
@@ -327,8 +355,8 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
   <div class="ptblwrap" id="pTable"></div>
 
   <p class="phint">
-    💾 이 표는 <b>지금 쓰는 기기에만</b> 저장됩니다. 다른 기기에서도 보려면 <b>📤 백업</b>으로 파일을 내려받아
-    그 기기에서 <b>📥 복원</b>하세요.<br>
+    ☁️ <b>로그인하면</b> 학교 컴퓨터·휴대폰 어디서 열어도 같은 표가 보입니다(칭찬 도장판과 같은 계정).
+    로그인하지 않으면 이 기기에만 저장돼요 — 그럴 때는 <b>📤 백업 / 📥 복원</b>으로 옮기시면 됩니다.<br>
     🧑‍🏫 학생에게는 이 방이 보이지 않습니다. 맨 아래 교사용 버튼으로 껐다 켤 수 있어요.
   </p>
   <input type="file" id="pFile" accept="application/json,.json" hidden>
@@ -567,7 +595,8 @@ let P;
 try { P = JSON.parse(localStorage.getItem(PKEY)); } catch(e) { P = null; }
 if(!P || !Array.isArray(P.tables) || !P.tables.length) P = pSeed();
 
-const pSave = () => { try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch(e) {} };
+const pLocal = () => { try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch(e) {} };
+const pSave = (board) => { pLocal(); cloudTouch(board || curT()); };
 const curT = () => P.tables.find(t => t.id === P.active) || P.tables[0];
 
 function drawProg(){
@@ -706,8 +735,13 @@ $('#v-prog').addEventListener('click', e => {
   if(d.delt){
     if(P.tables.length < 2){ alert('진도표가 하나뿐이라 지울 수 없어요.\n대신 「반 편집」이나 차시 ✕로 정리해 보세요.'); return; }
     if(!confirm('「' + t.name + '」 진도표를 통째로 지울까요?\n되돌릴 수 없습니다.')) return;
-    P.tables = P.tables.filter(x => x.id !== t.id);
-    P.active = P.tables[0].id; pSave(); drawProg(); return;
+    const gid = t.id;
+    P.tables = P.tables.filter(x => x.id !== gid);
+    P.active = P.tables[0].id; pLocal(); drawProg();
+    if(sbOn()){ setStat('saving');
+      sbRest('progress_boards?id=eq.' + encodeURIComponent(gid), { method:'DELETE' })
+        .then(() => setStat('saved')).catch(ex => setStat('err', ex.message)); }
+    return;
   }
 
   if(d.exp){
@@ -733,12 +767,190 @@ $('#pFile').addEventListener('change', ev => {
       if(!o || !Array.isArray(o.tables) || !o.tables.length) throw 0;
       if(!confirm('지금 이 기기의 진도표를 덮어씁니다. 계속할까요?')) return;
       P = o; if(!P.tables.some(x => x.id === P.active)) P.active = P.tables[0].id;
-      pSave(); drawProg();
+      pLocal(); drawProg();
+      if(sbOn()){ setStat('saving');
+        Promise.all(P.tables.map(pushBoard)).then(() => setStat('saved')).catch(ex => setStat('err', ex.message)); }
       alert('복원했습니다 — 진도표 ' + P.tables.length + '개');
     } catch(e) { alert('진도표 파일이 아닌 것 같아요. 백업으로 내려받은 파일을 골라 주세요.'); }
   };
   rd.readAsText(f);
   ev.target.value = '';
+});
+
+
+/* ══════════════════════════════════════════════════════════════
+   클라우드 저장 (Supabase) — 칭찬 도장판과 같은 프로젝트·같은 교사 계정.
+   라이브러리 없이 fetch만 씁니다. 로그인하지 않으면 이 기기에만 저장돼요.
+   ※ 표를 처음 쓰기 전 SETUP.sql을 한 번 실행해야 합니다.
+   ══════════════════════════════════════════════════════════════ */
+const SB = {
+  url: 'https://hmzklbrksfdhzsgwzfyg.supabase.co',
+  key: 'sb_publishable_OFVhbjVPbJiMWXVz2nKQuw_m6RmVVZE',
+  sesKey: 'sc_prog_session',
+  ses: null
+};
+try { SB.ses = JSON.parse(localStorage.getItem(SB.sesKey)); } catch(e) { SB.ses = null; }
+const sbOn = () => !!(SB.ses && SB.ses.refresh_token);
+const sbSaveSes = j => {
+  SB.ses = j ? { access_token:j.access_token, refresh_token:j.refresh_token,
+                 expires_at:j.expires_at || (Math.floor(Date.now()/1000) + (j.expires_in||3600)),
+                 email:(j.user&&j.user.email)||(SB.ses&&SB.ses.email), uid:(j.user&&j.user.id)||(SB.ses&&SB.ses.uid) } : null;
+  if(SB.ses) localStorage.setItem(SB.sesKey, JSON.stringify(SB.ses));
+  else localStorage.removeItem(SB.sesKey);
+};
+
+async function sbToken(){
+  if(!sbOn()) throw new Error('로그인이 필요합니다');
+  if(SB.ses.expires_at - 60 > Math.floor(Date.now()/1000)) return SB.ses.access_token;
+  const r = await fetch(SB.url + '/auth/v1/token?grant_type=refresh_token', {
+    method:'POST', headers:{ apikey:SB.key, 'Content-Type':'application/json' },
+    body: JSON.stringify({ refresh_token: SB.ses.refresh_token }) });
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok || !j.access_token){ sbSaveSes(null); throw new Error('로그인이 풀렸어요. 다시 들어가 주세요.'); }
+  sbSaveSes(j); return SB.ses.access_token;
+}
+
+async function sbRest(path, opt){
+  const tok = await sbToken();
+  const o = opt || {};
+  const r = await fetch(SB.url + '/rest/v1/' + path, {
+    method: o.method || 'GET',
+    headers: Object.assign({ apikey:SB.key, Authorization:'Bearer ' + tok,
+      'Content-Type':'application/json' }, o.headers || {}),
+    body: o.body });
+  if(!r.ok){
+    const t = await r.text().catch(() => '');
+    if(/progress_boards/.test(t) && /(does not exist|schema cache|PGRST205|42P01)/i.test(t))
+      throw new Error('서버에 진도표 자리가 아직 없어요. Supabase에서 SETUP.sql을 한 번만 실행해 주세요.');
+    if(r.status === 401 || r.status === 403)
+      throw new Error('권한이 없다고 나옵니다. 로그아웃했다가 다시 들어가 보세요.');
+    throw new Error('서버가 거절했어요 (' + r.status + ') ' + t.slice(0, 90));
+  }
+  return r.status === 204 ? null : r.json().catch(() => null);
+}
+
+async function sbLogin(email, pw){
+  const r = await fetch(SB.url + '/auth/v1/token?grant_type=password', {
+    method:'POST', headers:{ apikey:SB.key, 'Content-Type':'application/json' },
+    body: JSON.stringify({ email: email, password: pw }) });
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok || !j.access_token){
+    const KO = {
+      invalid_credentials:'이메일이나 비밀번호가 맞지 않아요. 다시 확인해 주세요.',
+      email_not_confirmed:'이메일 인증이 아직 끝나지 않은 계정이에요.',
+      user_not_found:'그런 계정이 없어요. 칭찬 도장판에서 쓰시던 이메일이 맞는지 확인해 주세요.',
+      over_request_rate_limit:'너무 여러 번 시도했어요. 잠시 뒤에 다시 해 주세요.',
+      validation_failed:'이메일과 비밀번호를 모두 적어 주세요.'
+    };
+    const raw = j.error_description || j.msg || j.message || '';
+    throw new Error(KO[j.error_code]
+      || (/invalid login/i.test(raw) ? KO.invalid_credentials : '')
+      || raw || '로그인하지 못했어요. 인터넷 연결을 확인해 주세요.');
+  }
+  sbSaveSes(j);
+}
+
+/* ── 상태 표시 ── */
+let cStat = { k:'', msg:'' };
+function setStat(k, msg){ cStat = { k:k, msg:msg || '' }; drawCloud(); }
+
+function drawCloud(){
+  const box = $('#pCloud');
+  if(!sbOn()){
+    box.innerHTML =
+      '<div class="cbar out"><span class="ci">☁️</span>'
+      + '<div class="ct"><b>이 기기에만 저장되고 있어요</b>'
+      + '<small>로그인하면 학교 컴퓨터·휴대폰 어디서 열어도 같은 표가 보입니다</small></div>'
+      + '<button class="pbtn" type="button" data-login="1">로그인</button></div>'
+      + '<form class="cform" id="cForm" hidden>'
+      + '<label for="cEmail">이메일</label><input id="cEmail" type="email" autocomplete="username" inputmode="email">'
+      + '<label for="cPw">비밀번호</label><input id="cPw" type="password" autocomplete="current-password">'
+      + '<div class="crow"><button class="cgo" type="submit">들어가기</button>'
+      + '<span class="cnote" style="margin:0">칭찬 도장판에서 쓰시던 교사 계정 그대로예요</span></div>'
+      + '<p class="cerr" id="cErr" hidden></p></form>';
+    return;
+  }
+  const lbl = { loading:'불러오는 중…', saving:'저장 중…', saved:'저장됨 ✓', err:'저장 못 함', offline:'인터넷 없음' }[cStat.k] || '';
+  box.innerHTML =
+    '<div class="cbar in"><span class="ci">☁️</span>'
+    + '<div class="ct"><b>어느 기기에서든 같은 표</b><small>' + esc(SB.ses.email || '') + '</small></div>'
+    + (lbl ? '<span class="cstat ' + (cStat.k === 'err' || cStat.k === 'offline' ? 'err' : cStat.k === 'saved' ? 'saved' : 'saving') + '">' + lbl + '</span>' : '')
+    + '<button class="pbtn" type="button" data-logout="1">로그아웃</button></div>'
+    + (cStat.msg ? '<p class="cerr">' + esc(cStat.msg) + '</p>' : '');
+}
+
+/* ── 올리기 / 내리기 ── */
+const tidy = b => ({ owner:SB.ses.uid, id:b.id, name:b.name,
+  sort: Math.max(0, P.tables.findIndex(x => x.id === b.id)),
+  classes:b.classes, lessons:b.lessons, done:b.done });
+
+async function pushBoard(b){
+  await sbRest('progress_boards?on_conflict=owner,id', { method:'POST',
+    headers:{ Prefer:'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify([tidy(b)]) });
+}
+
+const waiting = new Map();
+function cloudTouch(b){
+  if(!sbOn() || !b) return;
+  clearTimeout(waiting.get(b.id));
+  setStat('saving');
+  waiting.set(b.id, setTimeout(async () => {
+    waiting.delete(b.id);
+    try { await pushBoard(b); setStat('saved'); }
+    catch(e){ setStat(navigator.onLine ? 'err' : 'offline', navigator.onLine ? e.message : '연결되면 자동으로 다시 저장할게요.'); }
+  }, 600));
+}
+
+async function syncDown(){
+  if(!sbOn()) { drawCloud(); return; }
+  setStat('loading');
+  try {
+    const rows = await sbRest('progress_boards?select=id,name,sort,classes,lessons,done&order=sort.asc');
+    if(rows && rows.length){
+      const mine = P.tables.some(t => t.lessons.length || Object.keys(t.done).length);
+      if(mine) localStorage.setItem('sc_prog_before_cloud', JSON.stringify(P));
+      const keep = P.active;
+      P = { active:null, tables: rows.map(r => ({ id:r.id, name:r.name,
+              classes:r.classes || [], lessons:r.lessons || [], done:r.done || {} })) };
+      P.active = P.tables.some(t => t.id === keep) ? keep : P.tables[0].id;
+      pLocal();
+      setStat('saved', mine ? '서버에 있던 진도표를 가져왔습니다. 이 기기에 있던 것은 따로 보관해 두었어요(📤 백업으로 확인).' : '');
+    } else {
+      for(const b of P.tables) await pushBoard(b);
+      setStat('saved', '이 기기의 진도표를 서버에 올렸습니다.');
+    }
+    drawProg();
+  } catch(e){
+    setStat(navigator.onLine ? 'err' : 'offline', e.message);
+    drawProg();
+  }
+}
+
+window.addEventListener('online', () => { if(sbOn()){ setStat('saving'); cloudTouch(curT()); } });
+
+/* ── 로그인 · 로그아웃 ── */
+$('#v-prog').addEventListener('click', e => {
+  const b = e.target.closest('[data-login],[data-logout]');
+  if(!b) return;
+  if(b.dataset.login){ const f = $('#cForm'); f.hidden = false; $('#cEmail').focus(); return; }
+  if(b.dataset.logout){
+    if(!confirm('로그아웃할까요?\n표는 서버에 그대로 있고, 이 기기에도 마지막 모습이 남아 있어요.')) return;
+    sbSaveSes(null); setStat(''); drawCloud();
+  }
+});
+$('#v-prog').addEventListener('submit', async e => {
+  if(!e.target.matches('#cForm')) return;
+  e.preventDefault();
+  const btn = e.target.querySelector('.cgo'), err = $('#cErr');
+  err.hidden = true; btn.disabled = true; btn.textContent = '들어가는 중…';
+  try {
+    await sbLogin($('#cEmail').value.trim(), $('#cPw').value);
+    drawCloud(); await syncDown();
+  } catch(ex){
+    err.hidden = false; err.textContent = ex.message;
+    btn.disabled = false; btn.textContent = '들어가기';
+  }
 });
 
 /* ── 교사용 켜고 끄기 ── */
@@ -753,7 +965,8 @@ function setTeacher(on){
 $('#tmode').addEventListener('click', () => setTeacher(!document.body.classList.contains('teacher')));
 setTeacher(localStorage.getItem('sc_teacher') === '1'
   || new URLSearchParams(location.search).get('t') === '1');
-drawProg();
+drawProg(); drawCloud();
+if(sbOn()) syncDown();
 
 /* ══════════════ 시작 ══════════════ */
 setGrade(grade);
