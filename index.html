@@ -177,6 +177,8 @@ body.teacher .tmode{opacity:1;border-color:var(--leaf);color:var(--leaf);backgro
  background:var(--paper-hi);color:var(--ink-dim)}
 .pchip b{color:var(--ink);font-family:var(--jua);font-weight:400}
 .pchip.done{border-color:var(--leaf);background:rgba(47,125,85,.1);color:var(--leaf)}
+.pchip.tight{border-color:#b3423a;background:rgba(179,66,58,.1);color:#b3423a}
+.pchip.tight b{color:#8c212b}
 
 .ptblwrap{margin-top:14px;overflow-x:auto;border:1.5px solid var(--line);border-radius:14px;
  background:var(--paper-hi);-webkit-overflow-scrolling:touch}
@@ -345,6 +347,8 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 
   <div class="ptools" id="pTools">
     <button class="pbtn" type="button" data-cls="1">👥 반 편집</button>
+    <button class="pbtn" type="button" data-per="1">🗓 수업 횟수</button>
+    <button class="pbtn" type="button" data-fill="1">📋 2026 2학기 넣기</button>
     <button class="pbtn" type="button" data-rent="1">✏️ 표 이름</button>
     <button class="pbtn" type="button" data-exp="1">📤 백업</button>
     <button class="pbtn" type="button" data-imp="1">📥 복원</button>
@@ -357,6 +361,10 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
   <p class="phint">
     ☁️ <b>로그인하면</b> 학교 컴퓨터·휴대폰 어디서 열어도 같은 표가 보입니다(칭찬 도장판과 같은 계정).
     로그인하지 않으면 이 기기에만 저장돼요 — 그럴 때는 <b>📤 백업 / 📥 복원</b>으로 옮기시면 됩니다.<br>
+    🗓 <b>수업 횟수</b>는 2026학년도 2학기 시간표와 학사일정으로 셌습니다 —
+    1·2학년 시험 5일(9/22·23, 12/15~17), 창체 3일(9/28, 11/6, 11/23),
+    학교 행사 3일(12/24 체험, 12/31 예술제, 1/7 종업식)을 빼고,
+    요일이 바뀌는 4일(10/7·11/3·1/5·1/6)을 반영했습니다.<br>
     🧑‍🏫 학생에게는 이 방이 보이지 않습니다. 맨 아래 교사용 버튼으로 껐다 켤 수 있어요.
   </p>
   <input type="file" id="pFile" accept="application/json,.json" hidden>
@@ -520,6 +528,25 @@ function drawEval(){
   }).join('');
 }
 
+/* 학기 수업 횟수 대비 — 차시 하나에 몇 번을 쓸 수 있는지 */
+function budgetHTML(C, L){
+  const withP = C.filter(c => c.periods > 0);
+  if(!withP.length) return '';
+  if(!L.length)
+    return '<p class="pnexth">학기 수업 횟수</p><div class="pnext">'
+      + withP.map(c => '<span class="pchip"><b>' + esc(c.name) + '</b> ' + c.periods + '회</span>').join('')
+      + '</div>';
+  const chips = withP.map(c => {
+    const per = c.periods / L.length;
+    return '<span class="pchip' + (per < 1 ? ' tight' : '') + '"><b>' + esc(c.name) + '</b> '
+      + c.periods + '회 · 차시당 ' + per.toFixed(1) + '</span>';
+  }).join('');
+  const min = Math.min.apply(null, withP.map(c => c.periods / L.length));
+  return '<p class="pnexth">학기 수업 횟수 대비 — 차시 ' + L.length + '개를 몇 번에 나눠 쓸 수 있나'
+    + (min < 1 ? ' <b style="color:#b3423a">· 차시가 수업보다 많은 반이 있어요</b>' : '') + '</p>'
+    + '<div class="pnext">' + chips + '</div>';
+}
+
 function emptyBox(icon, title, body){
   return '<div class="empty"><span class="be">' + icon + '</span><b>' + title + '</b><br>' + body + '</div>';
 }
@@ -586,10 +613,18 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 const today = () => { const d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 
+/* 2026학년도 2학기 시간표·학사일정으로 센 반별 수업 횟수
+   — 시험(1·2학년) 5일 · 창체 3일 · 학교 행사 3일을 빼고, 요일 바뀌는 날 4일을 반영 */
+const PLAN2026 = [
+  { name:'2학년 과학A', classes:[['201반',32],['202반',34],['203반',33],['204반',34],
+                                 ['209반',34],['210반',33],['211반',32],['212반',34]] },
+  { name:'1학년 과학B', classes:[['105반',17],['106반',16]] }
+];
 function pSeed(){
-  return { active:'t0', tables:[{ id:'t0', name:'진도표',
-    classes:['1','2','3','4','9','10','11','12'].map(x => ({ id:uid(), name:x + '반' })),
-    lessons:[], done:{} }] };
+  const mk = p => ({ id:uid(), name:p.name, lessons:[], done:{},
+    classes: p.classes.map(x => ({ id:uid(), name:x[0], periods:x[1] })) });
+  const t = PLAN2026.map(mk);
+  return { active:t[0].id, tables:t };
 }
 let P;
 try { P = JSON.parse(localStorage.getItem(PKEY)); } catch(e) { P = null; }
@@ -624,7 +659,8 @@ function drawProg(){
   const body = '<tbody>' + C.map(c => {
       const n = L.filter(l => has(c.id, l.id)).length;
       return '<tr><th class="cls">' + esc(c.name)
-        + '<small>' + (L.length ? n + ' / ' + L.length : '—') + '</small></th>'
+        + '<small>' + (L.length ? n + ' / ' + L.length + '차시' : '—')
+        + (c.periods ? ' · 수업 ' + c.periods + '회' : '') + '</small></th>'
         + L.map(l => { const d = t.done[c.id + '|' + l.id];
             return '<td class="cell"><button type="button" class="' + (d ? 'on' : '') + '"'
               + ' data-c="' + c.id + '" data-l="' + l.id + '"'
@@ -658,13 +694,14 @@ function drawProg(){
     + (L.length ? ' · 모든 반이 마친 차시 <b>' + allDone + '</b>개' : '') + '</span></div>'
     + '<div class="pbar"><i style="width:' + pct + '%"></i></div>'
     + (L.length ? '<p class="pnexth">다음에 할 차시</p><div class="pnext">' + chips + '</div>' : '')
+    + budgetHTML(C, L)
     + '</div>';
 }
 
 /* ── 조작 ── */
 $('#v-prog').addEventListener('click', e => {
   const b = e.target.closest('[data-t],[data-newt],[data-addl],[data-ren],[data-del],[data-mv],[data-c],'
-    + '[data-cls],[data-rent],[data-delt],[data-exp],[data-imp]');
+    + '[data-cls],[data-rent],[data-delt],[data-exp],[data-imp],[data-per],[data-fill]');
   if(!b) return;
   const t = curT(), d = b.dataset;
 
@@ -724,6 +761,37 @@ $('#v-prog').addEventListener('click', e => {
     if(gone.length && !confirm(gone.map(c => c.name).join(', ') + ' 이(가) 사라집니다.\n체크한 기록도 함께 지워져요. 계속할까요?')) return;
     gone.forEach(c => t.lessons.forEach(l => { delete t.done[c.id + '|' + l.id]; }));
     t.classes = next; pSave(); drawProg(); return;
+  }
+
+  if(d.per){
+    const cur = t.classes.map(c => c.name + '=' + (c.periods || 0)).join(', ');
+    const nm = prompt('반별 학기 수업 횟수를 적어 주세요.\n반이름=횟수 를 쉼표로 잇습니다.\n(예: 201반=32, 202반=34)', cur);
+    if(nm === null) return;
+    nm.split(',').forEach(part => {
+      const i = part.indexOf('=');
+      if(i < 0) return;
+      const name = part.slice(0, i).trim(), v = parseInt(part.slice(i + 1), 10);
+      const c = t.classes.find(x => x.name === name);
+      if(c) c.periods = (!isNaN(v) && v > 0) ? v : undefined;
+    });
+    pSave(); drawProg(); return;
+  }
+
+  if(d.fill){
+    if(!confirm('2026학년도 2학기 시간표와 학사일정으로 계산한\n반 목록과 수업 횟수를 넣습니다.\n\n'
+      + '같은 이름의 진도표가 이미 있으면 반과 횟수만 바꾸고\n차시와 체크 기록은 그대로 둡니다. 계속할까요?')) return;
+    PLAN2026.forEach(p => {
+      let bd = P.tables.find(x => x.name === p.name);
+      if(!bd){ bd = { id:uid(), name:p.name, classes:[], lessons:[], done:{} }; P.tables.push(bd); }
+      bd.classes = p.classes.map(x => {
+        const old = bd.classes.find(c => c.name === x[0]);
+        return { id: old ? old.id : uid(), name:x[0], periods:x[1] };
+      });
+    });
+    P.active = P.tables.find(x => x.name === PLAN2026[0].name).id;
+    pLocal(); drawProg();
+    if(sbOn()) P.tables.forEach(bd => cloudTouch(bd));
+    return;
   }
 
   if(d.rent){

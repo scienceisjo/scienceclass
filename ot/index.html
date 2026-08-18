@@ -173,6 +173,24 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .rung.last .rq{color:var(--q)}
 .rung.first{opacity:.72}
 
+/* 수업 흐름 */
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;
+ gap:clamp(6px,1vw,12px);width:100%}
+.fs{flex:1 1 0;min-width:clamp(108px,13vw,180px);background:var(--paper-hi);border:2px solid var(--line);
+ border-bottom-width:5px;border-radius:var(--r);padding:clamp(9px,1.5vw,16px);text-align:left;
+ display:flex;flex-direction:column;gap:4px}
+.fs .fn{font-family:var(--mono);font-weight:700;font-size:clamp(11px,1.35vw,13px);color:var(--ink-mute)}
+.fs .ft{font-family:var(--jua);font-size:clamp(14px,1.95vw,22px);line-height:1.25}
+.fs .fd{font-size:clamp(11.5px,1.4vw,14.5px);color:var(--ink-dim);line-height:1.35}
+.fs.key{border-color:var(--q);background:#eef2fa}
+.fs.key .ft{color:var(--q)}
+.band{width:100%;background:#fbf5e6;border:2px dashed var(--brass);border-radius:var(--r);
+ padding:clamp(9px,1.5vw,15px) clamp(12px,2vw,22px);font-size:clamp(13px,1.85vw,19px);
+ color:var(--ink-dim);line-height:1.45}
+.band b{font-family:var(--jua);font-weight:400;color:var(--accent)}
+.band.q{background:#eef2fa;border-color:var(--q)}
+.band.q b{color:var(--q)}
+
 /* 세 바구니 */
 .baskets{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(9px,1.6vw,18px);width:100%}
 .bk{border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
@@ -265,7 +283,7 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
   <p class="cover-sub">그리고, 질문에 대한 이야기</p>
   <div class="cover-quote">“질문은 창이 아니라 거울이다.”</div>
   <ul class="plan">
-   <li><span class="m">10분</span><b>만화 한 편 보고, 짧게 이야기</b></li>
+   <li><span class="m">13분</span><b>만화 한 편 보고, 질문과 수업 흐름 이야기</b></li>
    <li><span class="m">5분</span><b>학습지에 내 생각 쓰기 → 제출</b></li>
   </ul>
   <p style="margin:22px 0 0"><button class="btn primary" id="go">시작하기</button></p>
@@ -278,7 +296,7 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
 <header>
  <div class="brand">과학을 왜 배우는 걸까<span class="dot">?</span></div>
  <div class="dots" id="dots"></div>
- <div class="counter" id="counter">1 / 22</div>
+ <div class="counter" id="counter">1 / 24</div>
  <div class="hbtns">
   <button class="btn small" id="noteBtn" title="교사 노트 (N)">🧑‍🏫</button>
   <button class="btn small" id="fsBtn" title="전체화면 (F)">⛶</button>
@@ -511,6 +529,40 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
    <div class="frame" data-img="why-worry"></div>
    <div class="cap">“선생님, 질문만 만들다가 수업 다 끝나면 어떡해요?”</div>
    <p class="punch" style="flex:none;font-size:clamp(16px,2.7vw,30px)">걱정 마. 학기 초엔 <b style="color:var(--q)">어떤 질문이든 만들어 보는 것</b>이 목적이다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>앞장 걱정에 대한 답</b> · 손으로 네 칸을 짚어 가며 “질문 만들기는 여기 한 칸이야. 개념 설명도 하고 문제도 푼다”를 보여 주세요. 그게 “질문만 하다 끝나는 거 아니냐”에 대한 제일 확실한 대답입니다. 업로드는 꼭 짚어 주세요 — 디벗이 안 되는 날이 반드시 있습니다. 적어 두고 나중에 올리는 게 규칙입니다.">
+  <div class="wrap">
+   <div class="eyebrow">우리 수업은 이렇게</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">교실 수업</h2>
+   <div class="flow">
+    <div class="fs"><span class="fn">STEP 1</span><span class="ft">복습</span><span class="fd">골든벨 · 원페이지 정리 · 빈칸 채우기</span></div>
+    <div class="fs key"><span class="fn">STEP 2</span><span class="ft">질문 만들기</span><span class="fd">시범 실험 · 읽기 자료 · 동영상을 보고</span></div>
+    <div class="fs"><span class="fn">STEP 3</span><span class="ft">개념 설명</span><span class="fd">선생님이 정리해 준다</span></div>
+    <div class="fs"><span class="fn">STEP 4</span><span class="ft">문제 풀이</span><span class="fd">배운 것으로 풀어 본다</span></div>
+   </div>
+   <p class="band q">만든 질문은 <b>질문나무</b>에 올린다. 디벗이 안 되는 날엔 적어 뒀다가 <b>꼭 업로드</b>.</p>
+   <p class="band">그리고 <b>중단원이 끝날 때마다</b>, 그동안 모은 질문을 함께 해결한다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>실험실 규칙</b> · 여섯 칸을 다 읽지 말고 첫 칸(안전 교육)과 마지막 칸(보고서 제출)만 힘주어 말하세요. “안전 교육 안 들으면 실험 못 한다”와 “보고서까지가 실험이다” 두 문장이면 충분합니다. 보고서는 포트폴리오로 들어갑니다.">
+  <div class="wrap">
+   <div class="eyebrow">우리 수업은 이렇게</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">실험실 수업</h2>
+   <p class="lead" style="max-width:44ch">모둠으로 앉아, 직접 실험하고, 보고서까지 쓴다.</p>
+   <div class="flow">
+    <div class="fs key"><span class="fn">STEP 1</span><span class="ft">안전 교육</span></div>
+    <div class="fs"><span class="fn">STEP 2</span><span class="ft">준비물 점검</span></div>
+    <div class="fs"><span class="fn">STEP 3</span><span class="ft">절차 설명</span></div>
+    <div class="fs"><span class="fn">STEP 4</span><span class="ft">실험 실시</span></div>
+    <div class="fs"><span class="fn">STEP 5</span><span class="ft">결과 분석</span></div>
+    <div class="fs key"><span class="fn">STEP 6</span><span class="ft">보고서 제출</span></div>
+   </div>
+   <p class="band">안전 교육을 안 들으면 실험을 할 수 없다. 그리고 <b>보고서까지가 실험</b>이다.</p>
   </div>
  </section>
 
