@@ -140,6 +140,79 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 #app-credit{margin-top:28px;padding-top:16px;border-top:1.5px dashed var(--line);
  text-align:center;font-size:12.2px;color:var(--ink-mute);line-height:1.95}
 #app-credit a{color:var(--ink-mute)}
+
+/* ══════════ 진도 트래커 (교사용) ══════════ */
+#roomProgress{display:none}
+body.teacher #roomProgress{display:flex}
+.room.r-prog .ic{background:rgba(112,88,168,.13);border-color:rgba(112,88,168,.36)}
+.tmode{margin-top:12px;font-family:var(--body);font-size:11.5px;padding:5px 13px;border-radius:99px;
+ border:1.5px solid var(--line);background:transparent;color:var(--ink-mute);cursor:pointer;opacity:.5}
+.tmode:hover{opacity:1}
+body.teacher .tmode{opacity:1;border-color:var(--leaf);color:var(--leaf);background:rgba(47,125,85,.08)}
+
+.ptabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.ptab{font-family:var(--jua);font-size:13.5px;padding:7px 15px;border-radius:999px;cursor:pointer;
+ border:1.5px solid var(--line);background:var(--paper-hi);color:var(--ink-mute)}
+.ptab.on{background:var(--leaf);border-color:var(--leaf);color:#f2fbf5}
+.ptab.add{border-style:dashed;color:var(--ink-mute)}
+
+.ptools{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.pbtn{font-family:var(--body);font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:10px;cursor:pointer;
+ border:1.5px solid var(--line);background:var(--paper-hi);color:var(--ink-dim)}
+.pbtn:hover{border-color:var(--leaf);color:var(--leaf)}
+.pbtn.warn:hover{border-color:#b3423a;color:#b3423a}
+
+.psum{margin-top:14px;border:1.5px solid var(--line);border-radius:var(--r);
+ background:linear-gradient(180deg,var(--paper-hi),var(--paper));padding:15px 16px;box-shadow:var(--shadow)}
+.psum .big{display:flex;align-items:baseline;gap:9px}
+.psum .big .pc{font-family:var(--jua);font-size:31px;color:var(--leaf);line-height:1}
+.psum .big .lb{font-size:13px;color:var(--ink-mute)}
+.pbar{height:11px;border-radius:99px;background:var(--paper-lo);border:1px solid var(--line-soft);
+ overflow:hidden;margin-top:10px}
+.pbar i{display:block;height:100%;border-radius:99px;transition:width .3s;
+ background:linear-gradient(90deg,var(--leaf-lo),var(--leaf))}
+.pnexth{font-size:12.5px;color:var(--ink-mute);margin-top:14px}
+.pnext{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.pchip{font-size:12px;padding:5px 11px;border-radius:99px;border:1px solid var(--line);
+ background:var(--paper-hi);color:var(--ink-dim)}
+.pchip b{color:var(--ink);font-family:var(--jua);font-weight:400}
+.pchip.done{border-color:var(--leaf);background:rgba(47,125,85,.1);color:var(--leaf)}
+
+.ptblwrap{margin-top:14px;overflow-x:auto;border:1.5px solid var(--line);border-radius:14px;
+ background:var(--paper-hi);-webkit-overflow-scrolling:touch}
+table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
+.prog th,.prog td{border-bottom:1px solid var(--line-soft);border-right:1px solid var(--line-soft);padding:0}
+.prog tr:last-child th,.prog tr:last-child td{border-bottom:0}
+.prog th.cls,.prog td.cls{position:sticky;left:0;z-index:2;background:var(--paper-hi);
+ min-width:78px;padding:9px 11px;text-align:left;font-family:var(--jua);font-weight:400;
+ box-shadow:2px 0 0 rgba(226,210,174,.55)}
+.prog th.cls small{display:block;font-family:var(--body);font-size:10.5px;color:var(--ink-mute);margin-top:1px}
+.prog thead th{background:var(--paper-lo);vertical-align:top}
+.prog thead th.cls{background:var(--paper-lo)}
+.prog th.lh{min-width:92px;max-width:124px;padding:8px 7px;text-align:center}
+.prog th.lh .ln{display:block;font-size:10.5px;color:var(--ink-mute)}
+.prog th.lh .lt{display:block;font-family:var(--jua);font-weight:400;font-size:12.5px;line-height:1.35;
+ cursor:pointer;margin-top:2px;word-break:keep-all}
+.prog th.lh .lt:hover{color:var(--leaf);text-decoration:underline dotted}
+.prog th.lh .lx{display:flex;gap:3px;justify-content:center;margin-top:6px}
+.prog th.lh .lx button{border:1px solid var(--line);background:var(--paper-hi);border-radius:6px;
+ font-size:10px;line-height:1;padding:3px 6px;cursor:pointer;color:var(--ink-mute)}
+.prog th.lh .lx button:hover{color:var(--leaf);border-color:var(--leaf)}
+.prog th.addcol{min-width:58px;background:var(--paper-lo);border-right:0}
+.prog th.addcol button{font-size:20px;border:none;background:transparent;cursor:pointer;color:var(--leaf);padding:10px 12px}
+.prog td.cell{text-align:center}
+.prog td.cell button{display:block;width:100%;min-height:44px;border:none;background:transparent;cursor:pointer;
+ font-size:17px;color:#cdbc98;transition:.12s;font-family:var(--body)}
+.prog td.cell button.on{background:rgba(47,125,85,.15);color:var(--leaf);font-size:19px}
+.prog td.cell button:hover{background:rgba(47,125,85,.08)}
+.prog td.pad{border-right:0}
+.prog tfoot td,.prog tfoot th{background:var(--paper-lo);font-size:11.5px;padding:7px 4px;text-align:center}
+.prog tfoot th.cls{text-align:left;font-size:12px;color:var(--ink-mute)}
+.prog tfoot td.rate{font-family:var(--jua);font-weight:400;color:var(--ink-mute)}
+.prog tfoot td.rate.full{color:var(--leaf)}
+.phint{font-size:12.3px;color:var(--ink-mute);margin-top:12px;line-height:1.85}
+.phint b{color:var(--ink-dim)}
+.pempty{text-align:center;padding:30px 18px;color:var(--ink-mute);font-size:13.5px;line-height:1.9}
 </style>
 </head>
 <body>
@@ -185,6 +258,11 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
       <span class="tx"><span class="tt">칭찬 도장판</span><span class="dd">내 도장 확인하고 교환소 가기</span></span>
       <span class="arw" aria-hidden="true"></span>
     </a>
+    <button class="room r-prog" type="button" data-go="prog" id="roomProgress">
+      <span class="ic">📊</span>
+      <span class="tx"><span class="tt">진도 트래커</span><span class="dd">반별 차시 진행 상황 · 교사용</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
   </div>
 
   <div class="install" id="install">
@@ -228,9 +306,38 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
   </div>
 </section>
 
+
+<!-- ══════════ 진도 트래커 (교사용) ══════════ -->
+<section class="view" id="v-prog">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📊 진도 트래커</h2></div>
+  <p class="vlead">칸을 누르면 그 반이 그 차시를 마친 것으로 표시됩니다(수업한 날짜도 함께 기록돼요).
+    차시는 표 오른쪽 <b>＋</b>로 늘리고, 차시 이름을 눌러 고치고, <b>✕</b>로 지울 수 있습니다.</p>
+
+  <div class="ptabs" id="pTabs"></div>
+
+  <div class="ptools" id="pTools">
+    <button class="pbtn" type="button" data-cls="1">👥 반 편집</button>
+    <button class="pbtn" type="button" data-rent="1">✏️ 표 이름</button>
+    <button class="pbtn" type="button" data-exp="1">📤 백업</button>
+    <button class="pbtn" type="button" data-imp="1">📥 복원</button>
+    <button class="pbtn warn" type="button" data-delt="1">🗑 표 삭제</button>
+  </div>
+
+  <div id="pSum"></div>
+  <div class="ptblwrap" id="pTable"></div>
+
+  <p class="phint">
+    💾 이 표는 <b>지금 쓰는 기기에만</b> 저장됩니다. 다른 기기에서도 보려면 <b>📤 백업</b>으로 파일을 내려받아
+    그 기기에서 <b>📥 복원</b>하세요.<br>
+    🧑‍🏫 학생에게는 이 방이 보이지 않습니다. 맨 아래 교사용 버튼으로 껐다 켤 수 있어요.
+  </p>
+  <input type="file" id="pFile" accept="application/json,.json" hidden>
+</section>
+
 <footer id="app-credit">
   © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-  최종 업데이트: 2026-08-18
+  최종 업데이트: 2026-08-18<br>
+  <button class="tmode" id="tmode" type="button" title="교사용 켜기">🧑‍🏫</button>
 </footer>
 </div>
 
@@ -442,10 +549,216 @@ if('serviceWorker' in navigator && (location.protocol === 'https:' || location.h
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 
+
+/* ══════════════════════════════════════════════════════════════
+   진도 트래커 (교사용) — 자료는 이 기기의 저장 공간에만 들어갑니다.
+   ══════════════════════════════════════════════════════════════ */
+const PKEY = 'sc_prog_v1';
+const uid = () => Math.random().toString(36).slice(2, 9);
+const today = () => { const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+
+function pSeed(){
+  return { active:'t0', tables:[{ id:'t0', name:'진도표',
+    classes:['1','2','3','4','9','10','11','12'].map(x => ({ id:uid(), name:x + '반' })),
+    lessons:[], done:{} }] };
+}
+let P;
+try { P = JSON.parse(localStorage.getItem(PKEY)); } catch(e) { P = null; }
+if(!P || !Array.isArray(P.tables) || !P.tables.length) P = pSeed();
+
+const pSave = () => { try { localStorage.setItem(PKEY, JSON.stringify(P)); } catch(e) {} };
+const curT = () => P.tables.find(t => t.id === P.active) || P.tables[0];
+
+function drawProg(){
+  const t = curT(); P.active = t.id;
+  const L = t.lessons, C = t.classes;
+  const has = (ci, li) => !!t.done[ci + '|' + li];
+
+  /* 진도표 탭 */
+  $('#pTabs').innerHTML = P.tables.map(x =>
+      '<button class="ptab' + (x.id === t.id ? ' on' : '') + '" type="button" data-t="' + x.id + '">' + esc(x.name) + '</button>'
+    ).join('') + '<button class="ptab add" type="button" data-newt="1">＋ 진도표</button>';
+
+  /* 표 */
+  const head = '<thead><tr><th class="cls">반</th>'
+    + L.map((l, i) =>
+        '<th class="lh"><span class="ln">' + (i + 1) + '차시</span>'
+        + '<span class="lt" data-ren="' + l.id + '" title="눌러서 이름 고치기">' + esc(l.name) + '</span>'
+        + '<span class="lx">'
+        + '<button type="button" data-mv="' + l.id + '" data-d="-1" title="왼쪽으로">‹</button>'
+        + '<button type="button" data-del="' + l.id + '" title="이 차시 지우기">✕</button>'
+        + '<button type="button" data-mv="' + l.id + '" data-d="1" title="오른쪽으로">›</button>'
+        + '</span></th>').join('')
+    + '<th class="addcol"><button type="button" data-addl="1" title="차시 추가">＋</button></th></tr></thead>';
+
+  const body = '<tbody>' + C.map(c => {
+      const n = L.filter(l => has(c.id, l.id)).length;
+      return '<tr><th class="cls">' + esc(c.name)
+        + '<small>' + (L.length ? n + ' / ' + L.length : '—') + '</small></th>'
+        + L.map(l => { const d = t.done[c.id + '|' + l.id];
+            return '<td class="cell"><button type="button" class="' + (d ? 'on' : '') + '"'
+              + ' data-c="' + c.id + '" data-l="' + l.id + '"'
+              + ' title="' + esc(c.name + ' · ' + l.name + (d ? ' — ' + d + ' 수업함' : ' — 아직')) + '">'
+              + (d ? '✓' : '·') + '</button></td>'; }).join('')
+        + '<td class="pad"></td></tr>'; }).join('') + '</tbody>';
+
+  const foot = '<tfoot><tr><th class="cls">마친 반</th>'
+    + L.map(l => { const n = C.filter(c => has(c.id, l.id)).length;
+        return '<td class="rate' + (n === C.length && n ? ' full' : '') + '">' + n + '/' + C.length + '</td>'; }).join('')
+    + '<td class="pad"></td></tr></tfoot>';
+
+  $('#pTable').innerHTML = L.length
+    ? '<table class="prog">' + head + body + foot + '</table>'
+    : '<table class="prog">' + head + body + '</table>'
+      + '<p class="pempty">아직 차시가 없어요.<br>표 오른쪽 위 <b>＋</b>를 눌러 첫 차시를 추가해 보세요.</p>';
+
+  /* 요약 */
+  const total = C.length * L.length;
+  const done = C.reduce((a, c) => a + L.filter(l => has(c.id, l.id)).length, 0);
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const chips = C.map(c => {
+      const nx = L.find(l => !has(c.id, l.id));
+      return nx ? '<span class="pchip"><b>' + esc(c.name) + '</b> → ' + esc(nx.name) + '</span>'
+                : '<span class="pchip done"><b>' + esc(c.name) + '</b> 다 마침 ✓</span>'; }).join('');
+  const allDone = L.filter(l => C.every(c => has(c.id, l.id))).length;
+
+  $('#pSum').innerHTML = '<div class="psum">'
+    + '<div class="big"><span class="pc">' + pct + '%</span>'
+    + '<span class="lb">' + C.length + '개 반 × ' + L.length + '차시 중 <b>' + done + '</b>칸 완료'
+    + (L.length ? ' · 모든 반이 마친 차시 <b>' + allDone + '</b>개' : '') + '</span></div>'
+    + '<div class="pbar"><i style="width:' + pct + '%"></i></div>'
+    + (L.length ? '<p class="pnexth">다음에 할 차시</p><div class="pnext">' + chips + '</div>' : '')
+    + '</div>';
+}
+
+/* ── 조작 ── */
+$('#v-prog').addEventListener('click', e => {
+  const b = e.target.closest('[data-t],[data-newt],[data-addl],[data-ren],[data-del],[data-mv],[data-c],'
+    + '[data-cls],[data-rent],[data-delt],[data-exp],[data-imp]');
+  if(!b) return;
+  const t = curT(), d = b.dataset;
+
+  if(d.t){ P.active = d.t; pSave(); drawProg(); return; }
+
+  if(d.newt){
+    const nm = prompt('새 진도표 이름을 적어 주세요.\n(예: 1학년 기체의 성질)', '새 진도표');
+    if(nm === null || !nm.trim()) return;
+    P.tables.push({ id:uid(), name:nm.trim(),
+      classes:t.classes.map(c => ({ id:uid(), name:c.name })), lessons:[], done:{} });
+    P.active = P.tables[P.tables.length - 1].id; pSave(); drawProg(); return;
+  }
+
+  if(d.addl){
+    const nm = prompt('추가할 차시 이름을 적어 주세요.\n(예: 3차시 전류와 전압)', '');
+    if(nm === null || !nm.trim()) return;
+    t.lessons.push({ id:uid(), name:nm.trim() }); pSave(); drawProg(); return;
+  }
+
+  if(d.ren){
+    const l = t.lessons.find(x => x.id === d.ren); if(!l) return;
+    const nm = prompt('차시 이름 고치기', l.name);
+    if(nm === null || !nm.trim()) return;
+    l.name = nm.trim(); pSave(); drawProg(); return;
+  }
+
+  if(d.del){
+    const l = t.lessons.find(x => x.id === d.del); if(!l) return;
+    const cnt = t.classes.filter(c => t.done[c.id + '|' + l.id]).length;
+    if(!confirm('「' + l.name + '」 차시를 지울까요?' + (cnt ? '\n체크해 둔 ' + cnt + '개 반 기록도 함께 사라집니다.' : ''))) return;
+    t.lessons = t.lessons.filter(x => x.id !== l.id);
+    t.classes.forEach(c => { delete t.done[c.id + '|' + l.id]; });
+    pSave(); drawProg(); return;
+  }
+
+  if(d.mv){
+    const i = t.lessons.findIndex(x => x.id === d.mv), j = i + (+d.d);
+    if(i < 0 || j < 0 || j >= t.lessons.length) return;
+    const [x] = t.lessons.splice(i, 1); t.lessons.splice(j, 0, x);
+    pSave(); drawProg(); return;
+  }
+
+  if(d.c){
+    const k = d.c + '|' + d.l;
+    if(t.done[k]) delete t.done[k]; else t.done[k] = today();
+    pSave(); drawProg(); return;
+  }
+
+  if(d.cls){
+    const nm = prompt('가르치는 반을 쉼표로 구분해 적어 주세요.\n이름을 그대로 두면 체크한 기록이 유지됩니다.',
+      t.classes.map(c => c.name).join(', '));
+    if(nm === null) return;
+    const names = nm.split(',').map(x => x.trim()).filter(Boolean);
+    if(!names.length){ alert('반이 하나는 있어야 해요.'); return; }
+    const next = names.map(x => t.classes.find(c => c.name === x) || { id:uid(), name:x });
+    const gone = t.classes.filter(c => !next.some(x => x.id === c.id));
+    if(gone.length && !confirm(gone.map(c => c.name).join(', ') + ' 이(가) 사라집니다.\n체크한 기록도 함께 지워져요. 계속할까요?')) return;
+    gone.forEach(c => t.lessons.forEach(l => { delete t.done[c.id + '|' + l.id]; }));
+    t.classes = next; pSave(); drawProg(); return;
+  }
+
+  if(d.rent){
+    const nm = prompt('이 진도표의 이름', t.name);
+    if(nm === null || !nm.trim()) return;
+    t.name = nm.trim(); pSave(); drawProg(); return;
+  }
+
+  if(d.delt){
+    if(P.tables.length < 2){ alert('진도표가 하나뿐이라 지울 수 없어요.\n대신 「반 편집」이나 차시 ✕로 정리해 보세요.'); return; }
+    if(!confirm('「' + t.name + '」 진도표를 통째로 지울까요?\n되돌릴 수 없습니다.')) return;
+    P.tables = P.tables.filter(x => x.id !== t.id);
+    P.active = P.tables[0].id; pSave(); drawProg(); return;
+  }
+
+  if(d.exp){
+    const blob = new Blob([JSON.stringify(P, null, 2)], { type:'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '진도표_' + today() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return;
+  }
+
+  if(d.imp){ $('#pFile').click(); return; }
+});
+
+$('#pFile').addEventListener('change', ev => {
+  const f = ev.target.files && ev.target.files[0];
+  if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const o = JSON.parse(rd.result);
+      if(!o || !Array.isArray(o.tables) || !o.tables.length) throw 0;
+      if(!confirm('지금 이 기기의 진도표를 덮어씁니다. 계속할까요?')) return;
+      P = o; if(!P.tables.some(x => x.id === P.active)) P.active = P.tables[0].id;
+      pSave(); drawProg();
+      alert('복원했습니다 — 진도표 ' + P.tables.length + '개');
+    } catch(e) { alert('진도표 파일이 아닌 것 같아요. 백업으로 내려받은 파일을 골라 주세요.'); }
+  };
+  rd.readAsText(f);
+  ev.target.value = '';
+});
+
+/* ── 교사용 켜고 끄기 ── */
+function setTeacher(on){
+  document.body.classList.toggle('teacher', on);
+  const b = $('#tmode');
+  b.textContent = on ? '🧑‍🏫 교사용 켜짐 — 누르면 꺼짐' : '🧑‍🏫';
+  b.title = on ? '교사용 끄기' : '교사용 켜기';
+  if(on) localStorage.setItem('sc_teacher', '1'); else localStorage.removeItem('sc_teacher');
+  if(!on && $('#v-prog').classList.contains('on')) show('home');
+}
+$('#tmode').addEventListener('click', () => setTeacher(!document.body.classList.contains('teacher')));
+setTeacher(localStorage.getItem('sc_teacher') === '1'
+  || new URLSearchParams(location.search).get('t') === '1');
+drawProg();
+
 /* ══════════════ 시작 ══════════════ */
 setGrade(grade);
 const h0 = location.hash.replace('#','');
-if(['sheet','eval','less'].includes(h0)) show(h0);
+if(['sheet','eval','less'].includes(h0) || (h0 === 'prog' && document.body.classList.contains('teacher'))) show(h0);
 </script>
 </body>
 </html>
