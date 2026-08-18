@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+/* 전자칠판 보정 — 패널 브라우저가 뷰포트 폭을 실제보다 좁게 잡아
+   화면이 왼쪽 구석에 작게 몰리는 것을 막는다. 일반 PC·폰·태블릿은 조건이 안 맞아 무동작. */
+(function(){try{
+  var sw=screen.width, iw=innerWidth;
+  if(sw>=1600 && iw>0 && sw/iw>1.15){
+    document.querySelector('meta[name=viewport]')
+      .setAttribute('content','width='+sw+', user-scalable=no, viewport-fit=cover');
+  }
+}catch(e){}})();
+</script>
+<meta name="theme-color" content="#f2eade">
+<title>과학을 왜 배우는 걸까? · 질문 이야기</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --paper:#f2e8d5; --paper-hi:#f9f2e3; --paper-lo:#e6d7ba;
+ --line:#c1ac82; --line-soft:#dccfae;
+ --ink:#2e2315; --ink-dim:#5c4a33; --ink-mute:#96805c;
+ --accent:#a05c2c; --brass:#b9873c; --brass-hi:#e6c17a; --brass-dk:#7d541e;
+ --q:#3f5c9a;
+ --ok:#2c7a44; --danger:#b3362e;
+ --disp:"Pretendard",-apple-system,"Malgun Gothic",sans-serif;
+ --jua:"Jua",var(--disp); --mono:"JetBrains Mono",ui-monospace,monospace;
+ --r:18px; --shadow:0 18px 50px -24px rgba(60,38,15,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--disp);color:var(--ink);line-height:1.6;background:var(--paper-lo);
+ height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;
+ background:radial-gradient(1100px 620px at 78% -8%,rgba(160,92,44,.14),transparent 60%),
+ radial-gradient(900px 560px at 8% 8%,rgba(63,92,154,.13),transparent 62%),
+ linear-gradient(180deg,var(--paper-hi),var(--paper) 60%,var(--paper-lo))}
+
+/* ── 표지 ── */
+#cover{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+ padding:24px;background:linear-gradient(180deg,var(--paper-hi),var(--paper));overflow:auto}
+#cover.hide{opacity:0;pointer-events:none;transition:opacity .4s}
+.cover-in{max-width:860px;text-align:center;padding:20px 0}
+.cover-eyebrow{font-size:clamp(13px,1.8vw,16px);letter-spacing:.12em;color:var(--ink-mute);font-weight:700}
+.cover-title{font-family:var(--jua);font-size:clamp(34px,7vw,68px);line-height:1.2;margin-top:8px;font-weight:400}
+.cover-sub{font-size:clamp(16px,2.4vw,21px);color:var(--ink-dim);margin-top:10px}
+.cover-quote{margin:26px auto 0;max-width:600px;border-left:6px solid var(--q);background:var(--paper-hi);
+ border-radius:0 14px 14px 0;padding:16px 22px;text-align:left;font-family:var(--jua);
+ font-size:clamp(19px,3vw,27px);color:var(--q);line-height:1.45}
+.plan{display:grid;gap:10px;margin:24px auto 0;max-width:560px;text-align:left;list-style:none}
+.plan li{display:flex;align-items:center;gap:12px;background:var(--paper-hi);border:1.5px solid var(--line);
+ border-bottom-width:4px;border-radius:14px;padding:12px 16px;font-size:clamp(15px,2vw,18px)}
+.plan .m{font-family:var(--mono);font-weight:700;color:var(--accent);min-width:52px}
+.plan b{font-family:var(--jua);font-weight:400}
+
+/* ── 공통 부품 ── */
+.btn{font-family:var(--disp);font-weight:700;font-size:16px;color:var(--ink);background:var(--paper-hi);
+ border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:11px 20px;cursor:pointer;transition:.15s}
+.btn:hover{background:#fff;transform:translateY(-1px)}
+.btn:active{transform:translateY(2px);border-bottom-width:2px}
+.btn.primary{background:var(--brass);border-color:var(--brass-dk);color:#fff}
+.btn.primary:hover{background:var(--brass-hi);color:var(--ink)}
+.btn.small{font-size:14px;padding:8px 14px;border-radius:11px}
+
+/* ── 헤더 ── */
+header{flex:none;display:flex;align-items:center;gap:14px;padding:10px 18px;
+ border-bottom:1.5px solid var(--line-soft);background:rgba(249,242,227,.72);backdrop-filter:blur(6px)}
+.brand{font-family:var(--jua);font-size:clamp(15px,2vw,19px);white-space:nowrap}
+.brand .dot{color:var(--accent)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;flex:1;justify-content:center}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line-soft);display:block;cursor:pointer;transition:.2s}
+.dots i.on{background:var(--accent);transform:scale(1.35)}
+.dots i.q{background:#b9c4dd}
+.dots i.q.on{background:var(--q)}
+.hbtns{display:flex;gap:7px;flex:none}
+.counter{font-family:var(--mono);font-size:13px;color:var(--ink-mute);flex:none;min-width:52px;text-align:right}
+
+/* ── 무대 ── */
+main{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+ padding:clamp(14px,2.6vw,34px);text-align:center;overflow:auto}
+.slide.on{display:flex;animation:in .34s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* 만화 슬라이드 */
+.cut{width:100%;max-width:1180px;display:flex;flex-direction:column;align-items:center;gap:14px;min-height:0;flex:1}
+.cut .frame{width:100%;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+ background:var(--paper-hi);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+ overflow:hidden;position:relative}
+.cut img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.cut .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+ padding:clamp(20px,5vw,60px);color:var(--ink-mute)}
+.cut .ph .big{font-family:var(--jua);font-size:clamp(22px,4.2vw,44px);color:var(--ink);line-height:1.35;max-width:22ch}
+.cut .ph .path{font-family:var(--mono);font-size:13px;background:var(--paper);border:1.5px dashed var(--line);
+ border-radius:9px;padding:5px 12px}
+.cut .cap{font-family:var(--jua);font-size:clamp(17px,2.7vw,28px);line-height:1.4;max-width:32ch;flex:none}
+/* 그림이 실제로 뜬 컷 — 세로 그림이 넓은 빈 상자에 갇히지 않도록 테두리를 그림에 맞춘다 */
+.cut.has-img{gap:9px}
+.cut.has-img .frame{width:auto;max-width:100%;align-self:center}
+.cut.has-img .cap{font-size:clamp(14px,1.9vw,20px);color:var(--ink-dim)}
+.cut .tagline{font-size:clamp(13px,1.7vw,15px);color:var(--ink-mute);letter-spacing:.1em;font-weight:700}
+.cut.insert .frame{border-style:dashed;border-color:var(--brass);background:#fbf5e6}
+.badge{display:inline-block;font-size:clamp(12px,1.6vw,14px);font-weight:700;letter-spacing:.06em;
+ background:var(--brass);color:#fff;border-radius:999px;padding:4px 14px;flex:none}
+
+/* 이야기 슬라이드 */
+.wrap{width:100%;max-width:1080px;display:flex;flex-direction:column;gap:clamp(12px,2.2vw,22px);align-items:center}
+.eyebrow{font-size:clamp(13px,1.8vw,16px);letter-spacing:.12em;color:var(--q);font-weight:800}
+h2.big{font-family:var(--jua);font-size:clamp(28px,5.4vw,58px);line-height:1.24;font-weight:400}
+h2.big em{font-style:normal;color:var(--q)}
+h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--ink-mute)}
+.lead{font-size:clamp(16px,2.4vw,24px);color:var(--ink-dim);line-height:1.6;max-width:36ch}
+.mirror{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,2vw,22px);width:100%;max-width:760px}
+.mirror div{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(14px,2.4vw,24px)}
+.mirror .k{font-family:var(--jua);font-size:clamp(20px,3.4vw,34px)}
+.mirror .v{font-size:clamp(14px,1.9vw,18px);color:var(--ink-dim);margin-top:6px}
+.mirror .win .k{color:var(--ink-mute)}
+.mirror .mir{border-color:var(--q);background:#eef2fa}
+.mirror .mir .k{color:var(--q)}
+
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.8vw,18px);width:100%}
+.three .c{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(14px,2.2vw,22px);text-align:left;display:flex;flex-direction:column;gap:7px}
+.three .n{font-family:var(--mono);font-weight:700;color:var(--q);font-size:clamp(15px,2vw,19px)}
+.three .t{font-family:var(--jua);font-size:clamp(17px,2.5vw,25px);line-height:1.32}
+.three .d{font-size:clamp(13px,1.7vw,16px);color:var(--ink-dim)}
+
+.chips{display:flex;flex-wrap:wrap;gap:clamp(8px,1.4vw,13px);justify-content:center;width:100%}
+.chips span{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:4px;border-radius:999px;
+ padding:clamp(9px,1.5vw,15px) clamp(15px,2.4vw,26px);font-size:clamp(15px,2.2vw,23px);font-family:var(--jua)}
+.punch{font-family:var(--jua);font-size:clamp(20px,3.6vw,40px);color:var(--accent);line-height:1.35}
+.sub{font-size:clamp(14px,1.9vw,18px);color:var(--ink-mute)}
+
+blockquote{background:var(--paper-hi);border:2px solid var(--line);border-left:8px solid var(--q);
+ border-radius:0 var(--r) var(--r) 0;padding:clamp(18px,3vw,34px);text-align:left;max-width:900px;box-shadow:var(--shadow)}
+blockquote p{font-family:var(--jua);font-size:clamp(19px,3.1vw,34px);line-height:1.5}
+blockquote mark{background:#dbe7e5;color:#1d5c56;padding:0 6px;border-radius:6px}
+blockquote u{text-decoration:none;border-bottom:5px solid #f2b6ac;padding-bottom:1px}
+blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);color:var(--ink-mute);text-align:right}
+
+.myth{display:grid;gap:clamp(10px,1.7vw,16px);width:100%;max-width:960px}
+.myth .r{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(8px,1.6vw,16px)}
+.myth .x,.myth .o{border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(12px,2vw,20px);font-size:clamp(14px,2.1vw,21px);line-height:1.4;text-align:left}
+.myth .x{background:#f7ece9;border-color:#d9b6ae;color:#7a4038}
+.myth .o{background:#eaf3ec;border-color:#a9c9b3;color:#1f5c34;font-family:var(--jua)}
+.myth .ar{font-size:clamp(18px,2.6vw,26px);color:var(--ink-mute)}
+
+.quote-card{background:var(--paper-hi);border:2px solid var(--q);border-radius:var(--r);box-shadow:var(--shadow);
+ padding:clamp(14px,2.6vw,26px) clamp(18px,3vw,34px);max-width:840px}
+.quote-card p{font-size:clamp(16px,2.6vw,27px);line-height:1.5;color:var(--ink-dim)}
+.quote-card p b{font-family:var(--jua);font-weight:400;color:var(--q)}
+.quote-card .src{display:block;margin-top:10px;font-size:clamp(11px,1.5vw,13.5px);color:var(--ink-mute)}
+.arrow{font-size:clamp(20px,3vw,30px);color:var(--ink-mute);line-height:1}
+.vidslot{width:100%;max-width:720px;aspect-ratio:16/9;background:#1b1712;border:2px solid var(--line);
+ border-radius:var(--r);overflow:hidden;display:none;box-shadow:var(--shadow)}
+.vidslot.on{display:block}
+.vidslot iframe{width:100%;height:100%;border:0;display:block}
+
+.todo{display:grid;gap:clamp(8px,1.4vw,12px);width:100%;max-width:860px;text-align:left}
+.todo li{list-style:none;display:flex;gap:12px;align-items:flex-start;background:var(--paper-hi);
+ border:1.5px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:clamp(10px,1.7vw,16px) clamp(13px,2vw,20px)}
+.todo .n{font-family:var(--mono);font-weight:700;color:var(--accent);flex:none}
+.todo .t{font-size:clamp(14px,2vw,20px);line-height:1.45}
+.todo .t b{font-family:var(--jua);font-weight:400}
+
+.src-chip{font-size:clamp(11px,1.5vw,13.5px);color:var(--ink-mute);background:var(--paper-hi);
+ border:1.5px solid var(--line-soft);border-radius:999px;padding:5px 14px}
+
+/* ── 교사 노트 ── */
+#notes{flex:none;display:none;border-top:2px solid var(--line);background:#2e2315;color:#f0e6d2;
+ padding:12px 20px;font-size:clamp(14px,1.8vw,17px);line-height:1.6;max-height:34vh;overflow:auto}
+#notes.on{display:block}
+#notes b{color:var(--brass-hi);font-family:var(--jua);font-weight:400}
+#notes .lbl{font-size:12px;letter-spacing:.14em;color:#a08f6c;font-weight:700;display:block;margin-bottom:5px}
+
+/* ── 하단 조작 ── */
+.navbar{flex:none;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 16px;
+ border-top:1.5px solid var(--line-soft);background:rgba(249,242,227,.72)}
+.navbar .hint{font-size:12.5px;color:var(--ink-mute);margin-left:8px}
+
+/* 낮은 화면(노트북·창 모드)에서 한 화면에 들어오도록 살짝 조인다 */
+@media (max-height:760px){
+ .wrap{gap:clamp(8px,1.6vw,16px)}
+ h2.big{font-size:clamp(24px,4.6vw,46px)}
+ .lead{font-size:clamp(14px,2.1vw,20px)}
+ .punch{font-size:clamp(17px,3vw,32px)}
+ .todo li{padding:clamp(7px,1.3vw,12px) clamp(11px,1.7vw,17px)}
+ .todo .t{font-size:clamp(13px,1.8vw,18px)}
+ .quote-card{padding:clamp(10px,2vw,20px) clamp(14px,2.4vw,26px)}
+ .quote-card p{font-size:clamp(15px,2.3vw,23px)}
+ .arrow{font-size:clamp(16px,2.4vw,24px)}
+}
+@media (max-width:760px){
+ .three{grid-template-columns:1fr}
+ .mirror{grid-template-columns:1fr}
+ .myth .r{grid-template-columns:1fr;gap:6px}
+ .myth .ar{transform:rotate(90deg)}
+ .navbar .hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 표지 ══════════ -->
+<div id="cover">
+ <div class="cover-in">
+  <div class="cover-eyebrow" id="coverGrade">2학년 과학 · 학기 첫 시간</div>
+  <h1 class="cover-title">과학을 왜 배우는 걸까?</h1>
+  <p class="cover-sub">그리고, 질문에 대한 이야기</p>
+  <div class="cover-quote">“질문은 창이 아니라 거울이다.”</div>
+  <ul class="plan">
+   <li><span class="m">10분</span><b>만화 한 편 보고, 짧게 이야기</b></li>
+   <li><span class="m">5분</span><b>학습지에 내 생각 쓰기 → 제출</b></li>
+  </ul>
+  <p style="margin:22px 0 0"><button class="btn primary" id="go">시작하기</button></p>
+  <p class="sub" style="margin-top:14px">← → 또는 화면 클릭으로 넘김 · <b>N</b> 교사 노트 · <b>F</b> 전체화면</p>
+  <footer id="app-credit" style="width:100%;box-sizing:border-box;margin:2.5rem 0 0;padding:14px 12px;text-align:center;font-size:13px;line-height:1.6;color:#8a755c;font-family:system-ui,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;border-top:1px solid rgba(128,128,128,.25);">© 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br><span style="font-size:11.5px;opacity:.85;">최종 업데이트: 2026-08-18</span></footer>
+ </div>
+</div>
+
+<!-- ══════════ 헤더 ══════════ -->
+<header>
+ <div class="brand">과학을 왜 배우는 걸까<span class="dot">?</span></div>
+ <div class="dots" id="dots"></div>
+ <div class="counter" id="counter">1 / 16</div>
+ <div class="hbtns">
+  <button class="btn small" id="noteBtn" title="교사 노트 (N)">🧑‍🏫</button>
+  <button class="btn small" id="fsBtn" title="전체화면 (F)">⛶</button>
+ </div>
+</header>
+
+<!-- ══════════ 무대 ══════════ -->
+<main id="stage">
+
+ <!-- ── 만화 ── -->
+ <section class="slide" data-kind="comic"
+  data-note="<b>가볍게 시작</b> · “선생님이 만화를 하나 그려 왔어. 딱 여덟 장이야.” 정도로만 열고 바로 넘깁니다. 설명하지 마세요.">
+  <div class="cut">
+   <div class="frame" data-img="why-00"></div>
+   <div class="cap">과학을 왜 배우는 걸까?</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>1컷</b> · “선생님도 중학교 때 지구과학 배웠는데, 지금 하나도 기억이 안 나.” 웃으면서 인정하고 넘어갑니다. 여기서 아이들 반응이 나오면 그냥 받아 주세요.">
+  <div class="cut">
+   <div class="frame" data-img="why-01"></div>
+   <div class="cap">중학교 지구과학, 정말 하·나·도 기억이 안 난다</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>2컷 · 오늘의 질문</b> · “쌤도 까먹었는데, 그럼 너희는 이걸 왜 배울까?” 답을 받지 말고 그대로 넘깁니다. 답은 5컷에서 나옵니다.">
+  <div class="cut">
+   <div class="frame" data-img="why-02"></div>
+   <div class="cap">과학쌤인 나도 까먹었는데,<br>너희는 이걸 왜 배울까?</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>작년 수업자료 삽입</b> · 작년에 “암석 좀 제발 외워줘”라고 했던 그 만화입니다. “작년엔 선생님이 이렇게 말했었지” 하고 웃고 넘어가면 2컷의 질문이 더 세게 남습니다. 여러 장이면 CONFIG.IMG 에 why-rock2, why-rock3… 를 추가하고 이 슬라이드를 복사해 쓰세요.">
+  <div class="cut insert">
+   <span class="badge">작년 수업자료</span>
+   <div class="frame" data-img="why-rock"></div>
+   <div class="cap">“암석 좀 제발 외워줘…”</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>3컷</b> · “그래도 수업은 해야 하니까, 일단 폈어.” 한마디면 됩니다.">
+  <div class="cut">
+   <div class="frame" data-img="why-03"></div>
+   <div class="cap">그래도 일단, 수업 준비 시작</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>4컷 · 반전</b> · “처음 보는 내용인데 한 시간도 안 걸리더라.” 여기서 잠깐 멈췄다가 다음 컷으로.">
+  <div class="cut">
+   <div class="frame" data-img="why-04"></div>
+   <div class="cap">처음 보는 내용인데 —<br>대단원 하나가 한 시간도 안 걸려 정리됐다</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>5컷 · 오늘의 답</b> · 여기만 조금 천천히. “내용은 까먹었는데, 내용을 다루는 방법은 안 까먹었더라.” 학습지 1번이 바로 이 컷입니다.">
+  <div class="cut">
+   <div class="frame" data-img="why-05"></div>
+   <div class="cap">아, 내가 학교에서 배운 건<br>‘지식을 구조화하고 내 것으로 만드는 방법’이었구나</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>6컷</b> · 한 단어로 못 박습니다. “문제를 해결하는 힘.”">
+  <div class="cut">
+   <div class="frame" data-img="why-06"></div>
+   <div class="cap">그게 곧 ‘문제를 해결하는 힘’</div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="comic"
+  data-note="<b>7컷 · 선생님의 바람</b> · 여기서 말을 길게 하지 마세요. 한 문장이면 충분합니다. “올해 이 시간이, 너희가 나중에 문제를 만났을 때 쓸 양분이 됐으면 좋겠어.”">
+  <div class="cut">
+   <div class="frame" data-img="why-07"></div>
+   <div class="cap">이 시간이, 너희가 문제를 만났을 때<br>쓸 양분이 되기를</div>
+  </div>
+ </section>
+
+ <!-- ── 질문 ── -->
+ <section class="slide" data-kind="q"
+  data-note="<b>여기서 화제를 바꿉니다</b> · 이 한 문장만 읽고 잠깐 둡니다. “창은 바깥을 보는 거고, 거울은 나를 보는 거잖아. 질문은 둘 중에 거울 쪽이야.” — 네가 무엇을 궁금해하는지가 곧 네가 지금 어디까지 알고 있는지를 보여 준다는 뜻으로 풀어 주세요.">
+  <div class="wrap">
+   <div class="eyebrow">이제 질문 이야기</div>
+   <h2 class="big">질문은 <s>창</s>이 아니라 <em>거울</em>이다</h2>
+   <div class="mirror">
+    <div class="win"><div class="k">창</div><div class="v">바깥을 내다보는 것</div></div>
+    <div class="mir"><div class="k">거울</div><div class="v">나를 비추는 것</div></div>
+   </div>
+   <p class="lead">네가 던진 질문에는,<br>네가 지금 어디까지 알고 있는지가 그대로 비친다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>AI 이야기</b> · 아이들이 제일 잘 아는 이야기라 짧게 해도 통합니다. “정답은 이제 5초면 나와. 그럼 정답을 다시 쓰는 걸로는 아무도 구분이 안 되지.” 세 칸은 읽어만 주고 넘어갑니다. 출처: 2026 학생 질문 중심 수업·평가 선도교원 연수 특강.">
+  <div class="wrap">
+   <div class="eyebrow">AI 시대</div>
+   <h2 class="big">평가는 ‘정답’에서 <em>‘질문’</em>으로</h2>
+   <p class="lead">AI가 정답을 몇 초 만에 만든다.<br>정답을 다시 쓰는 것만으로는 아무것도 구분되지 않는다.</p>
+   <div class="three">
+    <div class="c"><div class="n">01</div><div class="t">질문의 수준</div><div class="d">네가 무엇을 물었는가</div></div>
+    <div class="c"><div class="n">02</div><div class="t">키워 가는 과정</div><div class="d">그 질문을 탐구로 발전시켰는가</div></div>
+    <div class="c"><div class="n">03</div><div class="t">검증하는 힘</div><div class="d">AI가 준 답을 그대로 믿지 않고 판단했는가</div></div>
+   </div>
+   <span class="src-chip">2026 학생 질문 중심 수업·평가 선도교원 연수</span>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>인용</b> · 그냥 읽어 주기만 해도 됩니다. 한 학생이 “알리바바는 어떤 인재를 뽑나요?”라고 물었고, 돌아온 답이 ‘질문 잘하는 사람’이었다는 이야기입니다. 원문: 한우덕의 중국일기, 2026년 7월 20일, 중앙일보.">
+  <div class="wrap">
+   <blockquote>
+    <p>“알리바바는 어떤 인재를 뽑느냐?”<br>
+    한 학생의 질문에 돌아온 답은 <mark>“질문 잘하는 사람”</mark>이었다.<br>
+    AI가 모든 업무를 빨아들이는 시대,<br><u>질문을 잘하는 게 곧 실력</u>이라는 얘기였다.</p>
+    <span class="src">— 한우덕의 중국일기, 2026년 7월 20일, 중앙일보</span>
+   </blockquote>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>여기서 손 한번 들게 하세요</b> · “이 중에 하나라도 해당되는 사람?” 가볍게, 세지 말고. 다섯 개 모두 실제로 조사된 이유입니다. 마지막 줄만 분명하게 — “하나라도 걸리면 정상이야. 선생님도 그랬어.” 학습지 4번이 이 슬라이드입니다.">
+  <div class="wrap">
+   <div class="eyebrow">그런데</div>
+   <h2 class="big">왜 우리는 질문을 안 하게 될까?</h2>
+   <div class="chips">
+    <span>너무 기본적인 질문 같아서</span>
+    <span>수업에 방해될까 봐</span>
+    <span>수업 안 들은 것처럼 보일까 봐</span>
+    <span>교실 분위기가 그래서</span>
+    <span>질문해 본 경험이 별로 없어서</span>
+   </div>
+   <p class="punch">다섯 개 중 하나라도 걸리면 — 정상이다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>영상에서 딱 한 대목만</b> · “고등학교 가면 생기부라는 걸 쓰는데, 거기서 제일 먼저 보는 게 대회나 외부 활동이 아니라 <b>수업 시간에 한 질문</b>이래.” 나머지 입시 이야기(내신·수행평가 전략 등)는 꺼내지 않는 편이 낫습니다. 결론 한 줄만 남기세요 — 그래서 질문하는 법을 학교에서 배운다. · 영상을 틀려면 파일 위쪽 CONFIG.VIDEO.URL 에 주소를 넣으면 이 슬라이드 아래에 재생창이 생깁니다.">
+  <div class="wrap">
+   <div class="eyebrow">조금 먼 이야기지만</div>
+   <h2 class="big">생기부는 <em>수업 시간 질문</em>에서 시작한다</h2>
+   <div class="quote-card">
+    <p>밖에서 한 활동보다,<br><b>수업 안에서 어떤 호기심을 갖고 어디까지 파고들었는지</b>를 본다.</p>
+    <span class="src">입시 상담 영상 중 · 선생님 요약</span>
+   </div>
+   <div class="arrow">↓</div>
+   <p class="lead">수업 속 질문이 자라고,<br>그 탐구 과정과 태도가 흔적으로 남는 것 — 그게 성장으로 읽힌다.</p>
+   <p class="punch">그래서 학교에서 배운다.<br>질문하는 방법, 그리고 질문을 키우는 방법.</p>
+   <div class="vidslot" id="vidBox"></div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>포트폴리오와 연결</b> · 오해를 먼저 깨 주는 게 중요합니다. “질문 많이 쓴다고 점수 잘 받는 거 아니야.” 그리고 “과정만 있어도 안 되고, 결과만 있어도 안 돼. 둘 다 봐.” — 그래서 학습지를 모은다로 자연스럽게 넘깁니다.">
+  <div class="wrap">
+   <div class="eyebrow">미리 말해 두면</div>
+   <h2 class="big">딱 두 가지만</h2>
+   <div class="myth">
+    <div class="r">
+     <div class="x">질문을 많이 하면<br>점수를 잘 받는다</div>
+     <div class="ar">→</div>
+     <div class="o">개수가 아니라,<br>그 질문으로 무엇을 설명해 내는가</div>
+    </div>
+    <div class="r">
+     <div class="x">과정만 있으면 된다</div>
+     <div class="ar">→</div>
+     <div class="o">과정 기록과 결과물을<br>함께 본다</div>
+    </div>
+   </div>
+   <p class="lead">그래서 오늘 쓴 학습지를 모은다.</p>
+   <span class="src-chip">2026 학생 질문 중심 수업·평가 선도교원 연수</span>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
+  data-note="<b>마무리 · 5분</b> · “정답 없어. 네 생각을 쓰면 돼.” 다 쓴 사람 것부터 걷습니다. 포트폴리오에 철해 두었다가 학기말에 다시 꺼내 볼 거라고 예고해 주세요.">
+  <div class="wrap">
+   <div class="eyebrow">이제</div>
+   <h2 class="big">학습지에 내 생각 쓰기</h2>
+   <ul class="todo">
+    <li><span class="n">1</span><span class="t"><b>과학을 왜 배운다고 생각해?</b> — 만화를 보고 나서</span></li>
+    <li><span class="n">2</span><span class="t"><b>지금도 기억나는 과학 / 완전히 까먹은 과학</b></span></li>
+    <li><span class="n">3</span><span class="t"><b>요즘 내가 진짜 궁금한 것 하나</b> — 엉뚱해 보여도 좋다</span></li>
+    <li><span class="n">4</span><span class="t"><b>질문하고 싶었는데 참은 적</b>이 있다면, 왜?</span></li>
+    <li><span class="n">5</span><span class="t"><b>이번 학기 과학 시간의 나에게</b> 한 문장</span></li>
+   </ul>
+   <p class="punch">정답 없음. 네 생각을 쓰면 된다.</p>
+   <p class="sub">다 쓰면 제출 → 포트폴리오에 철해 두었다가 학기말에 다시 본다.</p>
+  </div>
+ </section>
+
+</main>
+
+<!-- ══════════ 교사 노트 ══════════ -->
+<div id="notes"><span class="lbl">교사 노트</span><div id="noteBody"></div></div>
+
+<!-- ══════════ 하단 ══════════ -->
+<div class="navbar">
+ <button class="btn small" id="prev">← 이전</button>
+ <button class="btn small primary" id="next">다음 →</button>
+ <span class="hint">← → · Space 넘김 &nbsp;|&nbsp; N 노트 &nbsp;|&nbsp; F 전체화면 &nbsp;|&nbsp; Home 처음</span>
+</div>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════
+   CONFIG — 여기만 고치면 됩니다.
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+
+  /* ── 만화 이미지 ──────────────────────────────────────────────
+     이 HTML과 같은 폴더의 img/ 안에 아래 이름으로 넣으면 자동으로 뜹니다.
+     (수업HTML\img\why0.webp … why7.webp, rock.webp)
+     확장자나 폴더가 다르면 오른쪽 경로만 고치세요.
+     파일이 없으면 그 자리에 컷 설명이 크게 뜹니다 — 그대로 진행해도 됩니다. */
+  IMG: {
+    'why-00'  : 'img/why0.webp',   // 표지 — 과학을 왜 배우는 걸까?
+    'why-01'  : 'img/why1.webp',   // 1컷 — 지구과학 하나도 기억 안 남
+    'why-02'  : 'img/why2.webp',   // 2컷 — 나도 까먹었는데 너희는 왜 배울까?
+    'why-rock': 'img/rock.webp',   // 삽입 — 작년 '암석 좀 외워줘' 만화
+    'why-03'  : 'img/why3.webp',   // 3컷 — 일단 수업 준비 시작
+    'why-04'  : 'img/why4.webp',   // 4컷 — 대단원 하나 1시간 안에 정리
+    'why-05'  : 'img/why5.webp',   // 5컷 — 지식을 구조화하는 방법을 배운 것
+    'why-06'  : 'img/why6.webp',   // 6컷 — 문제를 해결하는 힘
+    'why-07'  : 'img/why7.webp'    // 7컷 — 선생님의 바람
+  },
+
+  /* ── 영상 (선택) ──────────────────────────────────────────────
+     '생기부는 수업 시간 질문에서 시작한다' 슬라이드는 요약만으로 완결됩니다.
+     영상을 직접 틀고 싶을 때만 아래에 유튜브 주소를 넣으세요(watch?v=, youtu.be, shorts 모두 됨).
+     비워 두면 재생창 없이 요약 문구만 뜹니다. */
+  /* 표지 맨 위 작은 글씨. 1학년 수업에서 그대로 쓸 때 '1학년'으로만 바꾸면 됩니다. */
+  GRADE: '2학년',
+
+  VIDEO: {
+    URL: ''           // 예: 'https://www.youtube.com/watch?v=XXXXXXXXXXX'
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════════ */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const slides=$$('.slide');
+let idx=0, notesOn=false, started=false;
+
+/* ── 이미지 채우기 (없으면 컷 설명으로 대체) ── */
+slides.forEach(function(sl){
+  const fr=$('.frame',sl); if(!fr) return;
+  const key=fr.dataset.img, src=CONFIG.IMG[key];
+  const capEl=$('.cap',sl);
+  const capText=capEl?capEl.innerHTML:'';
+  const ph=function(){
+    fr.innerHTML='<div class="ph"><div class="tagline">이미지 넣을 자리</div>'+
+      '<div class="big">'+capText+'</div>'+
+      '<div class="path">'+(src||key)+'</div></div>';
+    if(capEl) capEl.style.display='none';
+  };
+  if(!src){ ph(); return; }
+  const im=new Image();
+  im.onload=function(){ fr.innerHTML=''; fr.appendChild(im); fr.closest('.cut').classList.add('has-img'); };
+  im.onerror=ph;
+  im.alt=key; im.src=src;
+});
+
+/* ── 영상 (주소가 있을 때만 재생창을 붙인다) ── */
+(function(){
+  const url=(CONFIG.VIDEO&&CONFIG.VIDEO.URL)||'';
+  const m=url?url.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/):null;
+  if(!m) return;
+  const box=$('#vidBox');
+  box.innerHTML='<iframe src="https://www.youtube.com/embed/'+m[1]+'?rel=0" allowfullscreen '+
+    'allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe>';
+  box.classList.add('on');
+})();
+
+/* ── 학년 표기 ── */
+if(CONFIG.GRADE) $('#coverGrade').textContent=CONFIG.GRADE+' 과학 · 학기 첫 시간';
+
+/* ── 진행 점 ── */
+const dots=$('#dots');
+slides.forEach(function(sl,i){
+  const d=document.createElement('i');
+  if(sl.dataset.kind==='q') d.className='q';
+  d.title=(i+1)+'번';
+  d.onclick=function(e){ e.stopPropagation(); show(i); };
+  dots.appendChild(d);
+});
+
+function show(i){
+  idx=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,n){ s.classList.toggle('on',n===idx); });
+  $$('#dots i').forEach(function(d,n){ d.classList.toggle('on',n===idx); });
+  $('#counter').textContent=(idx+1)+' / '+slides.length;
+  $('#noteBody').innerHTML=slides[idx].dataset.note||'—';
+  slides[idx].scrollTop=0;
+}
+function next(){ show(idx+1); }
+function prev(){ show(idx-1); }
+
+$('#next').onclick=function(e){e.stopPropagation();next();};
+$('#prev').onclick=function(e){e.stopPropagation();prev();};
+$('#stage').addEventListener('click',function(e){ if(e.target.closest('iframe,a,button')) return; next(); });
+
+$('#noteBtn').onclick=function(e){ e.stopPropagation(); notesOn=!notesOn; $('#notes').classList.toggle('on',notesOn); };
+$('#fsBtn').onclick=function(e){ e.stopPropagation();
+  if(document.fullscreenElement){ document.exitFullscreen(); } else { document.documentElement.requestFullscreen(); } };
+
+addEventListener('keydown',function(e){
+  if(!started){
+    if(e.key==='Enter'||e.key===' '){ start(); e.preventDefault(); }
+    return;
+  }
+  const k=e.key;
+  if(k==='ArrowRight'||k===' '||k==='PageDown'){ next(); e.preventDefault(); }
+  else if(k==='ArrowLeft'||k==='PageUp'){ prev(); e.preventDefault(); }
+  else if(k==='Home'){ show(0); }
+  else if(k==='End'){ show(slides.length-1); }
+  else if(k==='n'||k==='N'||k==='ㅜ'){ $('#noteBtn').click(); }
+  else if(k==='f'||k==='F'||k==='ㄹ'){ $('#fsBtn').click(); }
+});
+
+/* 터치 스와이프 */
+let tx=0,ty=0;
+addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;},{passive:true});
+addEventListener('touchend',function(e){
+  if(!started) return;
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){ if(dx<0){next();}else{prev();} }
+},{passive:true});
+
+function start(){ started=true; $('#cover').classList.add('hide'); show(0); }
+$('#go').onclick=start;
+show(0);
+</script>
+</body>
+</html>
