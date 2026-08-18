@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
 :root{
  --paper:#f2e8d5; --paper-hi:#f9f2e3; --paper-lo:#e6d7ba;
@@ -192,6 +193,20 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .band.q{background:#eef2fa;border-color:var(--q)}
 .band.q b{color:var(--q)}
 
+/* 디벗 즐겨찾기 */
+.bookmark{display:flex;align-items:center;gap:clamp(14px,2.6vw,32px);background:var(--paper-hi);
+ border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(14px,2.2vw,26px) clamp(18px,3vw,34px);box-shadow:var(--shadow)}
+.qr{flex:none;width:clamp(112px,15vw,190px);aspect-ratio:1;background:#fff;border:2px solid var(--line);
+ border-radius:12px;padding:7px;display:flex;align-items:center;justify-content:center}
+.qr img{width:100%;height:100%;image-rendering:pixelated}
+.qr .no{font-size:12px;color:var(--ink-mute);text-align:center;line-height:1.4}
+.bmt{font-family:var(--jua);font-size:clamp(17px,2.7vw,32px);line-height:1.35;text-align:left}
+.bmt b{color:var(--q);font-weight:400}
+.bmu{font-family:var(--mono);font-size:clamp(11.5px,1.6vw,17px);color:var(--accent);
+ margin-top:9px;text-align:left;word-break:break-all}
+@media (max-width:760px){ .bookmark{flex-direction:column} .bmt,.bmu{text-align:center} }
+
 /* 세 바구니 */
 .baskets{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(9px,1.6vw,18px);width:100%}
 .bk{border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
@@ -298,7 +313,7 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
 <header>
  <div class="brand">과학을 왜 배우는 걸까<span class="dot">?</span></div>
  <div class="dots" id="dots"></div>
- <div class="counter" id="counter">1 / 24</div>
+ <div class="counter" id="counter">1 / 25</div>
  <div class="hbtns">
   <button class="btn small" id="noteBtn" title="교사 노트 (N)">🧑‍🏫</button>
   <button class="btn small" id="fsBtn" title="전체화면 (F)">⛶</button>
@@ -551,6 +566,23 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
  </section>
 
  <section class="slide" data-kind="q"
+  data-note="<b>준비물 공지 · 30초</b> · 앞장에서 “질문나무에 올린다”고 했으니 바로 이어집니다. 세 마디면 끝 — ①매 시간 충전해서 가져온다 ②이 QR로 들어가서 즐겨찾기 해 둔다 ③걱정 마, 디벗은 아주 잠깐만 쓴다. 지금 이 자리에서 즐겨찾기까지 시켜 두면 다음 시간이 편합니다. 주소는 CONFIG.HUB 에서 바꿉니다.">
+  <div class="wrap">
+   <div class="eyebrow">준비물 딱 하나</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">과학 시간엔 <em>디벗</em>을 꼭!</h2>
+   <div class="bookmark">
+    <div class="qr" id="qrHub"><span class="no">주소를 직접 입력</span></div>
+    <div>
+     <div class="bmt">선생님 수업 메인페이지를<br><b>즐겨찾기</b> 해 두기</div>
+     <div class="bmu" id="hubUrl"></div>
+    </div>
+   </div>
+   <p class="band">충전해서 <b>매 시간</b> 가져오기.</p>
+   <p class="band q">걱정 마 — <b>디벗은 아주 잠깐만</b> 쓴다. 질문 올릴 때뿐.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
   data-note="<b>실험실 규칙</b> · 여섯 칸을 다 읽지 말고 첫 칸(안전 교육)과 마지막 칸(보고서 제출)만 힘주어 말하세요. “안전 교육 안 들으면 실험 못 한다”와 “보고서까지가 실험이다” 두 문장이면 충분합니다. 보고서는 포트폴리오로 들어갑니다.">
   <div class="wrap">
    <div class="eyebrow">우리 수업은 이렇게</div>
@@ -655,6 +687,9 @@ const CONFIG = {
     URL: ''           // 예: 'https://www.youtube.com/watch?v=XXXXXXXXXXX'
   },
 
+  /* ── 학생이 즐겨찾기 할 수업 메인페이지 ───────────────────── */
+  HUB: 'https://scienceisjo.github.io/scienceclass/',
+
   /* ── 이 수업이 끝나면 이어서 열 자료 ─────────────────────────
      비워 두면 마지막 장에 버튼이 뜨지 않습니다. */
   NEXT: {
@@ -696,6 +731,15 @@ slides.forEach(function(sl){
   box.innerHTML='<iframe src="https://www.youtube.com/embed/'+m[1]+'?rel=0" allowfullscreen '+
     'allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe>';
   box.classList.add('on');
+})();
+
+/* ── 수업 메인페이지 주소 + QR ── */
+(function(){ var u=CONFIG.HUB; if(!u) return;
+  $('#hubUrl').textContent=u.replace(/^https?:\/\//,'').replace(/\/$/,'');
+  try{ if(typeof qrcode!=='undefined'){
+    var q=qrcode(0,'M'); q.addData(u); q.make();
+    $('#qrHub').innerHTML=q.createImgTag(6,0);
+  } }catch(e){}
 })();
 
 /* ── 다음 자료 버튼 ── */
