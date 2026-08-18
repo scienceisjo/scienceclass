@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>교실 게시용 포스터 · 해누리와 승재쌤이 함께하는 과학 시간</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+ --paper:#fdf7ea; --line:#e2d2ae; --ink:#2f2a20; --ink-dim:#5d5342; --ink-mute:#7d7160;
+ --sun:#e0912b; --leaf:#2f7d55;
+ --jua:"Jua",-apple-system,"Malgun Gothic",sans-serif;
+ --body:"Gowun Dodum",-apple-system,"Malgun Gothic",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#e7e2d6;font-family:var(--body);color:var(--ink);padding:24px 14px;line-height:1.6}
+.tools{max-width:210mm;margin:0 auto 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tools button{font-family:var(--jua);font-size:15px;padding:10px 22px;border-radius:12px;border:none;
+ background:var(--leaf);color:#f2fbf5;cursor:pointer}
+.tools p{font-size:13px;color:#5a5347}
+
+.sheet{width:210mm;height:297mm;margin:0 auto;background:var(--paper);position:relative;
+ padding:13mm 15mm;display:flex;flex-direction:column;align-items:center;text-align:center;
+ box-shadow:0 20px 50px -28px rgba(0,0,0,.55);overflow:hidden}
+.sheet::before{content:"";position:absolute;inset:0;pointer-events:none;
+ background:
+  radial-gradient(60mm 40mm at 88% 2%, rgba(224,145,43,.20), transparent 62%),
+  radial-gradient(56mm 40mm at 6% 99%, rgba(47,125,85,.17), transparent 60%)}
+.sheet>*{position:relative}
+
+.sun{width:19mm;height:19mm;border-radius:50%;position:relative;margin-bottom:5mm;
+ background:radial-gradient(circle at 38% 34%, #ffd98f, var(--sun) 72%)}
+.sun::after{content:"";position:absolute;inset:-4.8mm;border-radius:50%;
+ background:conic-gradient(from 0deg, rgba(224,145,43,.5) 0 6deg, transparent 6deg 30deg);
+ -webkit-mask:radial-gradient(circle, transparent 62%, #000 64%);
+ mask:radial-gradient(circle, transparent 62%, #000 64%)}
+
+h1{font-family:var(--jua);font-weight:400;font-size:27pt;line-height:1.3;letter-spacing:-.5px}
+h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
+.sub{font-size:12pt;color:var(--ink-mute);margin-top:3mm}
+
+.qrbox{margin-top:7mm;padding:5.5mm;background:#fff;border:2mm solid var(--leaf);border-radius:5mm;
+ box-shadow:0 8mm 18mm -10mm rgba(0,0,0,.4)}
+.qrbox svg{display:block;width:57mm;height:57mm;shape-rendering:crispEdges}
+.qcap{font-family:var(--jua);font-size:14pt;color:var(--leaf);margin-top:4.5mm}
+.url{margin-top:2mm;font-size:10.5pt;color:var(--ink-dim);word-break:break-all}
+
+.menu{margin-top:7mm;display:grid;grid-template-columns:repeat(5,1fr);gap:3mm;width:100%}
+.mi{border:1.5px solid var(--line);border-radius:4mm;padding:3.5mm 1.5mm;background:rgba(255,255,255,.62)}
+.mi .e{font-size:18pt;display:block;line-height:1.1}
+.mi .t{font-family:var(--jua);font-size:9.5pt;margin-top:1.5mm;display:block;line-height:1.35}
+
+.tip{margin-top:7mm;width:100%;border:2px dashed var(--sun);border-radius:5mm;
+ padding:5mm 6mm;background:rgba(255,250,240,.85);text-align:left}
+.tip h2{font-family:var(--jua);font-weight:400;font-size:13pt;color:#a06318;display:flex;gap:2.5mm;align-items:center}
+.tip ol{margin:3mm 0 0 6mm;font-size:10.5pt;color:var(--ink-dim)}
+.tip li{margin:1.6mm 0}
+.tip b{color:var(--ink)}
+
+.foot{margin-top:auto;padding-top:5mm;font-size:9.5pt;color:var(--ink-mute)}
+
+@page{size:A4;margin:0}
+@media print{
+ body{background:#fff;padding:0}
+ .tools{display:none}
+ .sheet{box-shadow:none;margin:0;width:210mm;height:297mm}
+}
+@media (max-width:230mm){
+ body{padding:14px 8px}
+ .sheet{width:100%;height:auto;padding:22px 18px}
+ h1{font-size:26pt}
+ .qrbox svg{width:52mm;height:52mm}
+ .menu{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="tools">
+  <button onclick="window.print()">🖨 인쇄하기 (A4 1장)</button>
+  <p>인쇄 창에서 <b>배경 그래픽</b>을 켜면 색이 그대로 나옵니다 · 여백은 <b>없음</b>으로.</p>
+</div>
+
+<div class="sheet">
+  <div class="sun"></div>
+  <h1><span class="hl">해누리</span>와 <span class="hs">승재쌤</span>이<br>함께하는 과학 시간</h1>
+  <p class="sub">2026학년도 · 해누리중학교 과학</p>
+
+  <div class="qrbox"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37"><path stroke="#2f2a20" d="M0 0.5h7m1 0h3m2 0h2m1 0h3m1 0h2m1 0h5m2 0h7m-37 1h1m5 0h1m1 0h3m1 0h3m1 0h2m2 0h2m1 0h1m1 0h4m1 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m2 0h2m1 0h1m2 0h5m1 0h1m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h3m2 0h2m2 0h1m1 0h2m1 0h2m6 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h4m1 0h4m1 0h6m1 0h3m2 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m1 0h2m4 0h1m1 0h1m2 0h1m2 0h2m2 0h3m1 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-27 1h2m1 0h2m4 0h1m1 0h1m1 0h2m1 0h1m-24 1h1m2 0h1m2 0h1m1 0h1m4 0h2m4 0h1m2 0h3m3 0h3m1 0h2m-35 1h2m1 0h1m2 0h2m1 0h1m2 0h1m1 0h3m2 0h4m1 0h1m1 0h3m5 0h1m-37 1h3m1 0h4m8 0h3m1 0h1m7 0h1m1 0h1m1 0h2m1 0h2m-36 1h3m4 0h2m1 0h2m1 0h1m2 0h1m2 0h4m1 0h1m1 0h1m4 0h1m2 0h1m-36 1h3m3 0h9m1 0h1m2 0h1m2 0h2m1 0h1m2 0h3m-31 1h2m2 0h2m1 0h1m1 0h2m8 0h2m1 0h1m1 0h3m3 0h2m1 0h1m1 0h2m-36 1h2m3 0h4m3 0h3m1 0h3m1 0h6m3 0h2m2 0h1m1 0h1m-35 1h1m1 0h1m2 0h4m1 0h1m1 0h4m3 0h2m2 0h3m-27 1h1m2 0h1m1 0h1m1 0h1m1 0h1m4 0h4m5 0h1m1 0h2m1 0h3m1 0h2m-35 1h2m1 0h3m1 0h1m4 0h1m1 0h2m2 0h1m1 0h2m4 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-37 1h1m4 0h2m2 0h1m2 0h3m3 0h1m4 0h3m4 0h2m1 0h4m-35 1h3m2 0h2m1 0h2m2 0h2m2 0h1m1 0h1m1 0h3m1 0h1m1 0h3m3 0h1m1 0h1m-37 1h1m1 0h1m3 0h2m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m2 0h2m1 0h2m1 0h5m2 0h1m-36 1h2m2 0h1m4 0h3m2 0h3m1 0h4m1 0h1m1 0h2m2 0h2m4 0h2m-36 1h2m1 0h4m3 0h3m3 0h1m1 0h1m6 0h1m3 0h3m2 0h2m-36 1h2m5 0h1m3 0h2m3 0h2m1 0h1m1 0h1m1 0h2m3 0h2m1 0h1m2 0h1m-33 1h1m2 0h1m2 0h1m1 0h5m2 0h1m2 0h2m1 0h7m-30 1h1m1 0h1m1 0h1m1 0h4m1 0h2m4 0h1m1 0h2m1 0h1m5 0h3m3 0h2m-37 1h1m2 0h4m2 0h1m3 0h4m2 0h1m3 0h3m2 0h5m3 0h1m-36 1h1m7 0h1m3 0h1m2 0h1m6 0h1m1 0h4m1 0h2m4 0h1m-37 1h3m1 0h3m1 0h1m2 0h2m2 0h4m1 0h1m3 0h1m2 0h6m1 0h3m-29 1h1m2 0h2m1 0h1m1 0h2m3 0h4m1 0h3m3 0h1m3 0h1m-37 1h7m2 0h5m4 0h5m2 0h1m1 0h2m1 0h1m1 0h1m1 0h3m-37 1h1m5 0h1m3 0h2m3 0h1m1 0h4m1 0h1m5 0h1m3 0h1m1 0h1m1 0h1m-37 1h1m1 0h3m1 0h1m4 0h1m1 0h1m5 0h2m1 0h5m1 0h6m1 0h2m-37 1h1m1 0h3m1 0h1m1 0h1m4 0h1m3 0h1m4 0h2m1 0h1m1 0h3m2 0h1m1 0h3m-37 1h1m1 0h3m1 0h1m2 0h1m1 0h1m8 0h3m3 0h4m2 0h1m1 0h1m1 0h1m-37 1h1m5 0h1m2 0h7m2 0h1m1 0h1m2 0h3m2 0h1m1 0h3m-33 1h7m2 0h2m2 0h1m3 0h3m1 0h5m1 0h4m4 0h2"/></svg></div>
+  <p class="qcap">📷 카메라로 찍으면 바로 열려요</p>
+  <p class="url">https://scienceisjo.github.io/scienceclass/</p>
+
+  <div class="menu">
+    <div class="mi"><span class="e">📄</span><span class="t">학습지<br>받기</span></div>
+    <div class="mi"><span class="e">📅</span><span class="t">평가 계획<br>과 일정</span></div>
+    <div class="mi"><span class="e">📚</span><span class="t">수업<br>페이지</span></div>
+    <div class="mi"><span class="e">🌳</span><span class="t">질문<br>나무</span></div>
+    <div class="mi"><span class="e">🏅</span><span class="t">칭찬<br>도장판</span></div>
+  </div>
+
+  <div class="tip">
+    <h2>📱 홈 화면에 두면 더 편해요</h2>
+    <ol>
+      <li>QR을 찍어 페이지를 엽니다.</li>
+      <li>맨 아래 <b>홈 화면에 추가하기</b> 안내를 따라 합니다.</li>
+      <li>다음부터는 <b>아이콘 한 번</b>으로 열립니다. 주소를 외울 필요가 없어요.</li>
+    </ol>
+  </div>
+
+  <p class="foot">© 2026 조승재(과학이조선생) · 해누리중학교</p>
+</div>
+
+</body>
+</html>

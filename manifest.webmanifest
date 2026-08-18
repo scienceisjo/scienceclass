@@ -1,0 +1,21 @@
+{
+  "name": "해누리와 승재쌤이 함께하는 과학 시간",
+  "short_name": "과학 시간",
+  "description": "해누리중학교 과학 수업 — 학습지·평가 일정·수업 페이지·질문나무·칭찬 도장판",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf7ea",
+  "theme_color": "#2f7d55",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "학습지 받기", "url": "./#sheet" },
+    { "name": "수업 페이지", "url": "./#less" }
+  ]
+}

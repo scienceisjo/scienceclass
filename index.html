@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>해누리와 승재쌤이 함께하는 과학 시간</title>
+<meta name="description" content="해누리중학교 과학 수업 — 학습지·평가 일정·수업 페이지·질문나무·칭찬 도장판을 한곳에서.">
+<meta name="theme-color" content="#2f7d55">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="과학 시간">
+<meta property="og:title" content="해누리와 승재쌤이 함께하는 과학 시간">
+<meta property="og:description" content="학습지 · 평가 일정 · 수업 페이지 · 질문나무 · 칭찬 도장판">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+ --paper:#fdf7ea; --paper-hi:#fffdf6; --paper-lo:#f4ead4;
+ --line:#e2d2ae; --line-soft:#efe4ca;
+ --ink:#2f2a20; --ink-dim:#5d5342; --ink-mute:#7d7160;
+ --sun:#e0912b; --leaf:#2f7d55; --leaf-lo:#4a9e70; --sky:#356f95;
+ --jua:"Jua",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+ --body:"Gowun Dodum","Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+ --r:18px; --shadow:0 14px 34px -20px rgba(72,56,24,.5);
+ --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--paper-lo)}
+body{font-family:var(--body);color:var(--ink);min-height:100dvh;line-height:1.65;
+ background:
+  radial-gradient(900px 500px at 88% -6%, rgba(224,145,43,.16), transparent 62%),
+  radial-gradient(760px 460px at 6% 102%, rgba(47,125,85,.13), transparent 58%),
+  var(--paper);
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px calc(30px + var(--safe-b))}
+
+header{padding:26px 0 6px;text-align:center}
+.sunmark{width:54px;height:54px;margin:0 auto 12px;border-radius:50%;position:relative;
+ background:radial-gradient(circle at 38% 34%, #ffd98f, var(--sun) 72%);
+ box-shadow:0 0 0 7px rgba(224,145,43,.15), 0 10px 24px -12px rgba(224,145,43,.9)}
+.sunmark::after{content:"";position:absolute;inset:-14px;border-radius:50%;
+ background:conic-gradient(from 0deg, rgba(224,145,43,.45) 0 6deg, transparent 6deg 45deg);
+ -webkit-mask:radial-gradient(circle, transparent 62%, #000 64%);
+ mask:radial-gradient(circle, transparent 62%, #000 64%)}
+h1{font-family:var(--jua);font-weight:400;font-size:clamp(21px,5vw,29px);line-height:1.35}
+h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
+.sub{margin-top:7px;font-size:13.5px;color:var(--ink-mute)}
+
+.grade{display:flex;gap:8px;justify-content:center;margin:20px 0 0}
+.gbtn{font-family:var(--jua);font-size:15.5px;padding:9px 24px;border-radius:999px;cursor:pointer;
+ border:2px solid var(--line);background:var(--paper-hi);color:var(--ink-mute);transition:.16s}
+.gbtn.on{background:var(--leaf);border-color:var(--leaf);color:#f2fbf5;box-shadow:0 10px 22px -12px var(--leaf)}
+.gnote{text-align:center;font-size:12.5px;color:var(--ink-mute);margin-top:9px}
+
+.rooms{display:grid;gap:12px;margin-top:18px}
+@media(min-width:620px){.rooms{grid-template-columns:1fr 1fr}}
+.room{display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;
+ background:linear-gradient(180deg,var(--paper-hi),var(--paper));
+ border:2px solid var(--line);border-radius:var(--r);padding:16px 15px;
+ box-shadow:var(--shadow);transition:.16s;font-family:var(--body);color:var(--ink);text-decoration:none}
+.room:hover{transform:translateY(-2px);border-color:var(--leaf-lo)}
+.room:active{transform:translateY(0) scale(.99)}
+.room .ic{flex:none;width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:26px;
+ background:var(--paper-lo);border:1.5px solid var(--line-soft)}
+.room .tx{flex:1;min-width:0}
+.room .tt{font-family:var(--jua);font-size:17.5px;line-height:1.3}
+.room .dd{font-size:12.8px;color:var(--ink-mute);margin-top:3px}
+.room .arw{flex:none;color:var(--ink-mute);font-size:19px}
+.room.ext .arw::after{content:"\2197"}
+.room:not(.ext) .arw::after{content:"\203A"}
+.room.r-sheet .ic{background:rgba(53,111,149,.12);border-color:rgba(53,111,149,.35)}
+.room.r-eval  .ic{background:rgba(179,66,58,.11);border-color:rgba(179,66,58,.3)}
+.room.r-less  .ic{background:rgba(47,125,85,.12);border-color:rgba(47,125,85,.33)}
+.room.r-tree  .ic{background:rgba(74,158,112,.16);border-color:rgba(74,158,112,.38)}
+.room.r-stamp .ic{background:rgba(224,145,43,.16);border-color:rgba(224,145,43,.4)}
+
+.view{display:none;animation:fade .22s ease both}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}.room{transition:none}}
+.vhead{display:flex;align-items:center;gap:10px;margin:20px 0 2px;flex-wrap:wrap}
+.back{font-family:var(--jua);font-size:14.5px;padding:8px 15px;border-radius:999px;cursor:pointer;
+ border:2px solid var(--line);background:var(--paper-hi);color:var(--ink-dim);flex:none}
+.back:hover{border-color:var(--leaf);color:var(--leaf)}
+.vhead h2{font-family:var(--jua);font-weight:400;font-size:clamp(19px,4.2vw,24px);color:var(--leaf)}
+.vlead{font-size:14px;color:var(--ink-dim);margin:12px 0 2px;line-height:1.75}
+
+.empty{border:2px dashed var(--line);border-radius:var(--r);padding:26px 18px;text-align:center;
+ color:var(--ink-dim);font-size:14px;margin-top:14px;background:rgba(255,253,246,.65);line-height:1.85}
+.empty .be{font-size:34px;display:block;margin-bottom:9px}
+.empty b{color:var(--ink)}
+
+.units{display:grid;gap:10px;margin-top:14px}
+@media(min-width:620px){.units{grid-template-columns:1fr 1fr}}
+.unit{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:15px;text-decoration:none;
+ border:1.5px solid var(--line);background:var(--paper-hi);color:var(--ink);transition:.15s}
+.unit:hover{border-color:var(--leaf-lo);transform:translateY(-1px)}
+.unit .un{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:19px;
+ background:var(--paper-lo);border:1px solid var(--line-soft)}
+.unit .ut{flex:1;min-width:0}
+.unit .ut b{font-family:var(--jua);font-weight:400;font-size:15.5px;display:block;line-height:1.35}
+.unit .ut small{font-size:12.3px;color:var(--ink-mute);display:block;line-height:1.5}
+.unit .tag{flex:none;font-size:10.5px;padding:3px 8px;border-radius:99px;white-space:nowrap;
+ border:1px solid var(--line);color:var(--ink-mute)}
+.unit .tag.lesson{background:rgba(47,125,85,.13);border-color:var(--leaf);color:var(--leaf)}
+.unit .tag.lab{background:rgba(53,111,149,.12);border-color:var(--sky);color:var(--sky)}
+.unit.todo{opacity:.6;pointer-events:none;border-style:dashed}
+
+.wgroup{margin-top:18px}
+.wgroup>h3{font-family:var(--jua);font-weight:400;font-size:15.5px;color:var(--sky);
+ display:flex;align-items:center;gap:7px;padding-bottom:7px;border-bottom:1.5px dashed var(--line)}
+.wgroup>h3 .cnt{margin-left:auto;font-size:11.5px;color:var(--ink-mute)}
+.wlist{display:grid;gap:8px;margin-top:10px}
+.wrow{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:13px;text-decoration:none;
+ border:1.5px solid var(--line);background:var(--paper-hi);color:var(--ink);transition:.15s}
+.wrow:hover{border-color:var(--sky);transform:translateY(-1px)}
+.wrow .wi{flex:none;font-size:18px}
+.wrow .wt{flex:1;min-width:0}
+.wrow .wt b{font-weight:400;font-family:var(--jua);font-size:14.8px;display:block;line-height:1.35}
+.wrow .wt small{font-size:12px;color:var(--ink-mute)}
+.wrow .wgo{flex:none;font-size:11.5px;color:var(--sky);font-weight:700;white-space:nowrap}
+.wrow.todo{opacity:.55;pointer-events:none;border-style:dashed}
+.wrow.todo .wgo{color:var(--ink-mute)}
+
+.install{margin-top:20px;border:2px solid var(--sun);border-radius:var(--r);
+ background:linear-gradient(180deg,#fffaf0,#fdf2dc);padding:16px}
+.install h3{font-family:var(--jua);font-weight:400;font-size:16px;color:#a06318;display:flex;gap:8px;align-items:center}
+.install p{font-size:13.4px;color:var(--ink-dim);margin-top:8px}
+.install ol{margin:9px 0 0 20px;font-size:13.3px;color:var(--ink-dim)}
+.install li{margin:4px 0}
+.install .ibtn{margin-top:12px;font-family:var(--jua);font-size:14.5px;padding:10px 22px;border-radius:12px;
+ border:none;background:var(--sun);color:#fff;cursor:pointer;display:none}
+.install .ibtn.show{display:inline-block}
+.install.done{border-color:var(--leaf);background:linear-gradient(180deg,#f4fbf6,#e9f5ee)}
+.install.done h3{color:var(--leaf)}
+
+#app-credit{margin-top:28px;padding-top:16px;border-top:1.5px dashed var(--line);
+ text-align:center;font-size:12.2px;color:var(--ink-mute);line-height:1.95}
+#app-credit a{color:var(--ink-mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="sunmark" aria-hidden="true"></div>
+  <h1><span class="hl">해누리</span>와 <span class="hs">승재쌤</span>이<br>함께하는 과학 시간</h1>
+  <p class="sub">2026학년도 · 해누리중학교 과학</p>
+</header>
+
+<div class="grade" id="grade" role="group" aria-label="학년 선택">
+  <button class="gbtn" data-g="1" type="button">1학년</button>
+  <button class="gbtn" data-g="2" type="button">2학년</button>
+</div>
+<p class="gnote" id="gnote">학년을 고르면 학습지와 수업 페이지가 우리 학년 것으로 바뀝니다</p>
+
+<!-- ══════════ 홈 ══════════ -->
+<section class="view on" id="v-home">
+  <div class="rooms">
+    <button class="room r-sheet" type="button" data-go="sheet">
+      <span class="ic">📄</span>
+      <span class="tx"><span class="tt">학습지 받기</span><span class="dd">차시별 학습지·개념 정리·문제지</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
+    <button class="room r-eval" type="button" data-go="eval">
+      <span class="ic">📅</span>
+      <span class="tx"><span class="tt">평가 계획과 일정</span><span class="dd">수행평가·지필 범위·준비물</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
+    <button class="room r-less" type="button" data-go="less">
+      <span class="ic">📚</span>
+      <span class="tx"><span class="tt">수업 페이지</span><span class="dd">단원별 수업 자료와 가상 실험실</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
+    <a class="room r-tree ext" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">
+      <span class="ic">🌳</span>
+      <span class="tx"><span class="tt">질문나무</span><span class="dd">궁금한 것을 질문으로 키우기</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
+    <a class="room r-stamp ext" href="https://scienceisjo.github.io/class-tools/stamp-board/" target="_blank" rel="noopener">
+      <span class="ic">🏅</span>
+      <span class="tx"><span class="tt">칭찬 도장판</span><span class="dd">내 도장 확인하고 교환소 가기</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div class="install" id="install">
+    <h3>📱 홈 화면에 추가하기</h3>
+    <p>이 페이지를 앱처럼 홈 화면에 올려 두면, 다음부터는 아이콘 한 번으로 바로 열려요.</p>
+    <ol id="installSteps">
+      <li>브라우저 아래(또는 위) <b>공유 / 메뉴</b> 버튼을 누릅니다.</li>
+      <li><b>홈 화면에 추가</b>를 고릅니다.</li>
+      <li><b>추가</b>를 누르면 끝!</li>
+    </ol>
+    <button class="ibtn" id="installBtn" type="button">홈 화면에 추가</button>
+  </div>
+</section>
+
+<!-- ══════════ 학습지 ══════════ -->
+<section class="view" id="v-sheet">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📄 학습지 받기</h2></div>
+  <p class="vlead">수업에 쓴 학습지를 다시 받을 수 있어요. 결석했거나 잃어버렸을 때, 시험공부할 때 쓰세요.</p>
+  <div id="sheetList"></div>
+</section>
+
+<!-- ══════════ 평가 ══════════ -->
+<section class="view" id="v-eval">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📅 평가 계획과 일정</h2></div>
+  <p class="vlead">수행평가가 언제, 무엇으로, 어떻게 이루어지는지 여기에 정리됩니다.</p>
+  <div id="evalList"></div>
+</section>
+
+<!-- ══════════ 수업 페이지 ══════════ -->
+<section class="view" id="v-less">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📚 수업 페이지</h2></div>
+  <p class="vlead" id="lessLead"></p>
+  <div class="units" id="unitList"></div>
+  <div class="empty" style="border-style:solid;background:rgba(255,253,246,.5)">
+    <span class="be">🌍</span>
+    <b>더 많은 과학 웹앱이 궁금하다면</b><br>
+    지금까지 만든 모든 실험실·게임·이야기를 모아 둔 곳이 있어요.<br>
+    <a href="https://scienceisjo.github.io/scienceworld/science-exploration-world.html" target="_blank" rel="noopener"
+       style="display:inline-block;margin-top:11px;font-family:var(--jua);font-size:14.5px;padding:9px 20px;
+       border-radius:12px;background:var(--leaf);color:#f2fbf5;text-decoration:none">과학 탐험 월드 열기 →</a>
+  </div>
+</section>
+
+<footer id="app-credit">
+  © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
+  최종 업데이트: 2026-08-18
+</footer>
+</div>
+
+<script>
+'use strict';
+/* ══════════════════════════════════════════════════════════════
+   ★ 선생님이 고치는 곳은 아래 세 덩어리(UNITS · SHEETS · EVAL)뿐입니다.
+     - SHEETS의 url 에 OneDrive 공유 링크를 붙여 넣으면 바로 열립니다.
+     - url 이 비어 있으면 "준비 중"으로 흐리게 표시됩니다.
+   ══════════════════════════════════════════════════════════════ */
+
+const SW = 'https://scienceisjo.github.io/scienceworld/science-exploration-world.html';
+
+/* ── 단원 (학년별) ───────────────────────────────── */
+const UNITS = {
+ '1':[
+  {no:6, ic:'🎈', name:'기체의 성질', desc:'압력 · 입자의 충돌 · 압력↔부피 · 온도↔부피',
+   url:'https://scienceisjo.github.io/gas-properties/', kind:'lesson'},
+ ],
+ '2':[
+  {no:1, ic:'🔬', name:'물질의 특성', desc:'순물질과 혼합물 · 밀도 · 용해도 · 녹는점',
+   url:SW+'#unit-mid2-1', kind:'lab'},
+  {no:2, ic:'🪨', name:'지권의 변화', desc:'지구 내부 · 광물 · 화성암 · 퇴적암 · 변성암',
+   url:SW+'#unit-mid2-2', kind:'lab'},
+  {no:3, ic:'🌈', name:'빛과 파동', desc:'빛의 합성 · 거울과 렌즈 · 소리',
+   url:'https://scienceisjo.github.io/lightandwave/', kind:'lab'},
+  {no:4, ic:'⚛️', name:'물질의 구성', desc:'원소 · 원자 · 주기율표 · 이온',
+   url:SW+'#unit-mid2-4', kind:'lab'},
+  {no:5, ic:'🌱', name:'식물과 에너지', desc:'광합성 · 증산 작용 · 호흡', url:'', kind:'todo'},
+  {no:6, ic:'🫀', name:'동물과 에너지', desc:'소화 · 순환 · 호흡 · 배설', url:'', kind:'todo'},
+  {no:7, ic:'⚡', name:'전기와 자기', desc:'마찰 전기 · 전류와 전압 · 저항 · 전자석 · 전동기',
+   url:'https://scienceisjo.github.io/electricity/', kind:'lesson'},
+  {no:8, ic:'🌌', name:'별과 우주', desc:'연주 시차 · 별의 밝기와 색 · 우리은하 · 우주 팽창',
+   url:'https://scienceisjo.github.io/starandspace/', kind:'lesson'},
+ ]
+};
+
+/* ── 학습지 (학년별) ─────────────────────────────
+   url 에 OneDrive 링크를 넣으면 바로 열립니다. 비워 두면 '준비 중'.  */
+const SHEETS = {
+ '1':[
+  {unit:'🎈 기체의 성질', items:[
+   {t:'1걸음 · 압력',              k:'학습지', url:''},
+   {t:'2걸음 · 기체의 압력',        k:'학습지', url:''},
+   {t:'3걸음 · 압력과 부피',        k:'학습지', url:''},
+   {t:'4걸음 · 온도와 부피',        k:'학습지', url:''},
+   {t:'5걸음 · 생활 속 부피 변화',   k:'활동지', url:''},
+  ]},
+ ],
+ '2':[
+  {unit:'🧭 학기 시작', items:[
+   {t:'2학기 오리엔테이션',         k:'학습지', url:''},
+  ]},
+  {unit:'⚡ 전기와 자기', items:[
+   {t:'1차시 · 마찰 전기',          k:'학습지', url:''},
+   {t:'1차시 · 개념 정리',          k:'개념 정리', url:''},
+   {t:'1~2차시 · 문제지',           k:'문제지', url:''},
+   {t:'2차시 · 정전기 유도',        k:'학습지', url:''},
+   {t:'3차시 · 전류',               k:'학습지', url:''},
+   {t:'4차시 · 옴의 법칙',          k:'학습지', url:''},
+   {t:'5차시 · 직렬과 병렬',        k:'학습지', url:''},
+   {t:'6차시 · 소비 전력',          k:'학습지', url:''},
+   {t:'7차시 · 코일 주위의 자기장',  k:'학습지', url:''},
+   {t:'8차시 · 전동기',             k:'학습지', url:''},
+  ]},
+  {unit:'🌌 별과 우주', items:[
+   {t:'1차시 · 연주 시차',          k:'학습지', url:''},
+   {t:'2차시 · 별의 밝기와 거리',    k:'학습지', url:''},
+   {t:'3차시 · 별의 등급',          k:'학습지', url:''},
+   {t:'4차시 · 별의 색과 온도',      k:'학습지', url:''},
+   {t:'5차시 · 우리은하',           k:'학습지', url:''},
+   {t:'6차시 · 천체 관측',          k:'학습지', url:''},
+   {t:'7차시 · 성운과 성단',        k:'학습지', url:''},
+   {t:'8차시 · 팽창하는 우주',      k:'학습지', url:''},
+  ]},
+ ]
+};
+
+/* ── 평가 계획 (학년별) ───────────────────────────
+   {t:이름, when:'2026-10-15', what:'무엇을 보나', prep:'준비물'} 형태로 채우면 됩니다. */
+const EVAL = { '1':[], '2':[] };
+
+/* ══════════════ 그리기 ══════════════ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let grade = localStorage.getItem('sc_grade') || '2';
+
+function drawUnits(){
+  const list = UNITS[grade] || [];
+  $('#lessLead').textContent = grade === '1'
+    ? '1학년 과학 수업 페이지예요. 단원을 누르면 그 단원의 수업이 열립니다.'
+    : '2학년 과학 수업 페이지예요. 단원을 누르면 그 단원의 수업과 실험실이 열립니다.';
+  $('#unitList').innerHTML = list.map(u => {
+    const todo = u.kind === 'todo' || !u.url;
+    const tag = todo ? '<span class="tag">준비 중</span>'
+      : u.kind === 'lesson' ? '<span class="tag lesson">수업 페이지</span>'
+      : '<span class="tag lab">실험실 모음</span>';
+    const inner = '<span class="un">' + u.ic + '</span>'
+      + '<span class="ut"><b>' + esc(u.name) + '</b><small>' + esc(u.desc) + '</small></span>' + tag;
+    return todo
+      ? '<span class="unit todo">' + inner + '</span>'
+      : '<a class="unit" href="' + u.url + '" target="_blank" rel="noopener">' + inner + '</a>';
+  }).join('');
+}
+
+function drawSheets(){
+  const groups = SHEETS[grade] || [];
+  if(!groups.length){ $('#sheetList').innerHTML = emptyBox('📄','학습지를 준비하고 있어요','곧 여기에 올라옵니다.'); return; }
+  $('#sheetList').innerHTML = groups.map(g => {
+    const ready = g.items.filter(i => i.url).length;
+    const rows = g.items.map(i => {
+      const inner = '<span class="wi">' + (i.url ? '📄' : '⏳') + '</span>'
+        + '<span class="wt"><b>' + esc(i.t) + '</b><small>' + esc(i.k) + '</small></span>'
+        + '<span class="wgo">' + (i.url ? '받기 ↓' : '준비 중') + '</span>';
+      return i.url
+        ? '<a class="wrow" href="' + i.url + '" target="_blank" rel="noopener">' + inner + '</a>'
+        : '<span class="wrow todo">' + inner + '</span>';
+    }).join('');
+    return '<div class="wgroup"><h3>' + esc(g.unit)
+      + '<span class="cnt">' + ready + ' / ' + g.items.length + '</span></h3>'
+      + '<div class="wlist">' + rows + '</div></div>';
+  }).join('');
+}
+
+function drawEval(){
+  const list = EVAL[grade] || [];
+  if(!list.length){
+    $('#evalList').innerHTML = emptyBox('📅','평가 계획을 준비하고 있어요',
+      '수행평가 영역과 일정이 정해지면 여기에 올라옵니다.<br>날짜가 정해지면 <b>며칠 남았는지</b>도 함께 보여 줄게요.');
+    return;
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  $('#evalList').innerHTML = list.map(e => {
+    let dday = '';
+    if(e.when){
+      const d = new Date(e.when + 'T00:00:00');
+      const gap = Math.round((d - today) / 86400000);
+      dday = gap > 0 ? 'D-' + gap : gap === 0 ? '오늘!' : '끝남';
+    }
+    return '<div class="card"><div class="card-t">' + esc(e.t)
+      + (dday ? '<span class="tag lesson" style="margin-left:auto">' + dday + '</span>' : '') + '</div>'
+      + (e.when ? '<p style="font-size:13.5px;color:var(--ink-mute);margin-top:4px">🗓 ' + esc(e.when) + '</p>' : '')
+      + (e.what ? '<p style="font-size:14px;color:var(--ink-dim);margin-top:8px">' + esc(e.what) + '</p>' : '')
+      + (e.prep ? '<p style="font-size:13.5px;color:var(--ink-dim);margin-top:6px">🎒 준비물 — ' + esc(e.prep) + '</p>' : '')
+      + '</div>';
+  }).join('');
+}
+
+function emptyBox(icon, title, body){
+  return '<div class="empty"><span class="be">' + icon + '</span><b>' + title + '</b><br>' + body + '</div>';
+}
+
+/* ══════════════ 학년 · 화면 전환 ══════════════ */
+function setGrade(g){
+  grade = g; localStorage.setItem('sc_grade', g);
+  document.querySelectorAll('.gbtn').forEach(b => b.classList.toggle('on', b.dataset.g === g));
+  $('#gnote').textContent = g + '학년 과학 시간입니다 — 학년은 언제든 바꿀 수 있어요';
+  drawUnits(); drawSheets(); drawEval();
+}
+document.querySelectorAll('.gbtn').forEach(b =>
+  b.addEventListener('click', () => setGrade(b.dataset.g)));
+
+function show(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + id));
+  $('#grade').style.display = (id === 'home') ? '' : 'none';
+  $('#gnote').style.display = (id === 'home') ? '' : 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+  const h = (id === 'home') ? ' ' : '#' + id;
+  if(location.hash !== h) history.replaceState(null, '', (id === 'home') ? location.pathname : h);
+}
+document.querySelectorAll('[data-go]').forEach(b =>
+  b.addEventListener('click', () => show(b.dataset.go)));
+document.querySelectorAll('[data-back]').forEach(b =>
+  b.addEventListener('click', () => show('home')));
+
+/* ══════════════ 홈 화면에 추가 ══════════════ */
+const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+if(standalone){
+  const box = $('#install');
+  box.classList.add('done');
+  box.innerHTML = '<h3>✅ 홈 화면에 추가되어 있어요</h3>'
+    + '<p>지금 앱처럼 열려 있습니다. 인터넷이 잠깐 끊겨도 이 화면은 열려요.</p>';
+}else if(isiOS){
+  $('#installSteps').innerHTML =
+    '<li>아래쪽 <b>공유 버튼(□↑)</b>을 누릅니다.</li>'
+    + '<li>목록을 내려 <b>홈 화면에 추가</b>를 고릅니다.</li>'
+    + '<li>오른쪽 위 <b>추가</b>를 누르면 끝!</li>';
+}
+let deferred = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferred = e; $('#installBtn').classList.add('show');
+});
+$('#installBtn').addEventListener('click', async () => {
+  if(!deferred) return;
+  deferred.prompt();
+  await deferred.userChoice;
+  deferred = null; $('#installBtn').classList.remove('show');
+});
+
+/* ══════════════ 오프라인 대비 ══════════════ */
+if('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+/* ══════════════ 시작 ══════════════ */
+setGrade(grade);
+const h0 = location.hash.replace('#','');
+if(['sheet','eval','less'].includes(h0)) show(h0);
+</script>
+</body>
+</html>
