@@ -278,7 +278,7 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
 <header>
  <div class="brand">과학을 왜 배우는 걸까<span class="dot">?</span></div>
  <div class="dots" id="dots"></div>
- <div class="counter" id="counter">1 / 21</div>
+ <div class="counter" id="counter">1 / 22</div>
  <div class="hbtns">
   <button class="btn small" id="noteBtn" title="교사 노트 (N)">🧑‍🏫</button>
   <button class="btn small" id="fsBtn" title="전체화면 (F)">⛶</button>
@@ -403,9 +403,8 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
   <div class="wrap">
    <h2 class="big">대학과 대기업은<br><em>어떤 인재</em>를 뽑는가?</h2>
    <blockquote>
-    <p>한 학생의 질문에 돌아온 답은 <mark>“질문 잘하는 사람”</mark>이었다.<br>
-    AI가 모든 업무를 빨아들이는 시대,<br><u>질문을 잘하는 게 곧 실력</u>이라는 얘기였다.</p>
-    <span class="src">— 한우덕의 중국일기, 2026년 7월 20일, 중앙일보</span>
+    <p>돌아온 답은 <mark>“질문 잘하는 사람”</mark>이었다.<br>
+    AI가 모든 일을 빨아들이는 시대,<br><u>질문을 잘하는 게 곧 실력</u>이라는 뜻이다.</p>
    </blockquote>
   </div>
  </section>
@@ -506,6 +505,16 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
  </section>
 
  <section class="slide" data-kind="q"
+  data-note="<b>아이들이 진짜 하는 걱정</b> · 도구·사다리·바구니를 연달아 보면 “질문 만들기가 또 하나의 과제구나” 싶어집니다. 그 걱정을 선생님이 먼저 말해 주세요 — “질문만 만들다 수업 끝나는 거 아니냐고? 학기 초엔 그게 목적이야.” 잘 만들라는 말은 하지 마세요. 여기서 학습지 2번의 부담이 풀립니다.">
+  <div class="cut">
+   <span class="badge" style="background:var(--q)">걱정 하나</span>
+   <div class="frame" data-img="why-worry"></div>
+   <div class="cap">“선생님, 질문만 만들다가 수업 다 끝나면 어떡해요?”</div>
+   <p class="punch" style="flex:none;font-size:clamp(16px,2.7vw,30px)">걱정 마. 학기 초엔 <b style="color:var(--q)">어떤 질문이든 만들어 보는 것</b>이 목적이다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="q"
   data-note="<b>포트폴리오와 연결</b> · 오해를 먼저 깨 주는 게 중요합니다. “질문 많이 쓴다고 점수 잘 받는 거 아니야.” 그리고 “과정만 있어도 안 되고, 결과만 있어도 안 돼. 둘 다 봐.” — 그래서 학습지를 모은다로 자연스럽게 넘깁니다.">
   <div class="wrap">
    <div class="eyebrow">미리 말해 두면</div>
@@ -577,7 +586,8 @@ const CONFIG = {
     'why-05'  : 'img/why5.webp',   // 5컷 — 지식을 구조화하는 방법을 배운 것
     'why-06'  : 'img/why6.webp',   // 6컷 — 문제를 해결하는 힘
     'why-07'  : 'img/why7.webp',
-    'why-born': 'img/born.webp'   // 삽입 — '우리는 원래 질문하는 존재였다' 만화    // 7컷 — 선생님의 바람
+    'why-born': 'img/born.webp',  // 삽입 — '우리는 원래 질문하는 존재였다' (원본 과학오티질문1.png)
+    'why-worry':'img/worry.webp'  // 삽입 — '질문만 만들다 끝나면?' (원본 과학오티질문3.png)    // 7컷 — 선생님의 바람
   },
 
   /* ── 영상 (선택) ──────────────────────────────────────────────
