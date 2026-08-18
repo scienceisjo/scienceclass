@@ -182,6 +182,7 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .fs .fn{font-family:var(--mono);font-weight:700;font-size:clamp(11px,1.35vw,13px);color:var(--ink-mute)}
 .fs .ft{font-family:var(--jua);font-size:clamp(14px,1.95vw,22px);line-height:1.25}
 .fs .fd{font-size:clamp(11.5px,1.4vw,14.5px);color:var(--ink-dim);line-height:1.35}
+.flow.six{display:grid;grid-template-columns:repeat(3,1fr)}
 .fs.key{border-color:var(--q);background:#eef2fa}
 .fs.key .ft{color:var(--q)}
 .band{width:100%;background:#fbf5e6;border:2px dashed var(--brass);border-radius:var(--r);
@@ -201,7 +202,8 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .bk.mid{border-color:var(--q);background:#eef2fa}
 .bk.mid .bt{color:var(--q)}
 
-@media (max-width:900px){ .tools{grid-template-columns:repeat(2,1fr)} .baskets{grid-template-columns:1fr} }
+@media (max-width:900px){ .tools{grid-template-columns:repeat(2,1fr)} .baskets{grid-template-columns:1fr}
+ .flow.six{grid-template-columns:repeat(2,1fr)} }
 .sub{font-size:clamp(14px,1.9vw,18px);color:var(--ink-mute)}
 
 blockquote{background:var(--paper-hi);border:2px solid var(--line);border-left:8px solid var(--q);
@@ -554,7 +556,7 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
    <div class="eyebrow">우리 수업은 이렇게</div>
    <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">실험실 수업</h2>
    <p class="lead" style="max-width:44ch">모둠으로 앉아, 직접 실험하고, 보고서까지 쓴다.</p>
-   <div class="flow">
+   <div class="flow six">
     <div class="fs key"><span class="fn">STEP 1</span><span class="ft">안전 교육</span></div>
     <div class="fs"><span class="fn">STEP 2</span><span class="ft">준비물 점검</span></div>
     <div class="fs"><span class="fn">STEP 3</span><span class="ft">절차 설명</span></div>
