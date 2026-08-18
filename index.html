@@ -212,6 +212,31 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .prog tfoot th.cls{text-align:left;font-size:12px;color:var(--ink-mute)}
 .prog tfoot td.rate{font-family:var(--jua);font-weight:400;color:var(--ink-mute)}
 .prog tfoot td.rate.full{color:var(--leaf)}
+.pick{margin-top:13px;border:2px solid var(--leaf);border-radius:16px;background:var(--paper-hi);padding:15px 16px}
+.pick-h{display:flex;align-items:center;gap:9px;font-family:var(--jua);font-size:16px;color:var(--leaf)}
+.pick-h .x{margin-left:auto;font-family:var(--body);font-size:12.5px;padding:5px 12px;border-radius:99px;
+ border:1.5px solid var(--line);background:var(--paper);color:var(--ink-mute);cursor:pointer}
+.pick-h .x:hover{border-color:#b3423a;color:#b3423a}
+.pkg{margin-top:13px}
+.pkg h4{display:flex;align-items:center;gap:8px;font-family:var(--jua);font-weight:400;font-size:14px;
+ color:var(--ink-dim);padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.pkall{margin-left:auto;font-family:var(--body);font-size:11.5px;padding:4px 11px;border-radius:99px;
+ border:1px solid var(--line);background:var(--paper);color:var(--ink-mute);cursor:pointer;white-space:nowrap}
+.pkall:hover{border-color:var(--leaf);color:var(--leaf)}
+.pkl{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.pk{font-family:var(--body);font-size:13px;padding:7px 13px;border-radius:99px;cursor:pointer;
+ border:1.5px solid var(--line);background:var(--paper);color:var(--ink-dim);transition:.13s}
+.pk:hover{border-color:var(--leaf);color:var(--leaf)}
+.pk.on{background:var(--leaf);border-color:var(--leaf);color:#f2fbf5}
+.pk.has{opacity:.42;cursor:default;border-style:dashed}
+.pick-foot{display:flex;gap:8px;margin-top:15px;padding-top:13px;border-top:1px dashed var(--line);
+ flex-wrap:wrap;align-items:center}
+.pick-foot input{flex:1;min-width:160px;font-family:var(--body);font-size:14px;padding:10px 13px;
+ border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink)}
+.pick-foot input:focus{outline:none;border-color:var(--leaf)}
+.pkgo{font-family:var(--jua);font-size:14.5px;padding:10px 22px;border-radius:11px;border:none;
+ background:var(--leaf);color:#f2fbf5;cursor:pointer;white-space:nowrap}
+.pkgo[disabled]{opacity:.45;cursor:default}
 .phint{font-size:12.3px;color:var(--ink-mute);margin-top:12px;line-height:1.85}
 .phint b{color:var(--ink-dim)}
 .pempty{text-align:center;padding:30px 18px;color:var(--ink-mute);font-size:13.5px;line-height:1.9}
@@ -356,6 +381,17 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
   </div>
 
   <div id="pSum"></div>
+
+  <div class="pick" id="pPick" hidden>
+    <div class="pick-h">➕ 차시 고르기
+      <button class="x" type="button" data-pkclose="1">닫기</button></div>
+    <div id="pickBody"></div>
+    <div class="pick-foot">
+      <input id="pickCustom" type="text" placeholder="목록에 없으면 여기에 직접 적으세요">
+      <button class="pkgo" type="button" data-pkadd="1" disabled>추가</button>
+    </div>
+  </div>
+
   <div class="ptblwrap" id="pTable"></div>
 
   <p class="phint">
@@ -676,7 +712,8 @@ function drawProg(){
   $('#pTable').innerHTML = L.length
     ? '<table class="prog">' + head + body + foot + '</table>'
     : '<table class="prog">' + head + body + '</table>'
-      + '<p class="pempty">아직 차시가 없어요.<br>표 오른쪽 위 <b>＋</b>를 눌러 첫 차시를 추가해 보세요.</p>';
+      + '<p class="pempty">아직 차시가 없어요.<br>표 오른쪽 위 <b>＋</b>를 누르면 '
+      + '만들어 둔 <b>차시명 목록</b>에서 골라 담을 수 있어요.</p>';
 
   /* 요약 */
   const total = C.length * L.length;
@@ -705,7 +742,7 @@ $('#v-prog').addEventListener('click', e => {
   if(!b) return;
   const t = curT(), d = b.dataset;
 
-  if(d.t){ P.active = d.t; pSave(); drawProg(); return; }
+  if(d.t){ P.active = d.t; closePick(); pSave(); drawProg(); return; }
 
   if(d.newt){
     const nm = prompt('새 진도표 이름을 적어 주세요.\n(예: 1학년 기체의 성질)', '새 진도표');
@@ -715,11 +752,7 @@ $('#v-prog').addEventListener('click', e => {
     P.active = P.tables[P.tables.length - 1].id; pSave(); drawProg(); return;
   }
 
-  if(d.addl){
-    const nm = prompt('추가할 차시 이름을 적어 주세요.\n(예: 3차시 전류와 전압)', '');
-    if(nm === null || !nm.trim()) return;
-    t.lessons.push({ id:uid(), name:nm.trim() }); pSave(); drawProg(); return;
-  }
+  if(d.addl){ openPick(); return; }
 
   if(d.ren){
     const l = t.lessons.find(x => x.id === d.ren); if(!l) return;
@@ -1019,6 +1052,109 @@ $('#v-prog').addEventListener('submit', async e => {
     err.hidden = false; err.textContent = ex.message;
     btn.disabled = false; btn.textContent = '들어가기';
   }
+});
+
+
+/* ══════════════════════════════════════════════════════════════
+   차시 고르기 — 만들어 둔 수업 페이지의 차시명을 그대로 담았습니다.
+   단원을 새로 만들면 여기에 한 줄 추가하면 됩니다.
+   ══════════════════════════════════════════════════════════════ */
+const LESSON_BANK = [
+  { unit:'⚡ 전기와 자기', grade:'2학년', items:[
+    '1차시 마찰 전기', '2차시 정전기 유도', '3차시 전류', '4차시 옴의 법칙',
+    '5차시 직렬과 병렬', '6차시 소비 전력', '7차시 코일 주위의 자기장', '8차시 전동기'] },
+  { unit:'🌌 별과 우주', grade:'2학년', items:[
+    '1차시 연주 시차', '2차시 별의 밝기와 거리', '3차시 별의 등급', '4차시 별의 색과 온도',
+    '5차시 우리은하', '6차시 천체 관측', '7차시 성운과 성단', '8차시 팽창하는 우주'] },
+  { unit:'🎈 기체의 성질', grade:'1학년', items:[
+    '1걸음 압력', '2걸음 기체의 압력', '3걸음 압력과 부피',
+    '4걸음 온도와 부피', '5걸음 생활 속 부피 변화'] },
+  { unit:'🧭 단원과 상관없이', grade:'', items:[
+    '오리엔테이션', '단원 도입', '실험', '문제 풀이', '단원 정리',
+    '수행평가', '시험 대비', '지필평가 피드백'] },
+];
+
+/* 목록에 적힌 순서 = 교육과정 순서. 고른 차시를 이 순서로 정렬해 담습니다. */
+const BANK_ORDER = (function(){ const m = {}; let k = 0;
+  LESSON_BANK.forEach(b => b.items.forEach(it => { m[it] = k++; })); return m; })();
+
+let pickSel = [];
+
+function drawPick(){
+  const t = curT();
+  const have = new Set(t.lessons.map(l => l.name));
+  const g = /1학년/.test(t.name) ? '1학년' : /2학년/.test(t.name) ? '2학년' : '';
+  const banks = LESSON_BANK.map((b, i) => ({ b:b, i:i }))
+    .sort((x, y) => (y.b.grade === g && g ? 1 : 0) - (x.b.grade === g && g ? 1 : 0));
+
+  $('#pickBody').innerHTML = banks.map(o => {
+    const b = o.b;
+    const chips = b.items.map((it, ii) => {
+      if(have.has(it))
+        return '<span class="pk has">✓ ' + esc(it) + '</span>';
+      const on = pickSel.indexOf(it) >= 0;
+      return '<button type="button" class="pk' + (on ? ' on' : '') + '" data-pk="' + o.i + '.' + ii + '">'
+        + esc(it) + '</button>';
+    }).join('');
+    const rest = b.items.filter(x => !have.has(x) && pickSel.indexOf(x) < 0).length;
+    return '<div class="pkg"><h4>' + esc(b.unit)
+      + (rest ? '<button class="pkall" type="button" data-pkall="' + o.i + '">남은 ' + rest + '개 모두</button>' : '')
+      + '</h4><div class="pkl">' + chips + '</div></div>';
+  }).join('');
+
+  const btn = $('[data-pkadd]');
+  const extra = $('#pickCustom').value.trim() ? 1 : 0;
+  const total = pickSel.length + extra;
+  btn.disabled = total === 0;
+  btn.textContent = total ? total + '개 추가' : '추가';
+}
+
+function openPick(){ pickSel = []; $('#pickCustom').value = ''; $('#pPick').hidden = false; drawPick();
+  $('#pPick').scrollIntoView({ block:'nearest', behavior:'smooth' }); }
+function closePick(){ $('#pPick').hidden = true; pickSel = []; }
+
+$('#v-prog').addEventListener('click', e => {
+  const b = e.target.closest('[data-pk],[data-pkall],[data-pkadd],[data-pkclose]');
+  if(!b) return;
+  const t = curT();
+
+  if(b.dataset.pkclose){ closePick(); return; }
+
+  if(b.dataset.pk){
+    const p = b.dataset.pk.split('.');
+    const name = LESSON_BANK[+p[0]].items[+p[1]];
+    const i = pickSel.indexOf(name);
+    if(i >= 0) pickSel.splice(i, 1); else pickSel.push(name);
+    drawPick(); return;
+  }
+
+  if(b.dataset.pkall){
+    const have = new Set(t.lessons.map(l => l.name));
+    LESSON_BANK[+b.dataset.pkall].items.forEach(it => {
+      if(!have.has(it) && pickSel.indexOf(it) < 0) pickSel.push(it);
+    });
+    drawPick(); return;
+  }
+
+  if(b.dataset.pkadd){
+    const extra = $('#pickCustom').value.trim();
+    const list = pickSel.slice();
+    if(extra) list.push(extra);
+    if(!list.length) return;
+    const have = new Set(t.lessons.map(l => l.name));
+    list.sort(function(a, b){
+      var x = (a in BANK_ORDER) ? BANK_ORDER[a] : 1e9;
+      var y = (b in BANK_ORDER) ? BANK_ORDER[b] : 1e9;
+      return x - y;
+    });
+    list.forEach(nm => { if(!have.has(nm)) t.lessons.push({ id:uid(), name:nm }); });
+    closePick(); pSave(); drawProg(); return;
+  }
+});
+
+$('#pickCustom').addEventListener('input', drawPick);
+$('#pickCustom').addEventListener('keydown', e => {
+  if(e.key === 'Enter'){ e.preventDefault(); $('[data-pkadd]').click(); }
 });
 
 /* ── 교사용 켜고 끄기 ── */
