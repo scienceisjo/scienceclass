@@ -88,6 +88,12 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .vhead h2{font-family:var(--jua);font-weight:400;font-size:clamp(19px,4.2vw,24px);color:var(--leaf)}
 .vlead{font-size:14px;color:var(--ink-dim);margin:12px 0 2px;line-height:1.75}
 
+.rule{margin-top:14px;border:2px solid var(--sun);border-radius:var(--r);
+ background:linear-gradient(180deg,#fffaf0,#fdf2dc);padding:14px 16px;display:flex;gap:11px;align-items:flex-start}
+.rule .ri{font-size:21px;flex:none;line-height:1.4}
+.rule .rt b{display:block;font-family:var(--jua);font-weight:400;font-size:15.5px;color:#a06318}
+.rule .rt p{font-size:13.6px;color:var(--ink-dim);line-height:1.75;margin-top:4px}
+.rule .rt em{font-style:normal;font-weight:700;color:#a06318}
 .empty{border:2px dashed var(--line);border-radius:var(--r);padding:26px 18px;text-align:center;
  color:var(--ink-dim);font-size:14px;margin-top:14px;background:rgba(255,253,246,.65);line-height:1.85}
 .empty .be{font-size:34px;display:block;margin-bottom:9px}
@@ -334,6 +340,15 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 <section class="view" id="v-sheet">
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📄 학습지 받기</h2></div>
   <p class="vlead">수업에 쓴 학습지를 다시 받을 수 있어요. 결석했거나 잃어버렸을 때, 시험공부할 때 쓰세요.</p>
+
+  <div class="rule">
+    <span class="ri">📌</span>
+    <div class="rt"><b>학습지 공개 규칙</b>
+      <p>아직 수업하지 않은 학습지는 <em>공개하지 않습니다!</em>
+         미리 공부하고 수업 오면 재미없잖아요 🙂<br>
+         수업이 끝난 차시부터 하나씩 열립니다.</p></div>
+  </div>
+
   <div id="sheetList"></div>
 </section>
 
@@ -467,7 +482,6 @@ const SHEETS = {
   {unit:'🧭 학기 시작', items:[
    {t:'학기 첫 시간 · 과학을 왜 배울까', k:'학습지', url:'ot/worksheet-g2.html'},
    {t:'그날 본 만화 다시 보기',        k:'수업 자료', url:'ot/'},
-   {t:'2학기 오리엔테이션',           k:'수업 자료', url:'ot2/'},
   ]},
   {unit:'⚡ 전기와 자기', items:[
    {t:'1차시 · 마찰 전기',          k:'학습지', url:''},
