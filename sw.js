@@ -1,6 +1,6 @@
 /* 해누리 과학 시간 — 오프라인 대비 서비스 워커
    껍데기(HTML/아이콘)만 캐시합니다. 학습지·수업 페이지는 외부 링크라 인터넷이 필요해요. */
-const CACHE = 'science-class-v7';
+const CACHE = 'science-class-v8';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
