@@ -535,12 +535,9 @@ const SHEETS = {
    kind:'수행'|'지필' · pct:비중(%) · when:'2026-12-15'(D-day 계산) · items:[{t,d}]
    비율이 아직이면 pct를 0으로 두세요 — 「정하는 중」으로 나옵니다. */
 const EVAL = {
- '1':[
-  { kind:'수행', t:'수행평가', pct:35, when:'',
-    note:'무엇을 어떻게 볼지는 과학B 수업 시간에 따로 안내해 주실 거예요.', items:[] },
- ],
+ '1':[],
  '2':[
-  { kind:'수행', t:'수행평가', pct:35, when:'',
+  { kind:'수행', t:'과학A 수행평가', pct:35, when:'',
     note:'아래 두 가지로 나누어 봅니다. 둘 사이의 비율은 아직 정하는 중이에요.',
     items:[
       { t:'실험 평가',
@@ -548,6 +545,8 @@ const EVAL = {
       { t:'포트폴리오 평가',
         d:'수업에서 쓴 학습지와 활동 기록을 모아서 봅니다.' },
     ] },
+  { kind:'수행', t:'과학B 수행평가', pct:35, when:'',
+    note:'무엇을 어떻게 볼지는 과학B 수업 시간에 따로 안내해 주실 거예요.', items:[] },
   { kind:'지필', t:'기말고사', pct:30, when:'2026-12-15',
     note:'2026년 12월 15일(화) ~ 17일(목) · 학사일정 기준',
     items:[
@@ -614,9 +613,15 @@ function dday(w){
 function drawEval(){
   const list = EVAL[grade] || [];
   const box = $('#evalList');
+  const examBox = '<div class="card"><div class="card-t">🗓 학사일정에 잡힌 시험 날짜</div>'
+    + EXAM_DAYS.map(x => { const dd = dday(x.when);
+        return '<p class="evdate"><b>' + esc(x.t) + '</b>' + esc(x.d)
+          + (dd ? '<span class="evdd sm">' + dd + '</span>' : '') + '</p>'; }).join('')
+    + '<p class="evnote">시험 기간에는 수업이 없습니다.</p></div>';
+
   if(!list.length){
     box.innerHTML = emptyBox('📅', '평가 계획을 준비하고 있어요',
-      '정해지면 여기에 올라옵니다.<br>날짜가 잡히면 <b>며칠 남았는지</b>도 함께 보여 줄게요.');
+      '정해지면 여기에 올라옵니다.<br>날짜가 잡히면 <b>며칠 남았는지</b>도 함께 보여 줄게요.') + examBox;
     return;
   }
 
@@ -640,15 +645,7 @@ function drawEval(){
       + '</div>';
   }).join('');
 
-  html += '<div class="card"><div class="card-t">🗓 학사일정에 잡힌 시험 날짜</div>'
-    + EXAM_DAYS.map(x => {
-        const dd = dday(x.when);
-        return '<p class="evdate"><b>' + esc(x.t) + '</b>' + esc(x.d)
-          + (dd ? '<span class="evdd sm">' + dd + '</span>' : '') + '</p>';
-      }).join('')
-    + '<p class="evnote">시험 기간에는 수업이 없습니다.</p></div>';
-
-  box.innerHTML = html;
+  box.innerHTML = html + examBox;
 }
 
 /* 학기 수업 횟수 대비 — 차시 하나에 몇 번을 쓸 수 있는지 */

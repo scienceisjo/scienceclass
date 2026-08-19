@@ -174,6 +174,80 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .rung.last .rq{color:var(--q)}
 .rung.first{opacity:.72}
 
+/* ── 선생님 소개(1학년) ── */
+.dots i.me{background:#e0cba4}
+.dots i.me.on{background:var(--brass-dk)}
+
+/* 나이 서바이벌 */
+.surv{display:flex;flex-direction:column;align-items:center;gap:clamp(10px,1.8vw,18px);width:100%}
+.yline{display:flex;gap:2px;width:100%;max-width:900px;justify-content:center;flex-wrap:wrap}
+.yline i{font-style:normal;font-family:var(--mono);font-size:clamp(9px,1.15vw,13px);
+ padding:clamp(4px,.7vw,7px) clamp(3px,.5vw,6px);border-radius:6px;background:var(--paper-hi);
+ border:1.5px solid var(--line-soft);color:var(--ink-mute);transition:.2s;min-width:clamp(30px,3.4vw,46px);text-align:center}
+.yline i.out{opacity:.22}
+.yline i.cur{background:var(--brass);border-color:var(--brass-dk);color:#fff;transform:scale(1.16)}
+.yline i.ans{background:var(--q);border-color:var(--q);color:#fff;transform:scale(1.24)}
+.askcard{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:6px;
+ border-radius:var(--r);padding:clamp(12px,2.2vw,24px) clamp(22px,4vw,52px);box-shadow:var(--shadow)}
+.askcard .l{font-size:clamp(12px,1.6vw,15px);color:var(--ink-mute);letter-spacing:.1em;font-weight:700}
+.askcard .y{font-family:var(--jua);font-size:clamp(34px,7vw,76px);line-height:1.1;color:var(--accent)}
+.askcard .a{font-size:clamp(14px,2vw,20px);color:var(--ink-dim);margin-top:2px}
+.survbtns{display:flex;gap:clamp(7px,1.3vw,13px);flex-wrap:wrap;justify-content:center}
+.survbtns button{font-family:var(--jua);font-size:clamp(14px,2vw,21px);padding:clamp(9px,1.5vw,14px) clamp(15px,2.6vw,28px);
+ border-radius:14px;border:2px solid var(--line);border-bottom-width:5px;background:var(--paper-hi);
+ color:var(--ink);cursor:pointer;transition:.15s}
+.survbtns button:hover{background:#fff;transform:translateY(-1px)}
+.survbtns button:active{transform:translateY(2px);border-bottom-width:2px}
+.survbtns .go{background:var(--q);border-color:#2c4477;color:#fff}
+.survinfo{font-size:clamp(12px,1.6vw,15px);color:var(--ink-mute)}
+
+/* 과목 순위 계단 */
+.rank{display:flex;align-items:flex-end;gap:clamp(8px,1.6vw,18px);width:100%;justify-content:center}
+.rk{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(10px,1.8vw,18px) clamp(10px,1.6vw,20px);text-align:center;flex:1 1 0;max-width:220px;
+ display:flex;flex-direction:column;justify-content:flex-end;gap:5px}
+.rk .e{font-size:clamp(22px,3.6vw,40px);line-height:1}
+.rk .n{font-family:var(--jua);font-size:clamp(14px,2vw,22px)}
+.rk .p{font-family:var(--mono);font-size:clamp(11px,1.4vw,13px);color:var(--ink-mute)}
+.rk.r1{height:clamp(150px,21vw,230px);border-color:var(--accent);background:#fbf1e6}
+.rk.r2{height:clamp(128px,18vw,196px)}
+.rk.r3{height:clamp(106px,15vw,162px)}
+.rk.r4{height:clamp(86px,12vw,128px);opacity:.72}
+
+/* 약속 목록 */
+.vows{display:grid;gap:clamp(6px,1.1vw,10px);width:100%;max-width:960px}
+.vow{display:flex;gap:clamp(9px,1.5vw,14px);align-items:flex-start;background:var(--paper-hi);
+ border:1.5px solid var(--line);border-bottom-width:4px;border-radius:14px;
+ padding:clamp(7px,1.2vw,13px) clamp(11px,1.8vw,19px);text-align:left}
+.vow .no{flex:none;font-family:var(--mono);font-weight:700;color:var(--accent);font-size:clamp(12px,1.6vw,16px);padding-top:2px}
+.vow .tx{font-size:clamp(13px,1.85vw,20px);line-height:1.4}
+.vow .tx b{font-family:var(--jua);font-weight:400}
+.vow .tx small{display:block;font-size:clamp(11px,1.4vw,14.5px);color:var(--ink-mute);margin-top:2px;line-height:1.35}
+.vows.mine .vow{border-color:var(--q);background:#eef2fa}
+.vows.mine .no{color:var(--q)}
+
+/* 선배들의 말 */
+.voices{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(9px,1.6vw,18px);width:100%}
+.vc{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:5px;border-radius:var(--r);
+ padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;gap:7px;text-align:left}
+.vc .q{font-family:var(--jua);font-size:clamp(15px,2.15vw,24px);line-height:1.32}
+.vc .w{font-size:clamp(11.5px,1.4vw,14.5px);color:var(--ink-mute)}
+.vc .frame.mini{width:100%;aspect-ratio:4/3;background:var(--paper);border:1.5px dashed var(--line);
+ border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.vc .frame.mini img{width:100%;height:100%;object-fit:cover}
+.vc .frame.mini .ph{padding:6px;gap:0}
+.vc .frame.mini .path{font-family:var(--mono);font-size:clamp(9px,1.1vw,12px);color:var(--ink-mute);
+ background:transparent;border:0;padding:0;text-align:center;word-break:break-all}
+.vc.ask{border-color:var(--q);background:#eef2fa}
+.vc.ask .q{color:var(--q)}
+.recipe{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(5px,1vw,10px);width:100%}
+.recipe span{background:var(--paper-hi);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;
+ padding:clamp(8px,1.3vw,14px) clamp(11px,1.9vw,20px);font-family:var(--jua);font-size:clamp(13px,1.9vw,21px)}
+.recipe span.last{border-color:var(--accent);background:#fbf1e6;color:var(--accent)}
+.recipe i{font-style:normal;color:var(--ink-mute);font-size:clamp(13px,1.8vw,20px)}
+
+@media (max-width:900px){ .voices{grid-template-columns:1fr} }
+
 /* 수업 흐름 */
 .flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;
  gap:clamp(6px,1vw,12px);width:100%}
@@ -299,9 +373,15 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
   <h1 class="cover-title">과학을 왜 배우는 걸까?</h1>
   <p class="cover-sub">그리고, 질문에 대한 이야기</p>
   <div class="cover-quote">“질문은 창이 아니라 거울이다.”</div>
-  <ul class="plan">
+  <ul class="plan" data-g2only>
    <li><span class="m">13분</span><b>만화 한 편 보고, 질문과 수업 흐름 이야기</b></li>
    <li><span class="m">5분</span><b>학습지에 내 생각 쓰기 → 제출</b></li>
+  </ul>
+  <ul class="plan" data-g1only>
+   <li><span class="m">12분</span><b>선생님 소개, 그리고 약속</b></li>
+   <li><span class="m">13분</span><b>만화 한 편 보고, 질문과 수업 흐름 이야기</b></li>
+   <li><span class="m">10분</span><b>학습지에 내 생각 쓰기 → 제출</b></li>
+   <li><span class="m">10분</span><b>자기소개서 쓰기 (디벗)</b></li>
   </ul>
   <p style="margin:22px 0 0"><button class="btn primary" id="go">시작하기</button></p>
   <p class="sub" style="margin-top:14px">← → 또는 화면 클릭으로 넘김 · <b>N</b> 교사 노트 · <b>F</b> 전체화면</p>
@@ -322,6 +402,197 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
 
 <!-- ══════════ 무대 ══════════ -->
 <main id="stage">
+
+
+ <!-- ══════════ 1학년 전용 · 선생님 소개 ══════════ -->
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>첫인사</b> · “오늘 궁금한 거 거의 다 알려줄게”로 시작하세요. 이유는 마지막 장에서 밝힙니다. 여기서 밝히면 김이 샙니다.">
+  <div class="wrap">
+   <div class="eyebrow">시작하기 전에</div>
+   <h2 class="big">선생님은 <em>어떤 사람</em>일까요?</h2>
+   <p class="lead">오늘, 궁금한 걸 거의 다 알려드립니다.</p>
+   <p class="sub">대신 이유가 하나 있습니다. 그건 맨 마지막에.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>규칙 설명 · 30초</b> · 전원 일어서게 하고 시작합니다. 손 표시를 미리 맞춰 두세요 — 위로 번쩍(더 나이 많다) / 아래로(더 어리다). 헷갈리면 게임이 무너집니다.">
+  <div class="wrap">
+   <div class="eyebrow">하나 · 나이</div>
+   <h2 class="big">나이 맞히기 <em>생존 게임</em></h2>
+   <div class="vows">
+    <div class="vow"><span class="no">1</span><span class="tx"><b>모두 일어섭니다.</b></span></div>
+    <div class="vow"><span class="no">2</span><span class="tx">화면의 연도보다 선생님이 <b>더 나이가 많을지, 어릴지</b> 손으로 표시합니다.<small>위로 번쩍 = 더 많다 · 아래로 = 더 어리다</small></span></div>
+    <div class="vow"><span class="no">3</span><span class="tx">틀린 사람은 <b>앉습니다.</b></span></div>
+    <div class="vow"><span class="no">4</span><span class="tx">끝까지 살아남으면 <b style="color:var(--accent)">상점!</b></span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>진행</b> · 아이들이 손을 든 뒤에 버튼을 누르세요. 누르면 남은 구간이 줄고 다음 연도가 뜹니다. 3~4번이면 좁혀집니다. 다 좁혀지면 <b>정답 공개</b>를 누르세요. 되돌리려면 <b>다시</b>.">
+  <div class="wrap">
+   <div class="eyebrow">하나 · 나이</div>
+   <h2 class="big" style="font-size:clamp(22px,3.8vw,40px)">선생님은 몇 년생일까요?</h2>
+   <div class="surv">
+    <div class="yline" id="yline"></div>
+    <div class="askcard">
+     <div class="l">선생님은</div>
+     <div class="y" id="askYear">1995년생</div>
+     <div class="a" id="askAge">2026년 기준 32살</div>
+    </div>
+    <div class="survbtns">
+     <button id="bUp">⬆︎ 더 나이 많다</button>
+     <button id="bDn">⬇︎ 더 어리다</button>
+     <button id="bAns" class="go">정답 공개</button>
+     <button id="bRe">다시</button>
+    </div>
+    <div class="survinfo" id="survInfo"></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>정답</b> · 살아남은 학생을 세어 상점을 주세요. 여기서 “그럼 언제부터 선생님이었게?”로 넘어가면 뒤의 발령 이야기가 자연스럽습니다.">
+  <div class="wrap">
+   <div class="eyebrow">정답</div>
+   <h2 class="big"><em>2000년생</em>, 스물일곱입니다</h2>
+   <p class="punch">끝까지 살아남은 사람 — 상점!</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>전공 · 40초</b> · 마지막 줄에서 웃음이 납니다. 솔직하게 말하세요 — “생명과학은 정말 잘 모릅니다.” 모르는 걸 모른다고 말하는 어른을 보여 주는 장면이기도 합니다.">
+  <div class="wrap">
+   <div class="eyebrow">둘 · 전공</div>
+   <h2 class="big">대학에서 <em>화학교육</em>을 공부했습니다</h2>
+   <div class="rank">
+    <div class="rk r1"><span class="e">🧪</span><span class="n">화학</span><span class="p">1순위</span></div>
+    <div class="rk r2"><span class="e">🧲</span><span class="n">물리</span><span class="p">2순위</span></div>
+    <div class="rk r3"><span class="e">🪨</span><span class="n">지구과학</span><span class="p">3순위</span></div>
+    <div class="rk r4"><span class="e">🌱</span><span class="n">생명과학</span><span class="p">4순위</span></div>
+   </div>
+   <p class="punch">생명과학은... 정말 잘 모릅니다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>취미 · 40초</b> · 사진이 들어가면 말이 필요 없습니다. 파일은 CONFIG.IMG 의 me-sea / me-swim / me-run 자리에 넣으세요. 없으면 설명만 뜹니다.">
+  <div class="wrap">
+   <div class="eyebrow">셋 · 취미</div>
+   <h2 class="big">바다, 그리고 <em>달리기</em></h2>
+   <div class="voices">
+    <div class="vc"><div class="frame mini" data-img="me-sea"></div><span class="q">바닷속 구경</span></div>
+    <div class="vc"><div class="frame mini" data-img="me-swim"></div><span class="q">바다 수영</span></div>
+    <div class="vc"><div class="frame mini" data-img="me-run"></div><span class="q">달리기</span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>MBTI · 15초</b> · 짧게 끊고 넘어가세요. 이 장의 목적은 “MBTI 뭐예요?” 질문을 미리 닫는 것입니다.">
+  <div class="wrap">
+   <div class="eyebrow">넷 · MBTI</div>
+   <h2 class="big">“선생님 MBTI 뭐예요?”</h2>
+   <p class="punch">저는 MBTI를 <em style="font-style:normal;color:var(--q)">안 믿습니다.</em></p>
+   <p class="sub">그래서 이 질문은 여기서 끝!</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>여자친구 · 30초</b> · 아이들이 제일 궁금해하는 대목이라 솔직하게 답해 주고 넘어갑니다. 썰은 분위기 봐서 풀거나 아껴 두셔도 됩니다.">
+  <div class="wrap">
+   <div class="eyebrow">다섯 · 그거</div>
+   <h2 class="big">여자친구, <em>있습니다</em></h2>
+   <p class="lead">어떻게 만났는지 궁금하죠?<br>그 이야기는 아껴 두겠습니다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>발령 · 40초</b> · 2년차라는 걸 숨기지 마세요. “작년 1학년 4반이 지금 2학년”이라고 하면 아이들이 바로 연결합니다. 다음 장의 성적표 이야기로 이어집니다.">
+  <div class="wrap">
+   <div class="eyebrow">여섯 · 언제부터</div>
+   <h2 class="big">선생님이 된 지 <em>2년째</em>입니다</h2>
+   <div class="recipe">
+    <span>2025년 2월<br>대학 졸업</span><i>→</i>
+    <span>2025년 3월<br>첫 발령</span><i>→</i>
+    <span>작년 1학년 4반<br>담임</span><i>→</i>
+    <span class="last">올해<br>여러분</span>
+   </div>
+   <p class="sub">작년에 담임했던 1학년 4반이, 지금 2학년입니다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>성적표 · 1분</b> · 이 파트가 신뢰를 만듭니다. “선생님이 학생을 평가하는 성적표가 아니라, 학생이 선생님 수업을 평가하는 성적표”를 꼭 짚어 주세요. 세 번째 칸(파란 칸)이 핵심입니다 — 좋은 말만 고르지 않았다는 게 드러납니다.">
+  <div class="wrap">
+   <div class="eyebrow">어떤 선생님이냐면</div>
+   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">작년 선배들이 저에게 <em>성적표</em>를 줬습니다</h2>
+   <p class="sub">선생님이 학생을 평가하는 성적표가 아니라, 학생이 선생님 수업을 평가하는 성적표입니다.</p>
+   <div class="voices">
+    <div class="vc"><span class="q">“수업이 재밌고<br>이해가 잘 된다”</span><span class="w">— 2학년 선배</span></div>
+    <div class="vc"><span class="q">“직접 실험해 보니까<br>오래 기억에 남는다”</span><span class="w">— 2학년 선배</span></div>
+    <div class="vc ask"><span class="q">“선생님, 그래서 시험은요?<br>개념정리랑 문제풀이요!”</span><span class="w">— 2학년 선배</span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>그래서 올해는 · 1분</b> · 앞장의 세 번째 목소리에 대한 답입니다. 공식을 손으로 짚으며 읽어 주세요. 마지막 문장이 이 파트 전체의 핵심입니다 — <b>잘하게 만드는 것보다 포기하지 않게.</b>">
+  <div class="wrap">
+   <div class="eyebrow">그래서 올해는</div>
+   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">활동으로 <s>끝내지</s> 않겠습니다</h2>
+   <div class="recipe">
+    <span>재미있는 활동</span><i>+</i>
+    <span>직접 해보는 탐구</span><i>+</i>
+    <span>한 장 개념정리</span><i>+</i>
+    <span>짧은 복습</span><i>+</i>
+    <span class="last">대표 문제풀이</span>
+   </div>
+   <p class="punch" style="font-size:clamp(17px,2.9vw,32px)">과학을 잘하게 만드는 것보다,<br><b style="color:var(--q)">과학을 포기하지 않게</b> 만드는 것이 목표입니다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>선생님이 먼저 · 1분</b> · 순서가 중요합니다. 학생에게 약속을 요구하기 전에 선생님이 먼저 겁니다. 2번에서 잠깐 멈추세요 — “선생님도 말썽꾸러기였다”는 말이 아이들에게 제일 크게 남습니다.">
+  <div class="wrap">
+   <div class="eyebrow">약속 · 하나</div>
+   <h2 class="big">선생님이 <em>먼저</em> 약속합니다</h2>
+   <div class="vows mine">
+    <div class="vow"><span class="no">01</span><span class="tx"><b>공정하고 공평하게</b> 대하겠습니다.</span></div>
+    <div class="vow"><span class="no">02</span><span class="tx"><b>뒤끝, 절대 없습니다.</b><small>선생님도 말썽꾸러기였습니다. 지난 일을 꺼내며 혼나는 게 제일 싫었어요. 잘못은 그 자리에서 털고, 다음에 다시 꺼내지 않겠습니다.</small></span></div>
+    <div class="vow"><span class="no">03</span><span class="tx"><b>애정을 담아 지도하겠습니다.</b><small>감정적으로 여러분을 대하지 않겠습니다.</small></span></div>
+    <div class="vow"><span class="no">04</span><span class="tx"><b>웃음을 드리겠습니다.</b></span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>함께 지킬 약속 · 1분 30초</b> · 6·7번은 오늘 뒤에 나올 질문 이야기·실험실 수업과 이어지는 약속입니다. 필요 없으면 그 줄만 지우세요. 5번을 읽을 때 눈을 맞추면 좋습니다.">
+  <div class="wrap">
+   <div class="eyebrow">약속 · 둘</div>
+   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">우리가 <em>함께</em> 지킬 약속</h2>
+   <p class="sub">썰을 듣지 않더라도, 배움 가득한 수업 시간을 위해!</p>
+   <div class="vows">
+    <div class="vow"><span class="no">01</span><span class="tx"><b>수업 시간에 욕설하지 않기</b><small>밖에서 친구들끼리 하는 건 신경 쓰지 않습니다. 다만 어른 앞에서는 조심해 주세요.</small></span></div>
+    <div class="vow"><span class="no">02</span><span class="tx"><b>아픈 게 아니라면 엎드리지 않으려고 노력하기</b></span></div>
+    <div class="vow"><span class="no">03</span><span class="tx"><b>늦게 들어올 때는 가볍게 목례하고 “죄송합니다!”</b></span></div>
+    <div class="vow"><span class="no">04</span><span class="tx"><b>도를 넘는 비난하지 않기</b></span></div>
+    <div class="vow"><span class="no">05</span><span class="tx"><b>눈앞의 선생님을 믿기</b><small>수업 정말 열심히 준비해 오겠습니다. 열심히 듣다 보면 뭐라도 얻어갑니다.</small></span></div>
+    <div class="vow"><span class="no">06</span><span class="tx"><b>모르면 그냥 넘어가지 않기</b><small>질문은 부끄러운 게 아닙니다. 오늘 이 이야기를 뒤에서 자세히 할 거예요.</small></span></div>
+    <div class="vow"><span class="no">07</span><span class="tx"><b>모둠에서 한 사람에게 미루지 않기</b></span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>소개 마무리 · 20초</b> · 처음에 걸어 둔 “이유”를 여기서 회수합니다. 웃으면서 단호하게. 그리고 바로 만화로 넘어가세요.">
+  <div class="wrap">
+   <div class="eyebrow">이만큼 알려드린 이유</div>
+   <h2 class="big">앞으로 <em>개인적인 질문</em>은<br>받지 않습니다</h2>
+   <p class="punch">대신 <b style="color:var(--q)">과학 질문</b>은 얼마든지!</p>
+  </div>
+ </section>
 
  <!-- ── 만화 ── -->
  <section class="slide" data-kind="comic"
@@ -637,6 +908,22 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
   </div>
  </section>
 
+ <section class="slide" data-kind="me" data-g1only data-needform
+  data-note="<b>자기소개서 · 10분</b> · 디벗으로 QR을 찍어 들어갑니다. 이름과 학번 말고는 개인정보를 묻지 않는다고 미리 말해 주세요. 모둠 편성에 쓸 거라고 알려 주면 성의 있게 씁니다. 주소는 CONFIG.FORM 에 넣으면 이 장이 나타납니다.">
+  <div class="wrap">
+   <div class="eyebrow">마지막 · 10분</div>
+   <h2 class="big" style="font-size:clamp(24px,4.4vw,46px)">자기소개서 쓰기</h2>
+   <div class="bookmark">
+    <div class="qr" id="qrForm"><span class="no">주소를 직접 입력</span></div>
+    <div>
+     <div class="bmt">디벗으로 QR을 찍어<br><b>들어가 주세요</b></div>
+     <div class="bmu" id="formUrl"></div>
+    </div>
+   </div>
+   <p class="band">묻는 개인정보는 <b>이름과 학번</b>뿐입니다. 나머지는 <b>모둠을 짤 때</b> 쓰는 이야기예요.</p>
+  </div>
+ </section>
+
 </main>
 
 <!-- ══════════ 교사 노트 ══════════ -->
@@ -672,7 +959,11 @@ const CONFIG = {
     'why-06'  : 'img/why6.webp',   // 6컷 — 문제를 해결하는 힘
     'why-07'  : 'img/why7.webp',
     'why-born': 'img/born.webp',  // 삽입 — '우리는 원래 질문하는 존재였다' (원본 과학오티질문1.png)
-    'why-worry':'img/worry.webp'  // 삽입 — '질문만 만들다 끝나면?' (원본 과학오티질문3.png)    // 7컷 — 선생님의 바람
+    'why-worry':'img/worry.webp', // 삽입 — '질문만 만들다 끝나면?' (원본 과학오티질문3.png)
+    /* 1학년 소개 · 취미 사진 3장 (넣으면 뜨고, 없으면 글씨만 뜹니다) */
+    'me-sea'  : 'img/me-sea.webp',   // 바닷속 구경
+    'me-swim' : 'img/me-swim.webp',  // 바다 수영
+    'me-run'  : 'img/me-run.webp'    // 달리기    // 7컷 — 선생님의 바람
   },
 
   /* ── 영상 (선택) ──────────────────────────────────────────────
@@ -689,6 +980,10 @@ const CONFIG = {
   /* ── 학생이 즐겨찾기 할 수업 메인페이지 ───────────────────── */
   HUB: 'https://scienceisjo.github.io/scienceclass/',
 
+  /* ── 자기소개서 폼 주소 (MS Forms 등) ─────────────────────────
+     비워 두면 자기소개서 슬라이드 자체가 뜨지 않습니다. */
+  FORM: '',
+
   /* ── 이 수업이 끝나면 이어서 열 자료 ─────────────────────────
      비워 두면 마지막 장에 버튼이 뜨지 않습니다. */
   NEXT: {
@@ -699,16 +994,28 @@ const CONFIG = {
 
 /* ═══════════════════════════════════════════════════════════════ */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+/* 학년에 맞지 않는 슬라이드를 먼저 걷어낸다 (한 파일로 1·2학년을 굴리기 위해) */
+(function(){
+  var g1 = CONFIG.GRADE==='1학년';
+  $$(g1 ? '[data-g2only]' : '[data-g1only]').forEach(function(el){ el.remove(); });
+  if(!CONFIG.FORM) $$('[data-needform]').forEach(function(el){ el.remove(); });
+})();
+
 const slides=$$('.slide');
 let idx=0, notesOn=false, started=false;
 
 /* ── 이미지 채우기 (없으면 컷 설명으로 대체) ── */
-slides.forEach(function(sl){
-  const fr=$('.frame',sl); if(!fr) return;
+$$('.frame').forEach(function(fr){
   const key=fr.dataset.img, src=CONFIG.IMG[key];
-  const capEl=$('.cap',sl);
+  const cut=fr.closest('.cut');                 // 만화 컷이면 캡션이 따로 있다
+  const capEl=cut?$('.cap',cut):null;
   const capText=capEl?capEl.innerHTML:'';
+  const mini=fr.classList.contains('mini');     // 취미 사진처럼 한 장에 여러 칸인 경우
   const ph=function(){
+    if(mini){
+      fr.innerHTML='<div class="ph"><div class="path">'+(src||key)+'</div></div>';
+      return;
+    }
     fr.innerHTML='<div class="ph"><div class="tagline">이미지 넣을 자리</div>'+
       '<div class="big">'+capText+'</div>'+
       '<div class="path">'+(src||key)+'</div></div>';
@@ -716,7 +1023,7 @@ slides.forEach(function(sl){
   };
   if(!src){ ph(); return; }
   const im=new Image();
-  im.onload=function(){ fr.innerHTML=''; fr.appendChild(im); fr.closest('.cut').classList.add('has-img'); };
+  im.onload=function(){ fr.innerHTML=''; fr.appendChild(im); if(cut) cut.classList.add('has-img'); };
   im.onerror=ph;
   im.alt=key; im.src=src;
 });
@@ -730,6 +1037,45 @@ slides.forEach(function(sl){
   box.innerHTML='<iframe src="https://www.youtube.com/embed/'+m[1]+'?rel=0" allowfullscreen '+
     'allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe>';
   box.classList.add('on');
+})();
+
+/* ── 나이 서바이벌 ── */
+(function(){
+  var box=$('#yline'); if(!box) return;               // 2학년 덱에는 없다
+  var FROM=1988, TO=2006, BORN=2000, THIS_YEAR=2026;  // 나이 = 올해 - 출생연도 + 1 (세는나이)
+  var lo, hi, cur, done;
+  var age=function(y){ return THIS_YEAR-y+1; };
+  for(var y=FROM;y<=TO;y++){ var i=document.createElement('i'); i.dataset.y=y; i.textContent=y; box.appendChild(i); }
+  function paint(){
+    $$('#yline i').forEach(function(el){
+      var y=+el.dataset.y;
+      el.className = done ? (y===BORN?'ans':'out')
+                   : (y<lo||y>hi) ? 'out' : (y===cur?'cur':'');
+    });
+    $('#askYear').textContent = done ? BORN+'년생' : cur+'년생';
+    $('#askAge').textContent  = THIS_YEAR+'년 기준 '+age(done?BORN:cur)+'살';
+    $('#survInfo').textContent = done ? '정답!' : ('남은 후보 '+(hi-lo+1)+'개 · 위일까요, 아래일까요?');
+  }
+  function reset(){ lo=FROM; hi=TO; cur=1995; done=false; paint(); }
+  function step(older){
+    if(done) return;
+    if(older) hi=Math.min(hi,cur-1); else lo=Math.max(lo,cur+1);   // 더 나이 많다 = 더 옛날 연도
+    if(lo>hi){ done=true; } else { cur=Math.floor((lo+hi)/2); }
+    paint();
+  }
+  $('#bUp').onclick=function(e){ e.stopPropagation(); step(true);  };
+  $('#bDn').onclick=function(e){ e.stopPropagation(); step(false); };
+  $('#bAns').onclick=function(e){ e.stopPropagation(); done=true; paint(); };
+  $('#bRe').onclick=function(e){ e.stopPropagation(); reset(); };
+  reset();
+})();
+
+/* ── 자기소개서 QR ── */
+(function(){
+  var u=CONFIG.FORM, box=$('#qrForm'); if(!u||!box) return;
+  $('#formUrl').textContent = u.split('://').pop().slice(0,60);
+  try{ if(typeof qrcode!=='undefined'){ var q=qrcode(0,'M'); q.addData(u); q.make();
+    box.innerHTML=q.createImgTag(6,0); } }catch(e){}
 })();
 
 /* ── 수업 메인페이지 주소 + QR ── */
@@ -760,6 +1106,7 @@ const dots=$('#dots');
 slides.forEach(function(sl,i){
   const d=document.createElement('i');
   if(sl.dataset.kind==='q') d.className='q';
+  if(sl.dataset.kind==='me') d.className='me';
   d.title=(i+1)+'번';
   d.onclick=function(e){ e.stopPropagation(); show(i); };
   dots.appendChild(d);
