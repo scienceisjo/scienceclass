@@ -88,6 +88,27 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .vhead h2{font-family:var(--jua);font-weight:400;font-size:clamp(19px,4.2vw,24px);color:var(--leaf)}
 .vlead{font-size:14px;color:var(--ink-dim);margin:12px 0 2px;line-height:1.75}
 
+.evsum{margin-top:14px;border:2px solid var(--leaf);border-radius:var(--r);
+ background:linear-gradient(180deg,#f4fbf6,#e9f5ee);padding:14px 16px}
+.evsum b{font-family:var(--jua);font-weight:400;font-size:16.5px;color:var(--leaf);display:block}
+.evsum p{font-size:12.8px;color:var(--ink-mute);margin-top:5px;line-height:1.7}
+.evcard .card-t{gap:9px}
+.evpct{margin-left:auto;font-family:var(--jua);font-size:13.5px;padding:4px 12px;border-radius:99px;
+ background:rgba(47,125,85,.14);border:1px solid var(--leaf);color:var(--leaf);white-space:nowrap}
+.evpct.soft{background:transparent;border-style:dashed;border-color:var(--line);color:var(--ink-mute);
+ font-family:var(--body);font-size:12px}
+.evdd{font-family:var(--jua);font-size:13px;padding:4px 12px;border-radius:99px;white-space:nowrap;
+ background:rgba(224,145,43,.15);border:1px solid var(--sun);color:#a06318}
+.evdd.sm{margin-left:8px;font-size:11.5px;padding:2px 9px}
+.evnote{font-size:13.4px;color:var(--ink-dim);line-height:1.72;margin-top:9px}
+.evitems{display:grid;gap:9px;margin-top:12px}
+.evi{border-left:3px solid var(--leaf);background:rgba(47,125,85,.07);
+ padding:11px 14px;border-radius:0 12px 12px 0}
+.evi b{font-family:var(--jua);font-weight:400;font-size:15px;color:var(--ink);display:block}
+.evi p{font-size:13.6px;color:var(--ink-dim);line-height:1.75;margin-top:4px}
+.evcard.exam .evi{border-left-color:var(--sun);background:rgba(224,145,43,.09)}
+.evdate{font-size:14px;color:var(--ink-dim);margin-top:8px;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+.evdate b{font-family:var(--jua);font-weight:400;color:var(--ink);margin-right:7px}
 .rule{margin-top:14px;border:2px solid var(--sun);border-radius:var(--r);
  background:linear-gradient(180deg,#fffaf0,#fdf2dc);padding:14px 16px;display:flex;gap:11px;align-items:flex-start}
 .rule .ri{font-size:21px;flex:none;line-height:1.4}
@@ -511,8 +532,35 @@ const SHEETS = {
 };
 
 /* ── 평가 계획 (학년별) ───────────────────────────
-   {t:이름, when:'2026-10-15', what:'무엇을 보나', prep:'준비물'} 형태로 채우면 됩니다. */
-const EVAL = { '1':[], '2':[] };
+   kind:'수행'|'지필' · pct:비중(%) · when:'2026-12-15'(D-day 계산) · items:[{t,d}]
+   비율이 아직이면 pct를 0으로 두세요 — 「정하는 중」으로 나옵니다. */
+const EVAL = {
+ '1':[
+  { kind:'수행', t:'수행평가', pct:35, when:'',
+    note:'무엇을 어떻게 볼지 정해지면 여기에 자세히 올려 둘게요.', items:[] },
+ ],
+ '2':[
+  { kind:'수행', t:'수행평가', pct:35, when:'',
+    note:'아래 두 가지로 나누어 봅니다. 둘 사이의 비율은 아직 정하는 중이에요.',
+    items:[
+      { t:'실험 평가',
+        d:'🌌 <b>별과 우주</b> — 거리에 따른 밝기 실험<br>⚡ <b>전기와 자기</b> — 전류·전압·저항 사이의 관계 실험' },
+      { t:'포트폴리오 평가',
+        d:'수업에서 쓴 학습지와 활동 기록을 모아서 봅니다.' },
+    ] },
+  { kind:'지필', t:'기말고사', pct:30, when:'2026-12-15',
+    note:'2026년 12월 15일(화) ~ 17일(목) · 학사일정 기준',
+    items:[
+      { t:'시험 범위', d:'과학A <b>7단원 · 8단원 전부</b><br>⚡ 전기와 자기 &nbsp;·&nbsp; 🌌 별과 우주' },
+    ] },
+ ]
+};
+
+/* 학사일정에 잡힌 1·2학년 시험 날짜 */
+const EXAM_DAYS = [
+  { t:'중간고사', when:'2026-09-22', d:'9월 22일(화) ~ 23일(수)' },
+  { t:'기말고사', when:'2026-12-15', d:'12월 15일(화) ~ 17일(목)' },
+];
 
 /* ══════════════ 그리기 ══════════════ */
 const $ = s => document.querySelector(s);
@@ -556,28 +604,51 @@ function drawSheets(){
   }).join('');
 }
 
+function dday(w){
+  if(!w) return '';
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const gap = Math.round((new Date(w + 'T00:00:00') - t) / 86400000);
+  return gap > 0 ? 'D-' + gap : gap === 0 ? '오늘!' : '끝났어요';
+}
+
 function drawEval(){
   const list = EVAL[grade] || [];
+  const box = $('#evalList');
   if(!list.length){
-    $('#evalList').innerHTML = emptyBox('📅','평가 계획을 준비하고 있어요',
-      '수행평가 영역과 일정이 정해지면 여기에 올라옵니다.<br>날짜가 정해지면 <b>며칠 남았는지</b>도 함께 보여 줄게요.');
+    box.innerHTML = emptyBox('📅', '평가 계획을 준비하고 있어요',
+      '정해지면 여기에 올라옵니다.<br>날짜가 잡히면 <b>며칠 남았는지</b>도 함께 보여 줄게요.');
     return;
   }
-  const today = new Date(); today.setHours(0,0,0,0);
-  $('#evalList').innerHTML = list.map(e => {
-    let dday = '';
-    if(e.when){
-      const d = new Date(e.when + 'T00:00:00');
-      const gap = Math.round((d - today) / 86400000);
-      dday = gap > 0 ? 'D-' + gap : gap === 0 ? '오늘!' : '끝남';
-    }
-    return '<div class="card"><div class="card-t">' + esc(e.t)
-      + (dday ? '<span class="tag lesson" style="margin-left:auto">' + dday + '</span>' : '') + '</div>'
-      + (e.when ? '<p style="font-size:13.5px;color:var(--ink-mute);margin-top:4px">🗓 ' + esc(e.when) + '</p>' : '')
-      + (e.what ? '<p style="font-size:14px;color:var(--ink-dim);margin-top:8px">' + esc(e.what) + '</p>' : '')
-      + (e.prep ? '<p style="font-size:13.5px;color:var(--ink-dim);margin-top:6px">🎒 준비물 — ' + esc(e.prep) + '</p>' : '')
+
+  const total = list.map(e => e.t + (e.pct ? ' ' + e.pct + '%' : '')).join('  ·  ');
+  let html = '<div class="evsum"><b>' + esc(total) + '</b>'
+    + '<p>아직 확정 전이라 바뀔 수 있어요. 정해지는 대로 여기에 올립니다.</p></div>';
+
+  html += list.map(e => {
+    const dd = dday(e.when);
+    return '<div class="card evcard ' + (e.kind === '지필' ? 'exam' : 'perf') + '">'
+      + '<div class="card-t">' + (e.kind === '지필' ? '📝' : '🧪') + ' ' + esc(e.t)
+      + (e.pct ? '<span class="evpct">' + e.pct + '%</span>'
+               : '<span class="evpct soft">비율 정하는 중</span>')
+      + (dd ? '<span class="evdd">' + dd + '</span>' : '')
+      + '</div>'
+      + (e.note ? '<p class="evnote">' + esc(e.note) + '</p>' : '')
+      + ((e.items && e.items.length)
+          ? '<div class="evitems">' + e.items.map(i =>
+              '<div class="evi"><b>' + esc(i.t) + '</b><p>' + i.d + '</p></div>').join('') + '</div>'
+          : '')
       + '</div>';
   }).join('');
+
+  html += '<div class="card"><div class="card-t">🗓 학사일정에 잡힌 시험 날짜</div>'
+    + EXAM_DAYS.map(x => {
+        const dd = dday(x.when);
+        return '<p class="evdate"><b>' + esc(x.t) + '</b>' + esc(x.d)
+          + (dd ? '<span class="evdd sm">' + dd + '</span>' : '') + '</p>';
+      }).join('')
+    + '<p class="evnote">시험 기간에는 수업이 없습니다.</p></div>';
+
+  box.innerHTML = html;
 }
 
 /* 학기 수업 횟수 대비 — 차시 하나에 몇 번을 쓸 수 있는지 */
@@ -672,8 +743,10 @@ const PLAN2026 = [
                                  ['209반',34],['210반',33],['211반',32],['212반',34]] },
   { name:'1학년 과학B', classes:[['105반',17],['106반',16]] }
 ];
+const FIRST_LESSON = '학기 첫 시간 · 과학을 왜 배우는 걸까?';
 function pSeed(){
-  const mk = p => ({ id:uid(), name:p.name, lessons:[], done:{},
+  const mk = p => ({ id:uid(), name:p.name, done:{},
+    lessons: [{ id:uid(), name:FIRST_LESSON }],
     classes: p.classes.map(x => ({ id:uid(), name:x[0], periods:x[1] })) });
   const t = PLAN2026.map(mk);
   return { active:t[0].id, tables:t };
@@ -836,6 +909,7 @@ $('#v-prog').addEventListener('click', e => {
         const old = bd.classes.find(c => c.name === x[0]);
         return { id: old ? old.id : uid(), name:x[0], periods:x[1] };
       });
+      if(!bd.lessons.length) bd.lessons.push({ id:uid(), name:FIRST_LESSON });
     });
     P.active = P.tables.find(x => x.name === PLAN2026[0].name).id;
     pLocal(); drawProg();
@@ -1085,8 +1159,9 @@ const LESSON_BANK = [
   { unit:'🎈 기체의 성질', grade:'1학년', items:[
     '1걸음 압력', '2걸음 기체의 압력', '3걸음 압력과 부피',
     '4걸음 온도와 부피', '5걸음 생활 속 부피 변화'] },
-  { unit:'🧭 단원과 상관없이', grade:'', items:[
-    '오리엔테이션', '단원 도입', '실험', '문제 풀이', '단원 정리',
+  { unit:'🧭 학기 시작·공통', grade:'', items:[
+    '학기 첫 시간 · 과학을 왜 배우는 걸까?', '2학기 오리엔테이션',
+    '단원 도입', '실험', '문제 풀이', '단원 정리',
     '수행평가', '시험 대비', '지필평가 피드백'] },
 ];
 
