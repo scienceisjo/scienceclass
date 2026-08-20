@@ -238,6 +238,12 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .vc .frame.mini .ph{padding:6px;gap:0}
 .vc .frame.mini .path{font-family:var(--mono);font-size:clamp(9px,1.1vw,12px);color:var(--ink-mute);
  background:transparent;border:0;padding:0;text-align:center;word-break:break-all}
+.vc.noimg{align-items:center;text-align:center;justify-content:center}
+.vc.noimg .ic{font-size:clamp(34px,5.4vw,60px);line-height:1}
+/* 세로 영상이 가로 상자에 담겨 좌우가 비지 않도록, 상자가 영상에 맞춰 줄어든다 */
+.vidbox{width:auto;max-width:100%;border:2px solid var(--line);border-radius:var(--r);
+ overflow:hidden;background:#14110c;box-shadow:var(--shadow);display:flex;flex:none}
+.vidbox video{width:auto;height:min(52vh,460px);max-width:100%;display:block}
 .vc.ask{border-color:var(--q);background:#eef2fa}
 .vc.ask .q{color:var(--q)}
 .recipe{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(5px,1vw,10px);width:100%}
@@ -482,10 +488,20 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
    <div class="eyebrow">셋 · 취미</div>
    <h2 class="big">바다, 그리고 <em>달리기</em></h2>
    <div class="voices">
-    <div class="vc"><div class="frame mini" data-img="me-sea"></div><span class="q">바닷속 구경</span></div>
-    <div class="vc"><div class="frame mini" data-img="me-swim"></div><span class="q">바다 수영</span></div>
-    <div class="vc"><div class="frame mini" data-img="me-run"></div><span class="q">달리기</span></div>
+    <div class="vc"><div class="frame mini" data-img="me-sea"></div><span class="q">바닷속 구경</span><span class="w">물안경 쓰고 몇 시간이고 봅니다</span></div>
+    <div class="vc noimg"><span class="ic">🏊</span><span class="q">바다 수영</span><span class="w">사진은... 없습니다</span></div>
+    <div class="vc"><div class="frame mini" data-img="me-run"></div><span class="q">달리기</span><span class="w">이 코스를 자주 돕니다</span></div>
    </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>영상 · 40초</b> · 아이들 반응이 제일 큰 장면입니다. 재생은 이 장으로 넘어오면 자동으로 시작하고, 다른 장으로 가면 멈춥니다. 앞장에서 “생명과학은 잘 모른다”고 했으니 여기서 받아치세요 — “저도 이게 정확히 뭔지 몰라요. 아는 사람?” 첫 질문이 여기서 터지면 오늘 남은 시간이 편해집니다.">
+  <div class="wrap">
+   <div class="eyebrow">덤 · 바다에서</div>
+   <h2 class="big">이건 제가 바다에서 <em>잡은 생물</em>입니다</h2>
+   <div class="vidbox"><video src="img/me-catch.mp4" muted loop playsinline preload="metadata"></video></div>
+   <p class="punch" style="font-size:clamp(17px,2.9vw,32px)">무슨 생물일까요?</p>
   </div>
  </section>
 
@@ -962,7 +978,6 @@ const CONFIG = {
     'why-worry':'img/worry.webp', // 삽입 — '질문만 만들다 끝나면?' (원본 과학오티질문3.png)
     /* 1학년 소개 · 취미 사진 3장 (넣으면 뜨고, 없으면 글씨만 뜹니다) */
     'me-sea'  : 'img/me-sea.webp',   // 바닷속 구경
-    'me-swim' : 'img/me-swim.webp',  // 바다 수영
     'me-run'  : 'img/me-run.webp'    // 달리기    // 7컷 — 선생님의 바람
   },
 
@@ -1118,6 +1133,8 @@ function show(i){
   $$('#dots i').forEach(function(d,n){ d.classList.toggle('on',n===idx); });
   $('#counter').textContent=(idx+1)+' / '+slides.length;
   $('#noteBody').innerHTML=slides[idx].dataset.note||'—';
+  $$('video').forEach(function(v){ try{ v.pause(); v.currentTime=0; }catch(e){} });
+  var vd=$('video',slides[idx]); if(vd){ var pr=vd.play(); if(pr&&pr.catch) pr.catch(function(){}); }
   slides[idx].scrollTop=0;
 }
 function next(){ show(idx+1); }
