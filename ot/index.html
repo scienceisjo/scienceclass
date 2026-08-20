@@ -227,6 +227,8 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
  background:var(--brass);border-color:var(--brass-dk);color:#fff}
 .gbtn.hero:hover{background:var(--brass-hi);color:var(--ink)}
 .gbtns{display:flex;gap:clamp(10px,2vw,22px);flex-wrap:wrap;justify-content:center}
+.gbtn.small{font-size:clamp(14px,2vw,21px);padding:clamp(9px,1.5vw,15px) clamp(16px,2.8vw,32px);border-bottom-width:5px}
+.chips[hidden],.punch[hidden]{display:none}
 
 /* 약속 목록 */
 .vows{display:grid;gap:clamp(6px,1.1vw,10px);width:100%;max-width:960px}
@@ -531,10 +533,15 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
  </section>
 
  <section class="slide" data-kind="me" data-g1only
-  data-note="<b>여자친구 · 30초</b> · 아이들이 제일 궁금해하는 대목이라 솔직하게 답해 주고 넘어갑니다. 썰은 분위기 봐서 풀거나 아껴 두셔도 됩니다.">
+  data-note="<b>여자친구 · 30초</b> · 먼저 아이들에게 물어보고, 손 든 걸 본 다음 <b>맞는 쪽 버튼</b>을 누르세요. 답이 크게 뜹니다. 장을 나갔다 오면 다시 감춰지니 반마다 그대로 쓰시면 됩니다.">
   <div class="wrap">
    <div class="eyebrow">다섯 · 그거</div>
-   <h2 class="big">여자친구, <em>있습니다</em></h2>
+   <h2 class="big">여자친구, <em>있을까요 없을까요?</em></h2>
+   <div class="gbtns" id="gfPick">
+    <button class="gbtn" data-gf="있습니다">있다</button>
+    <button class="gbtn" data-gf="없습니다">없다</button>
+   </div>
+   <p class="punch" id="gfAns" hidden></p>
   </div>
  </section>
 
@@ -603,7 +610,6 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
     <span>작년 1학년 4반<br>담임</span><i>→</i>
     <span class="last">올해<br>여러분</span>
    </div>
-   <p class="sub">작년에 담임했던 1학년 4반이, 지금 2학년입니다.</p>
   </div>
  </section>
 
@@ -648,26 +654,20 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
  </section>
 
  <section class="slide" data-kind="me" data-g1only
-  data-note="<b>그래서 올해는 · 1분</b> · 앞장의 세 번째 목소리에 대한 답입니다. 공식을 손으로 짚으며 읽어 주세요. 마지막 문장이 이 파트 전체의 핵심입니다 — <b>잘하게 만드는 것보다 포기하지 않게.</b>">
-  <div class="wrap">
-   <div class="eyebrow">그래서 올해는</div>
-   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">활동으로 <s>끝내지</s> 않겠습니다</h2>
-   <div class="recipe">
-    <span>재미있는 활동</span><i>+</i>
-    <span>직접 해보는 탐구</span><i>+</i>
-    <span>한 장 개념정리</span><i>+</i>
-    <span>짧은 복습</span><i>+</i>
-    <span class="last">대표 문제풀이</span>
-   </div>
-   <p class="punch" style="font-size:clamp(17px,2.9vw,32px)">과학을 잘하게 만드는 것보다,<br><b style="color:var(--q)">과학을 포기하지 않게</b> 만드는 것이 목표입니다.</p>
-  </div>
- </section>
-
- <section class="slide" data-kind="me" data-g1only
-  data-note="<b>소개 마무리 · 20초</b> · 처음에 걸어 둔 “이유”를 여기서 회수합니다. 웃으면서 단호하게. 그리고 바로 만화로 넘어가세요.">
+  data-note="<b>소개 마무리 · 40초</b> · 처음에 걸어 둔 “이유”를 여기서 회수합니다. 웃으면서 단호하게. 버튼을 누르면 흔한 예시가 뜹니다 — 아이들이 웃을 때 “이런 것들”이라고 짚고 넘어가면 됩니다. 예시는 파일에서 자유롭게 고치세요.">
   <div class="wrap">
    <div class="eyebrow">이만큼 알려드린 이유</div>
-   <h2 class="big">앞으로 <em>개인적인 질문</em>은<br>받지 않습니다</h2>
+   <h2 class="big">이외에 <em>개인적인 질문</em>은<br>받지 않습니다!</h2>
+   <p class="lead">서로 사이에 선이 있는 게<br>더 좋은 교사와 학생 관계라고 생각합니다 ^.^</p>
+   <button class="gbtn small" id="pqBtn">개인적인 질문이 뭔데요?</button>
+   <div class="chips" id="pqList" hidden>
+    <span>집 어디예요?</span>
+    <span>월급 얼마예요?</span>
+    <span>인스타 알려주세요</span>
+    <span>전화번호 알려주세요</span>
+    <span>결혼 언제 해요?</span>
+    <span>차 뭐 타요?</span>
+   </div>
    <p class="punch">대신 <b style="color:var(--q)">과학 질문</b>은 얼마든지!</p>
   </div>
  </section>
@@ -1116,6 +1116,26 @@ $$('.frame').forEach(function(fr){
   box.classList.add('on');
 })();
 
+/* ── 여자친구 있다/없다 ── */
+function gfReset(){
+  var a=$('#gfAns'), p=$('#gfPick'); if(!a) return;
+  a.hidden=true; a.textContent=''; if(p) p.hidden=false;
+}
+(function(){
+  var p=$('#gfPick'); if(!p) return;
+  $$('[data-gf]',p).forEach(function(b){
+    b.onclick=function(e){ e.stopPropagation();
+      var a=$('#gfAns'); a.textContent=b.dataset.gf; a.hidden=false; p.hidden=true; };
+  });
+})();
+
+/* ── 개인적인 질문 예시 ── */
+function pqReset(){ var l=$('#pqList'), b=$('#pqBtn'); if(l){ l.hidden=true; } if(b){ b.hidden=false; } }
+(function(){
+  var b=$('#pqBtn'); if(!b) return;
+  b.onclick=function(e){ e.stopPropagation(); $('#pqList').hidden=false; b.hidden=true; };
+})();
+
 /* ── 어떻게 만났는가 게이트 ── */
 function gateReset(){
   var g=$('#gate'); if(!g) return;
@@ -1210,6 +1230,8 @@ function show(i){
   $$('video').forEach(function(v){ try{ v.pause(); v.currentTime=0; }catch(e){} });
   var vd=$('video',slides[idx]); if(vd){ var pr=vd.play(); if(pr&&pr.catch) pr.catch(function(){}); }
   if($('#gate',slides[idx])) gateReset();
+  if($('#gfPick',slides[idx])) gfReset();
+  if($('#pqBtn',slides[idx])) pqReset();
   slides[idx].scrollTop=0;
 }
 function next(){ show(idx+1); }
