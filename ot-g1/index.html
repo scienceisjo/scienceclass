@@ -258,6 +258,7 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .vidbox{width:auto;max-width:100%;border:2px solid var(--line);border-radius:var(--r);
  overflow:hidden;background:#14110c;box-shadow:var(--shadow);display:flex;flex:none}
 .vidbox video{width:auto;height:min(52vh,460px);max-width:100%;display:block}
+.vc .cat{font-size:clamp(11px,1.45vw,14.5px);font-weight:800;letter-spacing:.04em;color:var(--q)}
 .vc.ask{border-color:var(--q);background:#eef2fa}
 .vc.ask .q{color:var(--q)}
 .recipe{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(5px,1vw,10px);width:100%}
@@ -607,16 +608,42 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
  </section>
 
  <section class="slide" data-kind="me" data-g1only
-  data-note="<b>성적표 · 1분</b> · 이 파트가 신뢰를 만듭니다. “선생님이 학생을 평가하는 성적표가 아니라, 학생이 선생님 수업을 평가하는 성적표”를 꼭 짚어 주세요. 세 번째 칸(파란 칸)이 핵심입니다 — 좋은 말만 고르지 않았다는 게 드러납니다.">
+  data-note="<b>설문 결과 ① · 1분</b> · 이 파트가 신뢰를 만듭니다. “더 잘 가르치려고 선배들에게 물어봤다”는 태도를 먼저 보여 주세요. 세 칸은 카테고리만 읽고, 따옴표 안 문장을 소리 내어 읽어 주면 훨씬 잘 박힙니다. 우산은 실제로 작년에 썼던 설명 도구입니다.">
   <div class="wrap">
-   <div class="eyebrow">어떤 선생님이냐면</div>
-   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">작년 선배들이 저에게 <em>성적표</em>를 줬습니다</h2>
-   <p class="sub">선생님이 학생을 평가하는 성적표가 아니라, 학생이 선생님 수업을 평가하는 성적표입니다.</p>
+   <div class="eyebrow">더 나은 수업을 위해</div>
+   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">선배들이 겪은 <em>선생님의 수업</em>은?</h2>
+   <p class="sub">작년 2학년에게 수업 설문을 받았습니다. 그 대답을 모아 보면 —</p>
    <div class="voices">
-    <div class="vc"><span class="q">“수업이 재밌고<br>이해가 잘 된다”</span><span class="w">— 2학년 선배</span></div>
-    <div class="vc"><span class="q">“직접 실험해 보니까<br>오래 기억에 남는다”</span><span class="w">— 2학년 선배</span></div>
-    <div class="vc ask"><span class="q">“선생님, 그래서 시험은요?<br>개념정리랑 문제풀이요!”</span><span class="w">— 2학년 선배</span></div>
+    <div class="vc"><span class="cat">외우지 말고 이해하자</span>
+     <span class="q">“암기 과목인 줄 알았는데<br>아니었다”</span>
+     <span class="w">“이해하고 나니 외워졌다”</span></div>
+    <div class="vc"><span class="cat">설명이 쉽다</span>
+     <span class="q">“지금까지 들은 과학 설명 중<br>가장 이해가 잘 된다”</span>
+     <span class="w">“핵심을 잘 잡아 주셨다”</span></div>
+    <div class="vc"><span class="cat">비유와 실물로 보여 준다</span>
+     <span class="q">“우산으로 설명한 게<br>기억난다”</span>
+     <span class="w">실험 · 시뮬레이션 · 영상 자료</span></div>
    </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>설문 결과 ② · 1분</b> · 다섯 번째 칸(질문)을 힘주어 읽어 주세요. 오늘 뒤에 나올 질문 이야기의 밑돌이 됩니다. 마지막 띠 한 줄이 이 파트의 결론입니다 — 아이들이 좋아한 이유는 재미가 아니라 <b>이해</b>였다는 것.">
+  <div class="wrap">
+   <div class="eyebrow">그리고</div>
+   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">선배들이 <em>이런 말</em>도 했습니다</h2>
+   <div class="voices">
+    <div class="vc"><span class="cat">준비를 많이 한다</span>
+     <span class="q">“자료를 정말 많이<br>준비해 오신다”</span>
+     <span class="w">직접 만든 학습지 · 홈페이지</span></div>
+    <div class="vc"><span class="cat">질문을 귀찮아하지 않는다</span>
+     <span class="q">“쉬는 시간에<br>물어보러 갔다”</span>
+     <span class="w">모르면 다시 설명해 준다</span></div>
+    <div class="vc"><span class="cat">과학이 좋아졌다</span>
+     <span class="q">“시간표에 과학 있으면<br>기대된다”</span>
+     <span class="w">“과학 책을 사서 읽게 됐다”</span></div>
+   </div>
+   <p class="band q">가장 많이 나온 말은 “재밌다”가 아니라 <b>“드디어 이해됐다”</b> 였습니다.</p>
   </div>
  </section>
 
