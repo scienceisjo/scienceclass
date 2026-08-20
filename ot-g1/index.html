@@ -214,6 +214,20 @@ h2.big s{text-decoration:line-through;text-decoration-thickness:3px;color:var(--
 .rk.r3{height:clamp(106px,15vw,162px)}
 .rk.r4{height:clamp(86px,12vw,128px);opacity:.72}
 
+/* 어떻게 만났는가 게이트 */
+.gate{display:flex;flex-direction:column;align-items:center;gap:clamp(14px,2.4vw,26px);width:100%}
+.gs{display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2.2vw,24px);width:100%}
+.gs[hidden]{display:none}
+.gbtn{font-family:var(--jua);font-size:clamp(17px,2.8vw,32px);padding:clamp(12px,2.1vw,22px) clamp(24px,4.4vw,52px);
+ border-radius:18px;border:2px solid var(--line);border-bottom-width:6px;background:var(--paper-hi);
+ color:var(--ink);cursor:pointer;transition:.15s}
+.gbtn:hover{background:#fff;transform:translateY(-2px)}
+.gbtn:active{transform:translateY(3px);border-bottom-width:3px}
+.gbtn.hero{font-size:clamp(24px,5vw,54px);padding:clamp(18px,3.2vw,34px) clamp(30px,6vw,74px);
+ background:var(--brass);border-color:var(--brass-dk);color:#fff}
+.gbtn.hero:hover{background:var(--brass-hi);color:var(--ink)}
+.gbtns{display:flex;gap:clamp(10px,2vw,22px);flex-wrap:wrap;justify-content:center}
+
 /* 약속 목록 */
 .vows{display:grid;gap:clamp(6px,1.1vw,10px);width:100%;max-width:960px}
 .vow{display:flex;gap:clamp(9px,1.5vw,14px);align-items:flex-start;background:var(--paper-hi);
@@ -520,7 +534,60 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
   <div class="wrap">
    <div class="eyebrow">다섯 · 그거</div>
    <h2 class="big">여자친구, <em>있습니다</em></h2>
-   <p class="lead">어떻게 만났는지 궁금하죠?<br>그 이야기는 아껴 두겠습니다.</p>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>게이트 · 30초</b> · 큰 버튼을 누르면 “약속부터 할까요?”가 뜨고, <b>네를 누르든 아니오를 누르든</b> 같은 화면으로 넘어갑니다. 아이들이 아니오를 고르고 웃을 때 “어차피 하려고 했습니다”로 받으시면 됩니다. 이 장에 들어올 때마다 처음 상태로 돌아가니 반마다 그대로 쓰시면 됩니다.">
+  <div class="wrap">
+   <div class="gate" id="gate">
+    <div class="gs" data-step="1">
+     <button class="gbtn hero" id="gStart">어떻게 만났는가!</button>
+    </div>
+    <div class="gs" data-step="2" hidden>
+     <h2 class="big">잠깐, <em>약속</em>부터 할까요?</h2>
+     <div class="gbtns">
+      <button class="gbtn" data-ans>네</button>
+      <button class="gbtn" data-ans>아니오</button>
+     </div>
+    </div>
+    <div class="gs" data-step="3" hidden>
+     <h2 class="big">어차피 <em>약속</em>은<br>하려고 했습니다 ㅋ</h2>
+     <p class="sub">그럼 약속부터 하겠습니다.</p>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>선생님이 먼저 · 1분</b> · 순서가 중요합니다. 학생에게 약속을 요구하기 전에 선생님이 먼저 겁니다. 2번에서 잠깐 멈추세요 — “선생님도 말썽꾸러기였다”는 말이 아이들에게 제일 크게 남습니다.">
+  <div class="wrap">
+   <div class="eyebrow">약속 · 하나</div>
+   <h2 class="big">선생님이 <em>먼저</em> 약속합니다</h2>
+   <div class="vows mine">
+    <div class="vow"><span class="no">01</span><span class="tx"><b>공정하고 공평하게</b> 대하겠습니다.</span></div>
+    <div class="vow"><span class="no">02</span><span class="tx"><b>뒤끝, 절대 없습니다.</b><small>선생님도 말썽꾸러기였습니다. 지난 일을 꺼내며 혼나는 게 제일 싫었어요. 잘못은 그 자리에서 털고, 다음에 다시 꺼내지 않겠습니다.</small></span></div>
+    <div class="vow"><span class="no">03</span><span class="tx"><b>애정을 담아 지도하겠습니다.</b><small>감정적으로 여러분을 대하지 않겠습니다.</small></span></div>
+    <div class="vow"><span class="no">04</span><span class="tx"><b>웃음을 드리겠습니다.</b></span></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="slide" data-kind="me" data-g1only
+  data-note="<b>함께 지킬 약속 · 1분 30초</b> · 6·7번은 오늘 뒤에 나올 질문 이야기·실험실 수업과 이어지는 약속입니다. 필요 없으면 그 줄만 지우세요. 5번을 읽을 때 눈을 맞추면 좋습니다.">
+  <div class="wrap">
+   <div class="eyebrow">약속 · 둘</div>
+   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">우리가 <em>함께</em> 지킬 약속</h2>
+   <p class="sub">썰을 듣지 않더라도, 배움 가득한 수업 시간을 위해!</p>
+   <div class="vows">
+    <div class="vow"><span class="no">01</span><span class="tx"><b>수업 시간에 욕설하지 않기</b><small>밖에서 친구들끼리 하는 건 신경 쓰지 않습니다. 다만 어른 앞에서는 조심해 주세요.</small></span></div>
+    <div class="vow"><span class="no">02</span><span class="tx"><b>아픈 게 아니라면 엎드리지 않으려고 노력하기</b></span></div>
+    <div class="vow"><span class="no">03</span><span class="tx"><b>늦게 들어올 때는 가볍게 목례하고 “죄송합니다!”</b></span></div>
+    <div class="vow"><span class="no">04</span><span class="tx"><b>도를 넘는 비난하지 않기</b></span></div>
+    <div class="vow"><span class="no">05</span><span class="tx"><b>눈앞의 선생님을 믿기</b><small>수업 정말 열심히 준비해 오겠습니다. 열심히 듣다 보면 뭐라도 얻어갑니다.</small></span></div>
+    <div class="vow"><span class="no">06</span><span class="tx"><b>모르면 그냥 넘어가지 않기</b><small>질문은 부끄러운 게 아닙니다. 오늘 이 이야기를 뒤에서 자세히 할 거예요.</small></span></div>
+    <div class="vow"><span class="no">07</span><span class="tx"><b>모둠에서 한 사람에게 미루지 않기</b></span></div>
+   </div>
   </div>
  </section>
 
@@ -566,38 +633,6 @@ blockquote .src{display:block;margin-top:14px;font-size:clamp(12px,1.6vw,15px);c
     <span class="last">대표 문제풀이</span>
    </div>
    <p class="punch" style="font-size:clamp(17px,2.9vw,32px)">과학을 잘하게 만드는 것보다,<br><b style="color:var(--q)">과학을 포기하지 않게</b> 만드는 것이 목표입니다.</p>
-  </div>
- </section>
-
- <section class="slide" data-kind="me" data-g1only
-  data-note="<b>선생님이 먼저 · 1분</b> · 순서가 중요합니다. 학생에게 약속을 요구하기 전에 선생님이 먼저 겁니다. 2번에서 잠깐 멈추세요 — “선생님도 말썽꾸러기였다”는 말이 아이들에게 제일 크게 남습니다.">
-  <div class="wrap">
-   <div class="eyebrow">약속 · 하나</div>
-   <h2 class="big">선생님이 <em>먼저</em> 약속합니다</h2>
-   <div class="vows mine">
-    <div class="vow"><span class="no">01</span><span class="tx"><b>공정하고 공평하게</b> 대하겠습니다.</span></div>
-    <div class="vow"><span class="no">02</span><span class="tx"><b>뒤끝, 절대 없습니다.</b><small>선생님도 말썽꾸러기였습니다. 지난 일을 꺼내며 혼나는 게 제일 싫었어요. 잘못은 그 자리에서 털고, 다음에 다시 꺼내지 않겠습니다.</small></span></div>
-    <div class="vow"><span class="no">03</span><span class="tx"><b>애정을 담아 지도하겠습니다.</b><small>감정적으로 여러분을 대하지 않겠습니다.</small></span></div>
-    <div class="vow"><span class="no">04</span><span class="tx"><b>웃음을 드리겠습니다.</b></span></div>
-   </div>
-  </div>
- </section>
-
- <section class="slide" data-kind="me" data-g1only
-  data-note="<b>함께 지킬 약속 · 1분 30초</b> · 6·7번은 오늘 뒤에 나올 질문 이야기·실험실 수업과 이어지는 약속입니다. 필요 없으면 그 줄만 지우세요. 5번을 읽을 때 눈을 맞추면 좋습니다.">
-  <div class="wrap">
-   <div class="eyebrow">약속 · 둘</div>
-   <h2 class="big" style="font-size:clamp(22px,3.9vw,42px)">우리가 <em>함께</em> 지킬 약속</h2>
-   <p class="sub">썰을 듣지 않더라도, 배움 가득한 수업 시간을 위해!</p>
-   <div class="vows">
-    <div class="vow"><span class="no">01</span><span class="tx"><b>수업 시간에 욕설하지 않기</b><small>밖에서 친구들끼리 하는 건 신경 쓰지 않습니다. 다만 어른 앞에서는 조심해 주세요.</small></span></div>
-    <div class="vow"><span class="no">02</span><span class="tx"><b>아픈 게 아니라면 엎드리지 않으려고 노력하기</b></span></div>
-    <div class="vow"><span class="no">03</span><span class="tx"><b>늦게 들어올 때는 가볍게 목례하고 “죄송합니다!”</b></span></div>
-    <div class="vow"><span class="no">04</span><span class="tx"><b>도를 넘는 비난하지 않기</b></span></div>
-    <div class="vow"><span class="no">05</span><span class="tx"><b>눈앞의 선생님을 믿기</b><small>수업 정말 열심히 준비해 오겠습니다. 열심히 듣다 보면 뭐라도 얻어갑니다.</small></span></div>
-    <div class="vow"><span class="no">06</span><span class="tx"><b>모르면 그냥 넘어가지 않기</b><small>질문은 부끄러운 게 아닙니다. 오늘 이 이야기를 뒤에서 자세히 할 거예요.</small></span></div>
-    <div class="vow"><span class="no">07</span><span class="tx"><b>모둠에서 한 사람에게 미루지 않기</b></span></div>
-   </div>
   </div>
  </section>
 
@@ -1054,6 +1089,18 @@ $$('.frame').forEach(function(fr){
   box.classList.add('on');
 })();
 
+/* ── 어떻게 만났는가 게이트 ── */
+function gateReset(){
+  var g=$('#gate'); if(!g) return;
+  $$('.gs',g).forEach(function(el){ el.hidden = el.dataset.step!=='1'; });
+}
+(function(){
+  var g=$('#gate'); if(!g) return;
+  function go(n){ $$('.gs',g).forEach(function(el){ el.hidden = el.dataset.step!==String(n); }); }
+  $('#gStart').onclick=function(e){ e.stopPropagation(); go(2); };
+  $$('[data-ans]',g).forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); go(3); }; });
+})();
+
 /* ── 나이 서바이벌 ── */
 (function(){
   var box=$('#yline'); if(!box) return;               // 2학년 덱에는 없다
@@ -1135,6 +1182,7 @@ function show(i){
   $('#noteBody').innerHTML=slides[idx].dataset.note||'—';
   $$('video').forEach(function(v){ try{ v.pause(); v.currentTime=0; }catch(e){} });
   var vd=$('video',slides[idx]); if(vd){ var pr=vd.play(); if(pr&&pr.catch) pr.catch(function(){}); }
+  if($('#gate',slides[idx])) gateReset();
   slides[idx].scrollTop=0;
 }
 function next(){ show(idx+1); }
