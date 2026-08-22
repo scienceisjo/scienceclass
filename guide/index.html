@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📘 우리 반 과학 앱 사용법 — 질문과수원 · 칭찬도장판</title>
+<meta name="theme-color" content="#3D8B4F">
+<meta name="description" content="질문과수원·칭찬도장판을 처음 여는 학생을 위한 사용법 — 로그인부터 질문 심기, 캐릭터 키우기까지.">
+<link rel="icon" href="../icon-192.png">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --paper:#FBF8EF; --card:#FFFFFF; --ink:#20344B; --ink2:#4A5D72; --mute:#8A93A0;
+  --line:rgba(31,58,95,.13); --line2:rgba(31,58,95,.24);
+  --gr:#5CB86E; --gr-d:#3D8B4F; --gr-l:#E8F5EA;
+  --or:#C2703E; --or-d:#9C5427; --or-l:#FBEDE3;
+  --gold:#E8A93A; --red:#D9534F;
+  --font:'Pretendard Variable',Pretendard,-apple-system,system-ui,'Malgun Gothic',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--ink);background:var(--paper);line-height:1.65;
+  -webkit-font-smoothing:antialiased;padding-bottom:60px}
+.wrap{max-width:860px;margin:0 auto;padding:0 clamp(14px,4vw,26px)}
+
+/* 헤더 */
+header{background:linear-gradient(160deg,#F4FBF0,#E9F6E6 60%,#DDF1E4);
+  border-bottom:2px solid var(--line);padding:clamp(26px,5vw,44px) 0 0}
+h1{font-size:clamp(22px,4.4vw,34px);font-weight:900;letter-spacing:-.02em;line-height:1.25}
+.sub{margin-top:8px;color:var(--ink2);font-size:clamp(13px,1.7vw,16px);font-weight:600}
+.apps{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.app{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--line2);
+  border-radius:999px;padding:8px 15px;font-size:clamp(12px,1.5vw,14.5px);font-weight:800;
+  text-decoration:none;color:var(--ink)}
+.app:hover{border-color:var(--gr)}
+.app small{font-weight:700;color:var(--mute);font-size:.86em}
+.hback{display:inline-block;margin-bottom:12px;font-size:clamp(12.5px,1.6vw,14.5px);font-weight:800;
+  color:var(--gr-d);text-decoration:none;background:#fff;border:1.5px solid var(--line2);
+  border-radius:999px;padding:6px 14px}
+.hback:hover{border-color:var(--gr)}
+
+/* 탭 */
+.tabs{display:flex;gap:6px;margin-top:22px}
+.tab{flex:1;padding:13px 8px;border:none;background:rgba(255,255,255,.7);border-radius:14px 14px 0 0;
+  font-family:inherit;font-size:clamp(14px,2vw,17px);font-weight:900;color:var(--mute);cursor:pointer;
+  border:2px solid transparent;border-bottom:none}
+.tab.on{background:var(--paper);color:var(--ink);border-color:var(--line2)}
+
+/* 본문 */
+main{padding:clamp(20px,3.5vw,34px) 0}
+.pane{display:none} .pane.on{display:block}
+h2{font-size:clamp(18px,2.8vw,25px);font-weight:900;margin:clamp(26px,4vw,40px) 0 12px;
+  padding-bottom:8px;border-bottom:2.5px solid var(--gr);display:flex;align-items:center;gap:9px}
+h2:first-child{margin-top:0}
+h3{font-size:clamp(15px,2.1vw,19px);font-weight:900;margin:20px 0 8px}
+p{font-size:clamp(13.5px,1.75vw,16px);color:var(--ink2);font-weight:500;margin-bottom:9px}
+b{color:var(--ink);font-weight:800}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;
+  padding:clamp(14px,2.4vw,22px);margin:12px 0;box-shadow:0 2px 10px rgba(31,58,95,.05)}
+.card.gr{border-left:5px solid var(--gr)}
+.card.or{border-left:5px solid var(--or)}
+.card.warn{border-left:5px solid var(--gold);background:#FFFBF0}
+.card.bad{border-left:5px solid var(--red);background:#FDF3F3}
+
+/* 단계 */
+ol.steps{list-style:none;counter-reset:s;margin:12px 0}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 16px 46px;margin-bottom:2px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:-2px;width:32px;height:32px;
+  background:var(--gr-d);color:#fff;border-radius:50%;display:grid;place-items:center;
+  font-weight:900;font-size:15px}
+ol.steps>li::after{content:'';position:absolute;left:15.5px;top:32px;bottom:0;width:2px;background:var(--line)}
+ol.steps>li:last-child::after{display:none}
+ol.steps.or>li::before{background:var(--or-d)}
+.st-t{font-size:clamp(14.5px,1.9vw,17px);font-weight:900;margin-bottom:3px}
+.st-d{font-size:clamp(13px,1.65vw,15px);color:var(--ink2);font-weight:500}
+
+ul{margin:8px 0 8px 20px}
+li{font-size:clamp(13.5px,1.7vw,15.5px);color:var(--ink2);font-weight:500;margin-bottom:5px}
+li b{color:var(--ink)}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:clamp(12.5px,1.6vw,15px);
+  background:#fff;border-radius:12px;overflow:hidden;border:1.5px solid var(--line)}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:var(--gr-l);font-weight:900;font-size:.92em}
+td{color:var(--ink2);font-weight:500}
+td b{color:var(--ink)}
+tr:last-child td{border-bottom:none}
+
+.kbd{display:inline-block;background:#fff;border:1.5px solid var(--line2);border-radius:7px;
+  padding:2px 8px;font-weight:800;font-size:.92em;white-space:nowrap}
+.tip{background:var(--gr-l);border-radius:12px;padding:12px 15px;margin:12px 0;
+  font-size:clamp(13px,1.65vw,15px);font-weight:600;color:var(--ink2)}
+.tip b{color:var(--gr-d)}
+.q{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;margin-bottom:9px}
+.q .qq{font-weight:900;font-size:clamp(14px,1.8vw,16px);margin-bottom:5px}
+.q .qa{font-size:clamp(13px,1.65vw,15px);color:var(--ink2);font-weight:500}
+
+footer{margin-top:40px;padding:22px 0;border-top:2px solid var(--line);text-align:center;
+  color:var(--mute);font-size:12.5px;font-weight:700;line-height:1.8}
+.print{position:fixed;right:18px;bottom:18px;background:var(--ink);color:#fff;border:none;
+  border-radius:999px;padding:13px 20px;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50}
+@media print{
+  body{background:#fff;padding:0}
+  header{background:#fff;border-bottom:2px solid #ccc}
+  .tabs,.print,.app,.hback{display:none}
+  .pane{display:block!important;page-break-before:always}
+  .pane:first-of-type{page-break-before:auto}
+  .card,table,.q{break-inside:avoid}
+  h2{break-after:avoid}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="hback" href="../">← 과학 시간으로</a>
+    <h1>📘 우리 반 과학 앱 사용법</h1>
+    <p class="sub">질문과수원 · 칭찬도장판 — 회원가입부터 수업 활용까지</p>
+    <div class="apps">
+      <a class="app" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">🌳 질문과수원 <small>questionuri</small></a>
+      <a class="app" href="https://scienceisjo.github.io/class-tools/stamp-board/" target="_blank" rel="noopener">🏅 칭찬도장판 <small>stamp-board</small></a>
+    </div>
+    <div class="tabs">
+      <button class="tab on" data-t="stu" onclick="pick('stu')">🧒 학생용</button>
+      <button class="tab" data-t="tea" onclick="pick('tea')">🧑‍🏫 선생님용</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════════ 교사용 ══════════════════ -->
+<div class="pane" id="p-tea">
+
+  <h2>🎯 이 앱들은 무엇인가요</h2>
+  <table>
+    <tr><th>앱</th><th>학생이 보는 것</th><th>선생님이 얻는 것</th></tr>
+    <tr><td><b>🌳 질문과수원</b></td><td>질문을 심으면 나무에 열매가 열림</td><td>수업 전·후 질문 변화 = <b>세특 근거</b></td></tr>
+    <tr><td><b>🏅 칭찬도장판</b></td><td>칭찬을 모으면 캐릭터가 자람</td><td>관찰한 행동 기록 = <b>누가기록 근거</b></td></tr>
+  </table>
+  <div class="tip">💡 <b>두 앱은 로그인을 공유합니다.</b> 한쪽에 로그인하면 다른 쪽은 열기만 해도 바로 들어가집니다. 같은 계정이니 따로 만들 필요가 없어요.</div>
+
+  <h2>1️⃣ 처음 준비하기</h2>
+  <ol class="steps">
+    <li><div class="st-t">교사 계정 만들기</div>
+      <div class="st-d">질문과수원 교사 대시보드에서 이메일·비밀번호로 가입합니다. 가입 후 교사로 등록되어야 도장판의 교사 모드도 열립니다.</div></li>
+    <li><div class="st-t">학생 계정 일괄 만들기</div>
+      <div class="st-d">교사 대시보드 → <span class="kbd">📋 학생 계정 일괄 생성</span> 에서 CSV로 한 번에 만듭니다. <b>학생 각자 가입시키지 마세요</b> — 비밀번호 분실이 폭발합니다. 기본 비밀번호는 <span class="kbd">1234</span> 처럼 통일해 배부하고, 첫 시간에 각자 바꾸게 하세요.</div></li>
+    <li><div class="st-t">링크 배부</div>
+      <div class="st-d">두 앱 주소를 학급 게시판·패들렛·카톡 등에 올려 둡니다. 학생은 <b>가입할 필요 없이 로그인만</b> 하면 됩니다.</div></li>
+  </ol>
+  <div class="card warn">
+    <p><b>⚠️ 비밀번호를 잊은 학생이 나오면</b> — 교사 대시보드 학생 카드의 <span class="kbd">🔑 비번 초기화</span> 를 누르면 즉시 새 비밀번호를 정해 줄 수 있습니다. 학생에게 알려주고 로그인 후 바꾸게 하세요.</p>
+  </div>
+
+  <h2>2️⃣ 첫 수업 (1차시 · 45분)</h2>
+  <table>
+    <tr><th>시간</th><th>활동</th></tr>
+    <tr><td><b>10분</b></td><td>전자칠판에 질문과수원을 띄우고 <span class="kbd">👀 가입 없이 둘러보기</span> → 예시 학생 3명(🌱시작·🌿보통·🏆질문왕)을 버튼으로 바꿔 보여 주며 <i>"1년 하면 이렇게 된다"</i> 를 눈으로 보여줍니다.</td></tr>
+    <tr><td><b>10분</b></td><td><span class="kbd">🎯 좋은 질문의 7가지 특성</span> 함께 읽기</td></tr>
+    <tr><td><b>15분</b></td><td>각자 로그인 → 첫 질문 1개 심기 → 🎯 자가체크로 7가지 중 몇 개인지 스스로 표시</td></tr>
+    <tr><td><b>10분</b></td><td>친구 질문에 💧 물주기 3개씩 → 칭찬도장판도 열어 캐릭터 고르기</td></tr>
+  </table>
+
+  <h2>3️⃣ 매 차시 루틴 (5분 + 5분)</h2>
+  <div class="card gr">
+    <p><b>수업 시작 5분</b> — 🌅 <b>수업 열기</b>: "오늘 배울 것에서 무엇이 궁금한가?"<br>
+    <b>수업 끝 5분</b> — 🌇 <b>수업 닫기</b>: "배우고 나니 새로 생긴 궁금증은?"</p>
+  </div>
+  <div class="tip">💡 이 루틴만 지켜도 앱의 8할이 굴러갑니다. 그리고 <b>수업 중에 학생 질문을 소리 내어 인용</b>하세요 — 참여율을 가장 크게 올리는 건 이것 하나입니다.</div>
+
+  <h2>4️⃣ 칭찬도장 주기 (한 차시 3명)</h2>
+  <ol class="steps or">
+    <li><div class="st-t">수업 시작 전 · 5초</div>
+      <div class="st-d">도장판 → <span class="kbd">⚡ 도장 주기</span> → 반과 오늘 활동명을 한 번만 입력. 이후 찍는 도장에 자동으로 붙습니다.</div></li>
+    <li><div class="st-t">실험 순회 중 · 10초</div>
+      <div class="st-d">학생 이름 탭 → 역량 탭 → 행동칩 탭 → 저장. <b>여러 명을 한 번에</b> 고를 수도 있습니다.</div></li>
+    <li><div class="st-t">정리 시간 3분</div>
+      <div class="st-d">학생들이 뒷정리하는 동안 2~3명 몰아서 입력하는 게 가장 현실적입니다.</div></li>
+    <li><div class="st-t">주 1회 · 1분</div>
+      <div class="st-d">학생 목록을 <b>오래 안 받은 순</b>으로 훑어보세요. 0건인 학생이 회색으로 표시됩니다.</div></li>
+  </ol>
+  <div class="card bad">
+    <p><b>🚫 매 차시 전원 기록은 반드시 실패합니다.</b> 목표는 <b>한 차시에 3명</b>. 주 3시간 × 15주면 1인당 4~5건이 쌓여 세특 근거로 충분합니다. 욕심내면 3주 만에 그만두게 됩니다.</p>
+  </div>
+
+  <h3>도장 사유는 이렇게 적으세요</h3>
+  <table>
+    <tr><th>❌ 이렇게 말고</th><th>⭕ 이렇게</th></tr>
+    <tr><td>실험에 성실히 참여함</td><td>측정값이 예상과 달라 연결 상태를 다시 확인하고 재측정함</td></tr>
+    <tr><td>친구를 도와줌</td><td>어려워하는 친구에게 답을 알려주지 않고 방법을 설명함</td></tr>
+  </table>
+  <div class="tip">💡 <b>평가가 아니라 행동을 적습니다.</b> 이 문장이 그대로 세특 근거가 되기 때문이에요. 행동칩을 누르면 문장 앞부분이 자동으로 깔리니 뒤만 채우면 됩니다.</div>
+
+  <h2>5️⃣ 주말 영상 과제 (거꾸로 수업)</h2>
+  <ul>
+    <li>교사 대시보드에서 자료를 올릴 때 <span class="kbd">📼 주말 과제로 내기</span> 체크 + 영상 URL + 마감일 입력</li>
+    <li>학생 앱에 <b>D-day 뱃지 + 영상 + "이 영상 보고 질문하기"</b> 로 표시됩니다</li>
+    <li>월요일 수업은 <b>학생이 낸 질문에서 시작</b>하세요</li>
+  </ul>
+  <div class="tip">💡 과제를 "요약해오기"가 아니라 <b>"질문 2개 만들어오기"</b>로 내세요. 훨씬 잘 해옵니다.</div>
+
+  <h2>6️⃣ 학기말 — 생기부 쓰기</h2>
+  <ol class="steps">
+    <li><div class="st-t">도장판에서 내보내기</div>
+      <div class="st-d"><span class="kbd">📤 내보내기</span> → 반 선택 → CSV 내려받기, 또는 학생 카드에서 <span class="kbd">📋 요약 복사</span></div></li>
+    <li><div class="st-t">질문과수원에서 성장 확인</div>
+      <div class="st-d">학생별 리포트에서 <b>수업 전 질문 → 수업 후 질문</b>의 변화를 봅니다. 이게 가장 좋은 세특 문장 재료입니다.</div></li>
+    <li><div class="st-t">문장 만들기</div>
+      <div class="st-d">복사한 기록을 생기부 도우미에 넣어 문장을 만듭니다.</div></li>
+  </ol>
+  <div class="card warn">
+    <p><b>⚠️ 지켜야 할 원칙</b></p>
+    <ul>
+      <li><b>도장 개수로 세특을 쓰지 않습니다.</b> 근거는 개수가 아니라 <b>행동 문장</b>입니다.</li>
+      <li>기록이 3건 미만인 학생은 <b>학생이 부족한 게 아니라 내가 덜 본 것</b>입니다. 다른 근거를 함께 보세요.</li>
+      <li>기록은 <b>삭제되지 않고 무효 처리</b>됩니다. 잘못 준 도장은 취소하면 됩니다.</li>
+    </ul>
+  </div>
+
+  <h2>❓ 자주 묻는 것</h2>
+  <div class="q"><div class="qq">학생이 로그인을 못 해요</div><div class="qa">학년·반·번호가 계정과 다르거나 비밀번호를 잊은 경우입니다. 교사 대시보드에서 <b>🔑 비번 초기화</b> 하세요.</div></div>
+  <div class="q"><div class="qq">다른 반 학생 기록도 보이나요?</div><div class="qa">아니요. <b>선생님이 직접 기록한 것만</b> 보입니다. 학생은 자기 것만 봅니다.</div></div>
+  <div class="q"><div class="qq">학생끼리 도장 개수를 비교하나요?</div><div class="qa">우리 반 화면에서 <b>친구의 도장 수는 보이지 않습니다.</b> 캐릭터와 반 전체 합계만 보여요.</div></div>
+  <div class="q"><div class="qq">기기가 부족해요</div><div class="qa">전자칠판으로 게스트 모드를 함께 보고, 개인 작성은 과제로 돌리면 됩니다.</div></div>
+</div>
+
+<!-- ══════════════════ 학생용 ══════════════════ -->
+<div class="pane on" id="p-stu">
+
+  <h2>🌳🏅 두 개의 앱, 하나의 계정</h2>
+  <div class="card gr">
+    <p><b>🌳 질문과수원</b> — 궁금한 걸 심으면 <b>나무에 열매</b>가 열려요.<br>
+    <b>🏅 칭찬도장판</b> — 칭찬을 모으면 <b>내 캐릭터</b>가 자라요.</p>
+  </div>
+  <div class="tip">💡 <b>계정은 하나!</b> 한쪽에 로그인하면 다른 쪽은 그냥 열기만 해도 들어가져요.</div>
+
+  <h2>1️⃣ 로그인하기</h2>
+  <ol class="steps">
+    <li><div class="st-t">선생님이 알려준 주소로 들어가요</div>
+      <div class="st-d">폰이나 태블릿 브라우저에서 열면 됩니다. 앱을 따로 깔지 않아도 돼요.</div></li>
+    <li><div class="st-t">학년 · 반 · 번호 + 비밀번호</div>
+      <div class="st-d">선생님이 미리 만들어 두셨어요. <b>회원가입은 안 해도 됩니다.</b> (2학년 3반 7번이면 2 · 3 · 7)</div></li>
+    <li><div class="st-t">비밀번호 바꾸기</div>
+      <div class="st-d">처음 들어가면 나만 아는 비밀번호로 바꿔 두세요. 잊어버리면 선생님께 말하면 다시 정해 주십니다.</div></li>
+  </ol>
+
+  <h2>2️⃣ 🌳 질문과수원 — 질문 심기</h2>
+  <ol class="steps">
+    <li><div class="st-t">🌅 수업 열기 — 수업 시작할 때</div>
+      <div class="st-d">"오늘 배울 것에서 뭐가 궁금하지?" 를 적어요. 뭘 써야 할지 막히면 <b>"왜 ~", "만약 ~라면"</b> 같은 시작틀을 눌러 보세요.</div></li>
+    <li><div class="st-t">🌇 수업 닫기 — 수업 끝날 때</div>
+      <div class="st-d">"배우고 나니 새로 생긴 궁금증"을 적어요. 처음 질문과 나중 질문이 <b>어떻게 달라졌는지</b> 나중에 볼 수 있어요.</div></li>
+    <li><div class="st-t">🎯 자가체크</div>
+      <div class="st-d">내 질문이 <b>좋은 질문 7가지</b> 중 몇 개에 해당하는지 스스로 표시해 봐요.</div></li>
+    <li><div class="st-t">🌿 질문 키우기</div>
+      <div class="st-d">내 질문에서 한 걸음 더 들어간 <b>꼬리질문</b>을 달 수 있어요. "그래서 만약 ~라면?" 같은 도움말이 나와요.</div></li>
+    <li><div class="st-t">💧 친구 질문에 물주기</div>
+      <div class="st-d">"나도 궁금해!" 싶은 친구 질문에 물을 주세요. 답을 아는 질문엔 💬 답을 달아 줄 수도 있어요.</div></li>
+  </ol>
+  <div class="tip">🧚 <b>막히면 힌트 요정</b>을 눌러 보세요. 정답을 알려주지 않고, 다시 생각할 <b>힌트</b>를 줍니다.</div>
+
+  <h3>🌰 도토리와 나무 꾸미기</h3>
+  <ul>
+    <li>질문하면 <b>+1</b> · 해결하면 <b>+2</b> · 물주기 <b>+1</b></li>
+    <li>모은 도토리로 상점에서 <b>나무 종류와 동반자</b>를 바꿀 수 있어요</li>
+  </ul>
+
+  <h2>3️⃣ 🏅 칭찬도장판 — 캐릭터 키우기</h2>
+  <div class="card or">
+    <p>선생님이 수업에서 <b>좋은 모습을 보면 도장</b>을 찍어 주십니다. 도장이 쌓이면 캐릭터가 자라요.</p>
+  </div>
+  <h3>도장은 두 가지가 있어요</h3>
+  <table>
+    <tr><th></th><th>뜻</th><th>쓰면?</th></tr>
+    <tr><td><b>🏅 모은 도장</b></td><td>지금까지 받은 전부</td><td><b>절대 줄지 않아요</b> — 캐릭터는 계속 자라요</td></tr>
+    <tr><td><b>🎟️ 쓸 수 있는 도장</b></td><td>보상으로 바꿀 수 있는 몫</td><td>바꾸면 줄어들어요</td></tr>
+  </table>
+  <div class="tip">💡 그러니까 <b>보상을 바꿔도 캐릭터는 작아지지 않아요.</b> 마음 편히 바꿔도 됩니다!</div>
+
+  <h3>내 캐릭터 고르기</h3>
+  <ul>
+    <li><span class="kbd">🎨 모습 바꾸기</span> — 🦎탐구생물 · 🧑‍🔬과학자 · 🏛️연구소 · 🤖로봇 중에서 고르세요. <b>언제든 바꿔도 성장은 그대로</b>예요.</li>
+    <li><span class="kbd">🧬 진화 고르기</span> — 도장 6개부터 <b>내가 직접</b> 어떤 모습으로 진화할지 고를 수 있어요.</li>
+    <li>이름도 지어 줄 수 있어요.</li>
+  </ul>
+
+  <h3>성장 단계</h3>
+  <table>
+    <tr><th>모은 도장</th><th>단계</th></tr>
+    <tr><td>1개</td><td>🐣 부화!</td></tr>
+    <tr><td>3개</td><td>아기</td></tr>
+    <tr><td><b>6개</b></td><td><b>진화 갈림길 — 여기서 모습을 골라요</b></td></tr>
+    <tr><td>10개</td><td>성숙기</td></tr>
+    <tr><td>15개</td><td>완전체</td></tr>
+    <tr><td>20개</td><td>✨ 전설</td></tr>
+  </table>
+
+  <h3>🎁 교환소</h3>
+  <ul>
+    <li>🎟️ 도장으로 <b>간식 · 상점 · 자리 선택권 · 실험 조교</b> 같은 걸 바꿀 수 있어요</li>
+    <li>바꾸면 <b>🎫 쿠폰</b>이 생겨요 → <b>선생님께 그 화면을 보여주면</b> 받을 수 있어요</li>
+    <li>15개·20개를 <b>모으기만 해도</b> 열리는 보상도 있어요 (써도 사라지지 않아요)</li>
+  </ul>
+
+  <h3>🏕️ 우리 반 탐구기지</h3>
+  <p>친구들 캐릭터를 볼 수 있어요. <b>친구가 도장을 몇 개 받았는지는 보이지 않아요.</b> 대신 우리 반이 함께 모은 도장으로 <b>기지가 커집니다</b>.</p>
+
+  <h2>❓ 궁금한 것</h2>
+  <div class="q"><div class="qq">비밀번호를 잊었어요</div><div class="qa">선생님께 말씀드리면 새 비밀번호를 정해 주십니다. 받은 뒤에 나만 아는 것으로 바꾸세요.</div></div>
+  <div class="q"><div class="qq">질문이 부끄러워요</div><div class="qa">🕊️ <b>익명으로 심기</b>를 켜면 이름이 안 보여요. 세상에 나쁜 질문은 없어요!</div></div>
+  <div class="q"><div class="qq">도장을 못 받았어요</div><div class="qa">선생님이 <b>한 차시에 몇 명씩만</b> 기록하셔서 아직 차례가 안 온 것뿐이에요. 실력이 부족해서가 아니에요.</div></div>
+  <div class="q"><div class="qq">캐릭터를 바꾸면 처음부터인가요?</div><div class="qa">아니에요! <b>모은 도장이 그대로라 단계도 그대로</b>예요. 같은 도장을 다른 모습으로 보는 것뿐입니다.</div></div>
+  <div class="q"><div class="qq">앱을 깔아야 하나요?</div><div class="qa">아니요. 브라우저에서 주소만 열면 돼요. 홈 화면에 추가해 두면 앱처럼 쓸 수 있어요.</div></div>
+</div>
+
+</main>
+
+<footer class="wrap">
+  © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
+  <span style="opacity:.85">우리 반 과학 앱 사용법 · 최종 업데이트 2026-08-22</span>
+</footer>
+
+<button class="print" onclick="window.print()">🖨️ 인쇄 / PDF</button>
+
+<script>
+function pick(k){
+  var a=document.querySelectorAll('.tab'),i;
+  for(i=0;i<a.length;i++) a[i].classList.toggle('on', a[i].dataset.t===k);
+  var b=document.querySelectorAll('.pane');
+  for(i=0;i<b.length;i++) b[i].classList.toggle('on', b[i].id==='p-'+k);
+  window.scrollTo({top:0,behavior:'smooth'});
+  history.replaceState(null,'','#'+k);
+}
+function fromHash(){ var h=location.hash;
+  if(h==='#tea'||h==='#stu') pick(h.slice(1));
+}
+fromHash();
+window.addEventListener('hashchange', fromHash);
+</script>
+</body>
+</html>

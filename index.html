@@ -76,6 +76,8 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room.r-less  .ic{background:rgba(47,125,85,.12);border-color:rgba(47,125,85,.33)}
 .room.r-tree  .ic{background:rgba(74,158,112,.16);border-color:rgba(74,158,112,.38)}
 .room.r-stamp .ic{background:rgba(224,145,43,.16);border-color:rgba(224,145,43,.4)}
+.room.r-guide .ic{background:rgba(179,120,58,.13);border-color:rgba(179,120,58,.34)}
+.room.r-map   .ic{background:rgba(92,132,168,.15);border-color:rgba(92,132,168,.38)}
 
 .view{display:none;animation:fade .22s ease both}
 .view.on{display:block}
@@ -135,6 +137,16 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .unit .tag.lesson{background:rgba(47,125,85,.13);border-color:var(--leaf);color:var(--leaf)}
 .unit .tag.lab{background:rgba(53,111,149,.12);border-color:var(--sky);color:var(--sky)}
 .unit.todo{opacity:.6;pointer-events:none;border-style:dashed}
+/* 단원 카드 + 아래쪽 '지도에서 보기' 띠 */
+.unitbox{display:flex;flex-direction:column}
+.unitbox .unit{flex:1}
+.unitbox .unit:hover{transform:none}
+.unitbox.hasmap .unit{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none}
+.umap{display:flex;align-items:center;gap:6px;padding:7px 13px;font-size:11.6px;line-height:1.5;
+ color:var(--ink-mute);text-decoration:none;background:var(--paper-lo);
+ border:1.5px solid var(--line);border-top:1px dashed var(--line);border-radius:0 0 15px 15px;transition:.15s}
+.umap:hover{color:var(--leaf);border-color:var(--leaf-lo);background:rgba(47,125,85,.07)}
+.umap::after{content:"\2197";margin-left:auto;font-size:12.5px}
 
 .wgroup{margin-top:18px}
 .wgroup>h3{font-family:var(--jua);font-weight:400;font-size:15.5px;color:var(--sky);
@@ -169,9 +181,26 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 #app-credit a{color:var(--ink-mute)}
 
 /* ══════════ 진도 트래커 (교사용) ══════════ */
-#roomProgress{display:none}
-body.teacher #roomProgress{display:flex}
-.room.r-prog .ic{background:rgba(112,88,168,.13);border-color:rgba(112,88,168,.36)}
+#roomProgress,#roomTools{display:none}
+body.teacher #roomProgress,body.teacher #roomTools{display:flex}
+.room.r-prog  .ic{background:rgba(112,88,168,.13);border-color:rgba(112,88,168,.36)}
+.room.r-tools .ic{background:rgba(112,88,168,.13);border-color:rgba(112,88,168,.36)}
+
+/* 교사 도구 목록 */
+.tgroup{margin-top:18px}
+.tgroup>h3{font-family:var(--jua);font-weight:400;font-size:15.5px;color:#6f58a8;
+ display:flex;align-items:center;gap:7px;padding-bottom:7px;border-bottom:1.5px dashed var(--line)}
+.tlist{display:grid;gap:8px;margin-top:10px}
+@media(min-width:620px){.tlist{grid-template-columns:1fr 1fr}}
+.trow{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:13px;text-decoration:none;
+ border:1.5px solid var(--line);background:var(--paper-hi);color:var(--ink);transition:.15s}
+.trow:hover{border-color:#8a72c4;transform:translateY(-1px)}
+.trow .ti{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:18px;
+ background:var(--paper-lo);border:1px solid var(--line-soft)}
+.trow .tt2{flex:1;min-width:0}
+.trow .tt2 b{font-family:var(--jua);font-weight:400;font-size:14.8px;display:block;line-height:1.35}
+.trow .tt2 small{font-size:11.8px;color:var(--ink-mute);display:block;line-height:1.5}
+.trow .tar{flex:none;color:var(--ink-mute);font-size:13px}
 .tmode{margin-top:12px;font-family:var(--body);font-size:11.5px;padding:5px 13px;border-radius:99px;
  border:1.5px solid var(--line);background:transparent;color:var(--ink-mute);cursor:pointer;opacity:.5}
 .tmode:hover{opacity:1}
@@ -338,9 +367,25 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
       <span class="tx"><span class="tt">칭찬 도장판</span><span class="dd">내 도장 확인하고 교환소 가기</span></span>
       <span class="arw" aria-hidden="true"></span>
     </a>
+    <a class="room r-guide" href="guide/">
+      <span class="ic">📘</span>
+      <span class="tx"><span class="tt">앱 사용법</span><span class="dd">질문나무 · 칭찬 도장판 처음 쓰는 법</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
+    <a class="room r-map ext" href="https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/"
+       target="_blank" rel="noopener">
+      <span class="ic">🗺️</span>
+      <span class="tx"><span class="tt">과학 지도</span><span class="dd">지금 배우는 게 어디서 와서 어디로 이어지나</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
     <button class="room r-prog" type="button" data-go="prog" id="roomProgress">
       <span class="ic">📊</span>
       <span class="tx"><span class="tt">진도 트래커</span><span class="dd">반별 차시 진행 상황 · 교사용</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
+    <button class="room r-tools" type="button" data-go="tools" id="roomTools">
+      <span class="ic">🧰</span>
+      <span class="tx"><span class="tt">만든 것 모음</span><span class="dd">수업·학급 웹앱 전부 · 교사용</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
   </div>
@@ -396,6 +441,13 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 </section>
 
 
+<!-- ══════════ 만든 것 모음 (교사용) ══════════ -->
+<section class="view" id="v-tools">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🧰 만든 것 모음</h2></div>
+  <p class="vlead">지금까지 만든 수업·학급 웹앱을 한곳에 모았습니다. 학생에게는 이 방이 보이지 않아요.</p>
+  <div id="toolList"></div>
+</section>
+
 <!-- ══════════ 진도 트래커 (교사용) ══════════ -->
 <section class="view" id="v-prog">
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📊 진도 트래커</h2></div>
@@ -444,7 +496,7 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 
 <footer id="app-credit">
   © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-  최종 업데이트: 2026-08-18<br>
+  최종 업데이트: 2026-08-22<br>
   <button class="tmode" id="tmode" type="button" title="교사용 켜기">🧑‍🏫</button>
 </footer>
 </div>
@@ -452,12 +504,16 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 <script>
 'use strict';
 /* ══════════════════════════════════════════════════════════════
-   ★ 선생님이 고치는 곳은 아래 세 덩어리(UNITS · SHEETS · EVAL)뿐입니다.
+   ★ 선생님이 고치는 곳은 아래 네 덩어리(UNITS · SHEETS · EVAL · TOOLS)뿐입니다.
      - SHEETS의 url 에 OneDrive 공유 링크를 붙여 넣으면 바로 열립니다.
      - url 이 비어 있으면 "준비 중"으로 흐리게 표시됩니다.
+     - UNITS의 map 에 나선지도 단원 id(m13-14 처럼)를 넣으면
+       카드 아래에 「어디서 와서 어디로 이어질까」 띠가 생깁니다.
+     - TOOLS는 교사용 '만든 것 모음' 방에만 나옵니다(학생에게 안 보임).
    ══════════════════════════════════════════════════════════════ */
 
-const SW = 'https://scienceisjo.github.io/scienceworld/science-exploration-world.html';
+const SW  = 'https://scienceisjo.github.io/scienceworld/science-exploration-world.html';
+const MAP = 'https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/';
 
 /* ── 단원 (학년별) ───────────────────────────────── */
 const UNITS = {
@@ -465,25 +521,25 @@ const UNITS = {
   {no:0, ic:'🧭', name:'학기 첫 시간 — 과학을 왜 배우는 걸까?',
    desc:'수업에서 함께 본 이야기 다시 보기', url:'ot-g1/', kind:'lesson'},
   {no:6, ic:'🎈', name:'기체의 성질', desc:'압력 · 입자의 충돌 · 압력↔부피 · 온도↔부피',
-   url:'https://scienceisjo.github.io/gas-properties/', kind:'lesson'},
+   url:'https://scienceisjo.github.io/gas-properties/', kind:'lesson', map:'m13-06'},
  ],
  '2':[
   {no:0, ic:'🧭', name:'학기 첫 시간 — 과학을 왜 배우는 걸까?',
    desc:'수업에서 함께 본 이야기 다시 보기', url:'ot/', kind:'lesson'},
   {no:1, ic:'🔬', name:'물질의 특성', desc:'순물질과 혼합물 · 밀도 · 용해도 · 녹는점',
-   url:SW+'#unit-mid2-1', kind:'lab'},
+   url:SW+'#unit-mid2-1', kind:'lab', map:'m13-08'},
   {no:2, ic:'🪨', name:'지권의 변화', desc:'지구 내부 · 광물 · 화성암 · 퇴적암 · 변성암',
-   url:SW+'#unit-mid2-2', kind:'lab'},
+   url:SW+'#unit-mid2-2', kind:'lab', map:'m13-09'},
   {no:3, ic:'🌈', name:'빛과 파동', desc:'빛의 합성 · 거울과 렌즈 · 소리',
-   url:'https://scienceisjo.github.io/lightandwave/', kind:'lab'},
+   url:'https://scienceisjo.github.io/lightandwave/', kind:'lab', map:'m13-10'},
   {no:4, ic:'⚛️', name:'물질의 구성', desc:'원소 · 원자 · 주기율표 · 이온',
-   url:SW+'#unit-mid2-4', kind:'lab'},
-  {no:5, ic:'🌱', name:'식물과 에너지', desc:'광합성 · 증산 작용 · 호흡', url:'', kind:'todo'},
-  {no:6, ic:'🫀', name:'동물과 에너지', desc:'소화 · 순환 · 호흡 · 배설', url:'', kind:'todo'},
+   url:SW+'#unit-mid2-4', kind:'lab', map:'m13-11'},
+  {no:5, ic:'🌱', name:'식물과 에너지', desc:'광합성 · 증산 작용 · 호흡', url:'', kind:'todo', map:'m13-12'},
+  {no:6, ic:'🫀', name:'동물과 에너지', desc:'소화 · 순환 · 호흡 · 배설', url:'', kind:'todo', map:'m13-13'},
   {no:7, ic:'⚡', name:'전기와 자기', desc:'마찰 전기 · 전류와 전압 · 저항 · 전자석 · 전동기',
-   url:'https://scienceisjo.github.io/electricity/', kind:'lesson'},
+   url:'https://scienceisjo.github.io/electricity/', kind:'lesson', map:'m13-14'},
   {no:8, ic:'🌌', name:'별과 우주', desc:'연주 시차 · 별의 밝기와 색 · 우리은하 · 우주 팽창',
-   url:'https://scienceisjo.github.io/starandspace/', kind:'lesson'},
+   url:'https://scienceisjo.github.io/starandspace/', kind:'lesson', map:'m13-15'},
  ]
 };
 
@@ -561,6 +617,43 @@ const EXAM_DAYS = [
   { t:'기말고사', when:'2026-12-15', d:'12월 15일(화) ~ 17일(목)' },
 ];
 
+/* ── 만든 것 모음 (교사용 전용) ────────────────────
+   여기에 줄만 더하면 '🧰 만든 것 모음' 방에 카드가 생깁니다. */
+const TOOLS = [
+ { g:'📐 수업 준비', items:[
+   { ic:'🗺️', t:'과학 나선 교육과정 지도', d:'초3~고3 108단원 연계 · 성취수준 · 오개념',
+     url:MAP },
+   { ic:'📄', t:'학습지 스튜디오', d:'A4 학습지 조판기',
+     url:'https://scienceisjo.github.io/teacher-toolkit/worksheet-studio/' },
+   { ic:'🧰', t:'교사 도구 모음 (teacher-toolkit)', d:'수업 준비 도구 허브',
+     url:'https://scienceisjo.github.io/teacher-toolkit/' },
+   { ic:'📎', t:'PDF 만능 도구', d:'합치기 · 나누기 · 압축 · 변환 (브라우저에서)',
+     url:'https://scienceisjo.github.io/class-tools/pdf-tool/' },
+ ]},
+ { g:'🔬 수업에서 쓰는 것', items:[
+   { ic:'🌏', t:'과학 탐험 월드', d:'만든 수업 웹앱·실험실·게임 전체 허브', url:SW },
+   { ic:'📖', t:'웹앱 설명서', d:'앱마다 무엇이고 어떻게 쓰는지 (인쇄용)',
+     url:'https://scienceisjo.github.io/scienceworld/webapp-manual.html' },
+   { ic:'🌳', t:'질문과수원 교사 대시보드', d:'질문 확인 · 자료 올리기 · 비밀번호 초기화',
+     url:'https://scienceisjo.github.io/questionuri/teacher-dashboard.html' },
+   { ic:'📘', t:'앱 사용법 (선생님용)', d:'질문과수원·도장판 운영 루틴', url:'guide/#tea' },
+ ]},
+ { g:'🏫 학급 운영', items:[
+   { ic:'🏫', t:'학급 도구 모음 (class-tools)', d:'학급 운영 웹도구 허브',
+     url:'https://scienceisjo.github.io/class-tools/' },
+   { ic:'🏅', t:'칭찬 도장판 (교사 모드)', d:'도장 주기 · 관찰 기록 · 골든벨',
+     url:'https://scienceisjo.github.io/class-tools/stamp-board/' },
+   { ic:'🗳️', t:'학급 임원 선거', d:'후보 등록부터 개표까지',
+     url:'https://scienceisjo.github.io/class-tools/election/' },
+   { ic:'🌲', t:'이삼한 친구들의 숲', d:'3D 학급 추억 보관소',
+     url:'https://scienceisjo.github.io/class-tools/memory-village/' },
+   { ic:'💌', t:'송별 롤링페이퍼', d:'QR로 편지 모아 전시·인쇄',
+     url:'https://scienceisjo.github.io/class-tools/rolling-paper/' },
+   { ic:'🎮', t:'교실을 깨우자', d:'전자칠판 미니게임 모음',
+     url:'https://scienceisjo.github.io/brain-break-lab/sonic.html' },
+ ]},
+];
+
 /* ══════════════ 그리기 ══════════════ */
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -578,9 +671,14 @@ function drawUnits(){
       : '<span class="tag lab">실험실 모음</span>';
     const inner = '<span class="un">' + u.ic + '</span>'
       + '<span class="ut"><b>' + esc(u.name) + '</b><small>' + esc(u.desc) + '</small></span>' + tag;
-    return todo
+    const card = todo
       ? '<span class="unit todo">' + inner + '</span>'
       : '<a class="unit" href="' + u.url + '" target="_blank" rel="noopener">' + inner + '</a>';
+    const band = u.map
+      ? '<a class="umap" href="' + MAP + '#u=' + u.map + '" target="_blank" rel="noopener">'
+        + '🗺️ 어디서 와서 어디로 이어질까</a>'
+      : '';
+    return '<div class="unitbox' + (u.map ? ' hasmap' : '') + '">' + card + band + '</div>';
   }).join('');
 }
 
@@ -665,6 +763,17 @@ function budgetHTML(C, L){
   return '<p class="pnexth">학기 수업 횟수 대비 — 차시 ' + L.length + '개를 몇 번에 나눠 쓸 수 있나'
     + (min < 1 ? ' <b style="color:#b3423a">· 차시가 수업보다 많은 반이 있어요</b>' : '') + '</p>'
     + '<div class="pnext">' + chips + '</div>';
+}
+
+function drawTools(){
+  $('#toolList').innerHTML = TOOLS.map(g =>
+    '<div class="tgroup"><h3>' + esc(g.g) + '</h3><div class="tlist">'
+    + g.items.map(i =>
+        '<a class="trow" href="' + i.url + '" target="_blank" rel="noopener">'
+        + '<span class="ti">' + i.ic + '</span>'
+        + '<span class="tt2"><b>' + esc(i.t) + '</b><small>' + esc(i.d) + '</small></span>'
+        + '<span class="tar" aria-hidden="true">↗</span></a>').join('')
+    + '</div></div>').join('');
 }
 
 function emptyBox(icon, title, body){
@@ -1252,18 +1361,19 @@ function setTeacher(on){
   b.textContent = on ? '🧑‍🏫 교사용 켜짐 — 누르면 꺼짐' : '🧑‍🏫';
   b.title = on ? '교사용 끄기' : '교사용 켜기';
   if(on) localStorage.setItem('sc_teacher', '1'); else localStorage.removeItem('sc_teacher');
-  if(!on && $('#v-prog').classList.contains('on')) show('home');
+  if(!on && ($('#v-prog').classList.contains('on') || $('#v-tools').classList.contains('on'))) show('home');
 }
 $('#tmode').addEventListener('click', () => setTeacher(!document.body.classList.contains('teacher')));
 setTeacher(localStorage.getItem('sc_teacher') === '1'
   || new URLSearchParams(location.search).get('t') === '1');
-drawProg(); drawCloud();
+drawProg(); drawCloud(); drawTools();
 if(sbOn()) syncDown();
 
 /* ══════════════ 시작 ══════════════ */
 setGrade(grade);
 const h0 = location.hash.replace('#','');
-if(['sheet','eval','less'].includes(h0) || (h0 === 'prog' && document.body.classList.contains('teacher'))) show(h0);
+if(['sheet','eval','less'].includes(h0)
+   || (['prog','tools'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
 </script>
 </body>
 </html>
