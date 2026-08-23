@@ -18,6 +18,7 @@ create table if not exists public.progress_boards (
   classes    jsonb       not null default '[]'::jsonb,   -- [{id,name}, ...]
   lessons    jsonb       not null default '[]'::jsonb,   -- [{id,name}, ...]
   done       jsonb       not null default '{}'::jsonb,   -- {"반id|차시id":"2026-08-18"}
+  memo       jsonb       not null default '{}'::jsonb,   -- {"반id|차시id":"이 반은 실험 안내 못 함"}
   updated_at timestamptz not null default now(),
   primary key (owner, id)
 );
@@ -69,3 +70,10 @@ create trigger progress_boards_touch
 --  이제 https://scienceisjo.github.io/scienceclass/?t=1 에서
 --  📊 진도 트래커 → ☁️ 로그인 을 누르면 어느 기기에서든 같은 표가 보입니다.
 -- ══════════════════════════════════════════════════════════════════════════
+
+
+-- ── 이미 표를 만들어 두었다면 (메모 기능 추가분) ──────────────────────────
+--  위 create table 은 표가 있으면 아무 일도 하지 않으므로, 아래 한 줄을 따로 실행하세요.
+--  이미 memo 칸이 있으면 그냥 넘어갑니다.
+alter table public.progress_boards
+  add column if not exists memo jsonb not null default '{}'::jsonb;
