@@ -71,6 +71,8 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room .arw{flex:none;color:var(--ink-mute);font-size:19px}
 .room.ext .arw::after{content:"\2197"}
 .room:not(.ext) .arw::after{content:"\203A"}
+.folder.soon{opacity:.55;cursor:default}
+.folder.soon .fgo{background:none;color:var(--mut,#8a8377)}
 .room.r-sheet .ic{background:rgba(53,111,149,.12);border-color:rgba(53,111,149,.35)}
 .room.r-eval  .ic{background:rgba(179,66,58,.11);border-color:rgba(179,66,58,.3)}
 .room.r-less  .ic{background:rgba(47,125,85,.12);border-color:rgba(47,125,85,.33)}
@@ -596,6 +598,10 @@ const SHEETS = {
  '1': { url:'', portfolio:'',
         extra:[{t:'학기 첫 시간 · 과학을 왜 배울까', url:'ot/worksheet-g1.html'}] },
  '2': { url:'', portfolio:'',
+        folders:[
+          { t:'⚡ VII. 전기와 자기', small:'학습지1부터 번호 순서대로', url:'https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgDFmHNvnZ8uQ5CYbU2GG1-RAcwSOqTsKkztxEVzFKeHc8o?e=BgF5GC' },
+          { t:'🌌 VIII. 별과 우주', small:'준비되면 여기에 열려요', url:'' },
+        ],
         extra:[{t:'학기 첫 시간 · 과학을 왜 배울까', url:'ot/worksheet-g2.html'}] }
 };
 /* ── 평가 계획 (학년별) ───────────────────────────
@@ -697,12 +703,28 @@ function drawSheets(){
   const S = SHEETS[grade] || {};
   let h = '';
 
-  if(S.url){
-    h += '<a class="folder" href="' + S.url + '" target="_blank" rel="noopener">'
-       + '<span class="fi">📂</span>'
-       + '<span class="ft"><b>학습지 폴더 열기</b>'
-       + '<small>중' + esc(grade) + ' 학습지가 전부 여기에 있어요</small></span>'
-       + '<span class="fgo">열기 ↗</span></a>';
+  /* 대단원별 폴더 목록 — folders 가 있으면 그것을, 없으면 단일 url 을 쓴다 */
+  const folders = (S.folders && S.folders.length)
+    ? S.folders
+    : (S.url ? [{ t:'학습지 폴더 열기', small:'중' + grade + ' 학습지가 전부 여기에 있어요', url:S.url }] : []);
+  const hasAny = folders.some(f => f.url);
+
+  if(hasAny){
+    folders.forEach(f => {
+      if(f.url){
+        h += '<a class="folder" href="' + f.url + '" target="_blank" rel="noopener">'
+           + '<span class="fi">📂</span>'
+           + '<span class="ft"><b>' + esc(f.t) + '</b>'
+           + '<small>' + esc(f.small || '') + '</small></span>'
+           + '<span class="fgo">열기 ↗</span></a>';
+      } else {
+        h += '<div class="folder soon">'
+           + '<span class="fi">📂</span>'
+           + '<span class="ft"><b>' + esc(f.t) + '</b>'
+           + '<small>' + esc(f.small || '아직 준비 중이에요') + '</small></span>'
+           + '<span class="fgo">준비 중</span></div>';
+      }
+    });
 
     h += '<div class="fnote"><b>📌 찾는 법</b><p>'
        + '학습지는 <em>번호 순서</em>예요. 선생님이 「3번」이라고 하면 '
@@ -718,6 +740,7 @@ function drawSheets(){
   } else {
     h += emptyBox('📄','학습지를 준비하고 있어요','곧 여기에 올라옵니다.');
   }
+  /* hasAny 기준 안내문은 위 if(hasAny) 블록이 담당한다 */
 
   /* 폴더에 없고 앱 안에서 바로 여는 것 (예: 학기 첫 시간 학습지) */
   const ex = (S.extra || []).filter(i => i.url);
