@@ -535,7 +535,7 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 
 <footer id="app-credit">
   © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-  최종 업데이트: 2026-08-22<br>
+  최종 업데이트: 2026-08-30<br>
   <button class="tmode" id="tmode" type="button" title="교사용 켜기">🧑‍🏫</button>
 </footer>
 </div>
@@ -899,15 +899,31 @@ const today = () => { const d = new Date();
 
 /* 2026학년도 2학기 시간표·학사일정으로 센 반별 수업 횟수
    — 시험(1·2학년) 5일 · 창체 3일 · 학교 행사 3일을 빼고, 요일 바뀌는 날 4일을 반영 */
+const FIRST_LESSON = '학기 첫 시간 · 과학을 왜 배우는 걸까?';
+
+/* 2학기 26차시 — 평가계획서의 월별 배정과 맞춘 순서.
+   옴의 법칙 → 연습 실험 → 수행평가 → 다시 진도,
+   별의 등급(절대·겉보기) → 연습 실험 → 수행평가 → 다시 진도. */
+const LESSONS_G2 = [
+    '학기 첫 시간 · 과학을 왜 배우는 걸까?', '⚡ 마찰 전기', '⚡ 정전기 유도',
+    '⚡ 중단원 정리 ① · 회로 기호', '⚡ 전류·전압·저항', '⚡ 옴의 법칙',
+    '⚡ 옴의 법칙 실험 (연습)', '⚡ 수행평가', '⚡ 직렬과 병렬',
+    '⚡ 소비 전력', '⚡ 중단원 정리 ②', '⚡ 코일 주위의 자기장',
+    '⚡ 전동기', '⚡ 중단원 정리 ③', '🌌 연주 시차',
+    '🌌 별의 밝기와 거리', '🌌 별의 등급', '🌌 연습 실험 (수행 대비)',
+    '🌌 수행평가', '🌌 별의 색과 온도', '🌌 중단원 정리 ①',
+    '🌌 우리은하', '🌌 천체 관측', '🌌 성운과 성단',
+    '🌌 팽창하는 우주', '🌌 중단원 정리 ②'];
+
 const PLAN2026 = [
-  { name:'2학년 과학A', classes:[['201반',32],['202반',34],['203반',33],['204반',34],
-                                 ['209반',34],['210반',33],['211반',32],['212반',34]] },
+  { name:'2학년 과학A', lessons:LESSONS_G2,
+    classes:[['201반',32],['202반',34],['203반',33],['204반',34],
+             ['209반',34],['210반',33],['211반',32],['212반',34]] },
   { name:'1학년 과학B', classes:[['105반',17],['106반',16]] }
 ];
-const FIRST_LESSON = '학기 첫 시간 · 과학을 왜 배우는 걸까?';
 function pSeed(){
   const mk = p => ({ id:uid(), name:p.name, done:{}, memo:{},
-    lessons: [{ id:uid(), name:FIRST_LESSON }],
+    lessons: (p.lessons || [FIRST_LESSON]).map(n => ({ id:uid(), name:n })),
     classes: p.classes.map(x => ({ id:uid(), name:x[0], periods:x[1] })) });
   const t = PLAN2026.map(mk);
   return { active:t[0].id, tables:t };
@@ -1096,7 +1112,8 @@ $('#v-prog').addEventListener('click', e => {
   }
 
   if(d.fill){
-    if(!confirm('2026학년도 2학기 시간표와 학사일정으로 계산한\n반 목록과 수업 횟수를 넣습니다.\n\n'
+    if(!confirm('2026학년도 2학기 시간표와 학사일정으로 계산한\n반 목록과 수업 횟수를 넣습니다.\n'
+      + '(2학년은 26차시가 순서대로 함께 들어갑니다)\n\n'
       + '같은 이름의 진도표가 이미 있으면 반과 횟수만 바꾸고\n차시와 체크 기록은 그대로 둡니다. 계속할까요?')) return;
     PLAN2026.forEach(p => {
       let bd = P.tables.find(x => x.name === p.name);
@@ -1105,7 +1122,10 @@ $('#v-prog').addEventListener('click', e => {
         const old = bd.classes.find(c => c.name === x[0]);
         return { id: old ? old.id : uid(), name:x[0], periods:x[1] };
       });
-      if(!bd.lessons.length) bd.lessons.push({ id:uid(), name:FIRST_LESSON });
+      /* 아직 손대지 않은 진도표(차시가 없거나 기본 한 줄뿐 + 체크 0)에만 전체 차시를 넣는다.
+         한 칸이라도 체크해 두었으면 건드리지 않는다 — 기록이 날아가면 안 되니까. */
+      const untouched = bd.lessons.length <= 1 && !Object.keys(bd.done || {}).length;
+      if(untouched) bd.lessons = (p.lessons || [FIRST_LESSON]).map(n => ({ id:uid(), name:n }));
     });
     P.active = P.tables.find(x => x.name === PLAN2026[0].name).id;
     pLocal(); drawProg();
@@ -1347,11 +1367,16 @@ $('#v-prog').addEventListener('submit', async e => {
    ══════════════════════════════════════════════════════════════ */
 const LESSON_BANK = [
   { unit:'⚡ 전기와 자기', grade:'2학년', items:[
-    '1차시 마찰 전기', '2차시 정전기 유도', '3차시 전류', '4차시 옴의 법칙',
-    '5차시 직렬과 병렬', '6차시 소비 전력', '7차시 코일 주위의 자기장', '8차시 전동기'] },
+    '⚡ 마찰 전기', '⚡ 정전기 유도', '⚡ 중단원 정리 ① · 회로 기호',
+    '⚡ 전류·전압·저항', '⚡ 옴의 법칙', '⚡ 옴의 법칙 실험 (연습)',
+    '⚡ 수행평가', '⚡ 직렬과 병렬', '⚡ 소비 전력',
+    '⚡ 중단원 정리 ②', '⚡ 코일 주위의 자기장', '⚡ 전동기',
+    '⚡ 중단원 정리 ③'] },
   { unit:'🌌 별과 우주', grade:'2학년', items:[
-    '1차시 연주 시차', '2차시 별의 밝기와 거리', '3차시 별의 등급', '4차시 별의 색과 온도',
-    '5차시 우리은하', '6차시 천체 관측', '7차시 성운과 성단', '8차시 팽창하는 우주'] },
+    '🌌 연주 시차', '🌌 별의 밝기와 거리', '🌌 별의 등급',
+    '🌌 연습 실험 (수행 대비)', '🌌 수행평가', '🌌 별의 색과 온도',
+    '🌌 중단원 정리 ①', '🌌 우리은하', '🌌 천체 관측',
+    '🌌 성운과 성단', '🌌 팽창하는 우주', '🌌 중단원 정리 ②'] },
   { unit:'🎈 기체의 성질', grade:'1학년', items:[
     '1걸음 압력', '2걸음 기체의 압력', '3걸음 압력과 부피',
     '4걸음 온도와 부피', '5걸음 생활 속 부피 변화'] },
