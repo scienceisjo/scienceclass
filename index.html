@@ -149,6 +149,8 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
  border:1.5px solid var(--line);border-top:1px dashed var(--line);border-radius:0 0 15px 15px;transition:.15s}
 .umap:hover{color:var(--leaf);border-color:var(--leaf-lo);background:rgba(47,125,85,.07)}
 .umap::after{content:"\2197";margin-left:auto;font-size:12.5px}
+.uactivity{display:flex;flex-direction:column;gap:4px;margin-top:8px;padding:12px 14px;min-height:56px;border:1.5px solid var(--leaf-lo);border-radius:13px;background:var(--paper-lo);color:var(--leaf);text-decoration:none;line-height:1.55}
+.uactivity b{font-size:14px}.uactivity small{font-size:12px;color:var(--ink-mute)}.uactivity:hover,.uactivity:focus-visible{border-color:var(--leaf);background:rgba(47,125,85,.07)}
 
 .wgroup{margin-top:18px}
 .wgroup>h3{font-family:var(--jua);font-weight:400;font-size:15.5px;color:var(--sky);
@@ -597,7 +599,7 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 
 <footer id="app-credit">
   © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-  최종 업데이트: 2026-09-14<br>
+  최종 업데이트: 2026-09-15<br>
   <button class="tmode" id="tmode" type="button" title="교사용 켜기">🧑‍🏫</button>
 </footer>
 </div>
@@ -642,7 +644,9 @@ const UNITS = {
   {no:5, ic:'🌱', name:'식물과 에너지', desc:'광합성 · 증산 작용 · 호흡', url:'', kind:'todo', map:'m13-12'},
   {no:6, ic:'🫀', name:'동물과 에너지', desc:'소화 · 순환 · 호흡 · 배설', url:'', kind:'todo', map:'m13-13'},
   {no:7, ic:'⚡', name:'전기와 자기', desc:'마찰 전기 · 전류와 전압 · 저항 · 전자석 · 전동기',
-   url:'https://scienceisjo.github.io/electricity/', kind:'lesson', map:'m13-14'},
+   url:'https://scienceisjo.github.io/electricity/', kind:'lesson', map:'m13-14',
+   activity:{title:'🏝️ 반짝섬 탐험일지', desc:'전기 회로 복습 게임 · 나만의 섬에서 부탁을 해결하고 일지 완성하기',
+     url:'https://scienceisjo.github.io/electricity/sparkle-island/'}},
   {no:8, ic:'🌌', name:'별과 우주', desc:'연주 시차 · 별의 밝기와 색 · 우리은하 · 우주 팽창',
    url:'https://scienceisjo.github.io/starandspace/', kind:'lesson', map:'m13-15'},
  ]
@@ -761,7 +765,11 @@ function drawUnits(){
       ? '<a class="umap" href="' + MAP + '#u=' + u.map + '" target="_blank" rel="noopener">'
         + '🗺️ 어디서 와서 어디로 이어질까</a>'
       : '';
-    return '<div class="unitbox' + (u.map ? ' hasmap' : '') + '">' + card + band + '</div>';
+    const activity = u.activity
+      ? '<a class="uactivity" href="' + esc(u.activity.url) + '" target="_blank" rel="noopener"><b>'
+        + esc(u.activity.title) + '</b><small>' + esc(u.activity.desc) + '</small></a>'
+      : '';
+    return '<div class="unitbox' + (u.map ? ' hasmap' : '') + '">' + card + band + activity + '</div>';
   }).join('');
 }
 
