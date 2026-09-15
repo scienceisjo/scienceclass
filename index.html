@@ -422,6 +422,41 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .fnote.pf em{color:#a06318}
 .fnote.pf{background:#fdf6e9;border-color:rgba(160,99,24,.18)}
 </style>
+<style id="stu-css">
+/* ── 🎒 학생 로그인 · 오늘 수업 ── */
+.stubar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:4px auto 10px;font-size:13.5px;color:var(--ink-dim)}
+.stubar .who{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:99px;background:var(--paper-hi);border:1.5px solid var(--line);font-weight:700;color:var(--ink)}
+.stubar .who .cls{font-family:var(--jua);font-weight:400;color:var(--leaf)}
+.stubar .lk{font:inherit;font-weight:700;color:var(--leaf);background:none;border:0;cursor:pointer;text-decoration:underline dotted;padding:2px 4px}
+.stubar .lgbtn{font-family:var(--body);font-size:13.5px;font-weight:700;padding:8px 16px;border-radius:99px;border:1.5px solid var(--leaf);background:var(--leaf);color:#fff;cursor:pointer}
+.today{margin:0 0 14px;border:2px solid var(--sun);border-radius:18px;background:var(--paper-hi);padding:14px 16px;box-shadow:0 8px 24px -18px rgba(120,80,20,.5)}
+.today .th{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-family:var(--jua);font-size:17px;color:var(--ink)}
+.today .th small{font-family:var(--body);font-size:12.5px;color:var(--ink-mute)}
+.today .tl{display:grid;gap:8px;margin-top:10px}
+.today .ti{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:12px;background:var(--paper);border:1px solid var(--line-soft)}
+.today .ti .per{font-family:var(--jua);color:var(--sun);min-width:3em}
+.today .ti .nm{font-weight:700;flex:1 1 12em}
+.today .ti .go{font-family:var(--body);font-size:13.5px;font-weight:700;padding:8px 14px;border-radius:99px;border:0;background:var(--leaf);color:#fff;text-decoration:none;white-space:nowrap}
+.today .ti .go.soft{background:var(--paper-hi);color:var(--leaf);border:1.5px solid var(--leaf)}
+.today .ti.past{opacity:.85}.today .ti.next .per{color:var(--sky)}
+.today .tn{font-size:12.5px;color:var(--ink-mute);margin-top:8px}
+.lgm{position:fixed;inset:0;background:rgba(40,30,10,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:60}
+.lgm.on{display:flex}
+.lgm .box{width:min(420px,100%);background:var(--paper-hi);border:1.5px solid var(--line);border-radius:20px;padding:20px 20px 16px;box-shadow:0 30px 60px -30px rgba(0,0,0,.5)}
+.lgm h3{margin:0 0 4px;font-family:var(--jua);font-weight:400;font-size:20px}
+.lgm p{margin:0 0 12px;font-size:13.5px;color:var(--ink-mute);line-height:1.5}
+.lgm .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.lgm select,.lgm input{font:inherit;font-size:16px;padding:10px 10px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+.lgm input:focus,.lgm select:focus{outline:2px solid var(--leaf);outline-offset:1px}
+.lgm .err{display:none;color:#b3362e;font-size:13px;font-weight:700;margin:6px 0 0}.lgm .err.show{display:block}
+.lgm .btns{display:flex;gap:8px;margin-top:12px}
+.lgm .btns button{flex:1;font-family:var(--body);font-size:15px;font-weight:700;padding:11px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.lgm .btns button.go{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.lgm .btns button:disabled{opacity:.5}
+.lgm .foot{margin-top:10px;font-size:12.5px;color:var(--ink-mute);line-height:1.5}
+.lgm .foot a{color:var(--leaf)}
+.prog th.lh .lx button.lurl.has{color:var(--leaf);border-color:var(--leaf)}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -432,6 +467,8 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
   <p class="sub">2026학년도 · 해누리중학교 과학</p>
 </header>
 
+<div class="stubar" id="stubar"></div>
+
 <div class="grade" id="grade" role="group" aria-label="학년 선택">
   <button class="gbtn" data-g="1" type="button">1학년</button>
   <button class="gbtn" data-g="2" type="button">2학년</button>
@@ -440,6 +477,7 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 
 <!-- ══════════ 홈 ══════════ -->
 <section class="view on" id="v-home">
+  <section class="today" id="today" hidden aria-live="polite"></section>
   <div class="rooms">
     <button class="room r-sheet" type="button" data-go="sheet">
       <span class="ic">📄</span>
@@ -1029,6 +1067,7 @@ function drawProg(){
         + '<span class="lx">'
         + '<button type="button" data-mv="' + l.id + '" data-d="-1" title="왼쪽으로">‹</button>'
         + '<button type="button" data-del="' + l.id + '" title="이 차시 지우기">✕</button>'
+        + '<button type="button" data-lurl="' + l.id + '" class="lurl' + (lessonUrl(l) ? ' has' : '') + '" title="' + (lessonUrl(l) ? '수업 페이지 링크: ' + esc(lessonUrl(l)) : '수업 페이지 링크 붙이기 (학생 허브 「오늘 수업」에서 바로 열림)') + '">🔗</button>'
         + '<button type="button" data-mv="' + l.id + '" data-d="1" title="오른쪽으로">›</button>'
         + '</span></th>').join('')
     + '<th class="addcol"><button type="button" data-addl="1" title="차시 추가">＋</button></th></tr></thead>';
@@ -1101,7 +1140,7 @@ function memoHTML(t, C, L){
 
 /* ── 조작 ── */
 $('#v-prog').addEventListener('click', e => {
-  const b = e.target.closest('[data-t],[data-newt],[data-addl],[data-ren],[data-del],[data-mv],[data-c],'
+  const b = e.target.closest('[data-t],[data-newt],[data-addl],[data-ren],[data-del],[data-mv],[data-lurl],[data-c],'
     + '[data-cls],[data-rent],[data-delt],[data-exp],[data-imp],[data-per],[data-fill],[data-m]');
   if(!b) return;
   const t = curT(), d = b.dataset;
@@ -1117,6 +1156,14 @@ $('#v-prog').addEventListener('click', e => {
   }
 
   if(d.addl){ openPick(); return; }
+
+  if(d.lurl){
+    const l = t.lessons.find(x => x.id === d.lurl); if(!l) return;
+    const auto = AUTO_URL[l.name] || '';
+    const u = prompt('「' + l.name + '」 수업 페이지 주소\n(학생 허브 「오늘 수업」에서 이 링크로 바로 갑니다' + (auto ? ' · 비우면 자동: ' + auto : '') + ')', l.url || auto);
+    if(u === null) return;
+    l.url = u.trim(); pSave(); drawProg(); return;
+  }
 
   if(d.ren){
     const l = t.lessons.find(x => x.id === d.ren); if(!l) return;
@@ -1372,7 +1419,53 @@ async function pushBoard(b){
   await sbRest('progress_boards?on_conflict=owner,id', { method:'POST',
     headers:{ Prefer:'resolution=merge-duplicates,return=minimal' },
     body: JSON.stringify([tidy(b)]) });
+  publishToday(b);
 }
+/* 차시 이름 → 배포된 수업 페이지 (선생님이 🔗로 직접 넣은 주소가 있으면 그게 우선) */
+const AUTO_URL = (function(){
+  const E = 'https://scienceisjo.github.io/electricity/', S = 'https://scienceisjo.github.io/starandspace/';
+  return {
+    '⚡ 중단원 정리 ① · 회로 기호': E + '00-basics.html',
+    '⚡ 마찰 전기': E + '01-friction.html', '⚡ 정전기 유도': E + '02-induction.html',
+    '⚡ 전류·전압·저항': E + '03-current.html', '⚡ 옴의 법칙': E + '04-ohm.html',
+    '⚡ 옴의 법칙 실험 (연습)': E + '04-ohm.html', '⚡ 직렬과 병렬': E + '05-series-parallel.html',
+    '⚡ 소비 전력': E + '06-power.html', '⚡ 코일 주위의 자기장': E + '07-coil-field.html',
+    '⚡ 전동기': E + '08-motor.html',
+    '🌌 연주 시차': S + '01-parallax.html', '🌌 별의 밝기와 거리': S + '02-brightness.html',
+    '🌌 별의 등급': S + '03-magnitude.html', '🌌 연습 실험 (수행 대비)': S + '03-magnitude.html',
+    '🌌 별의 색과 온도': S + '04-color.html', '🌌 우리은하': S + '05-milkyway.html',
+    '🌌 천체 관측': S + '06-objects.html', '🌌 성운과 성단': S + '07-nebula.html',
+    '🌌 팽창하는 우주': S + '08-expanding.html'
+  };
+})();
+const lessonUrl = l => (l && (l.url || AUTO_URL[l.name])) || '';
+
+/* 📤 오늘 수업 내보내기 — 달력 계획(어제~3주 뒤)을 class_today 표로. 학생 허브가 이걸 읽는다 */
+function todayRows(b){
+  const td = today(), from = addDays(td, -1), to = addDays(td, 21), out = [];
+  const cls = Object.fromEntries((b.classes || []).map(c => [c.id, c])), les = Object.fromEntries((b.lessons || []).map(l => [l.id, l]));
+  Object.keys(b.plan || {}).forEach(k => {
+    const [day, ci, per] = k.split('|'); if(day < from || day > to) return;
+    const c = cls[ci], l = les[(b.plan[k] || {}).l]; if(!c || !l) return;
+    if(b.days && /^휴/.test(String(b.days[day] || ''))) return;
+    out.push({ owner:SB.ses.uid, board:b.id, cls:String(c.name).replace(/[^0-9]/g, ''), day, period:+per || 0, lesson:l.name, url:lessonUrl(l) });
+  });
+  return out;
+}
+function addDays(ymd, n){ const d = new Date(ymd + 'T00:00:00'); d.setDate(d.getDate() + n);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+async function publishToday(b){
+  if(!sbOn() || !b) return;
+  const td = today(), from = addDays(td, -1), to = addDays(td, 21);
+  try {
+    await sbRest('class_today?owner=eq.' + SB.ses.uid + '&board=eq.' + encodeURIComponent(b.id) + '&day=gte.' + from + '&day=lte.' + to,
+      { method:'DELETE', headers:{ Prefer:'return=minimal' } });
+    const rows = todayRows(b);
+    if(rows.length) await sbRest('class_today?on_conflict=owner,board,cls,day,period', { method:'POST',
+      headers:{ Prefer:'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(rows) });
+  } catch(e) { /* 표가 아직 없으면(오늘수업_SETUP.sql 미실행) 조용히 넘어간다 */ }
+}
+
 
 const waiting = new Map();
 function cloudTouch(b){
@@ -1405,6 +1498,7 @@ async function syncDown(){
       setStat('saved', '이 기기의 진도표를 서버에 올렸습니다.');
     }
     drawProg();
+    P.tables.forEach(b => publishToday(b));   /* 열 때마다 「오늘 수업」 표도 최신으로 */
   } catch(e){
     setStat(navigator.onLine ? 'err' : 'offline', e.message);
     drawProg();
@@ -1820,6 +1914,161 @@ setGrade(grade);
 const h0 = location.hash.replace('#','');
 if(['sheet','eval','less'].includes(h0)
    || (['prog','tools'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
+</script>
+<div class="lgm" id="lgm" role="dialog" aria-modal="true" aria-labelledby="lgmT">
+ <form class="box" id="lgmForm" autocomplete="off">
+  <h3 id="lgmT">🎒 과학 시간 로그인</h3>
+  <p>질문나무에서 쓰는 <b>학년·반·번호와 비밀번호</b> 그대로예요. 한 번 로그인하면 질문나무·칭찬 도장판·수업 페이지가 바로 열립니다.</p>
+  <div class="row">
+   <select id="lgG" aria-label="학년"><option value="">학년</option><option value="1">1학년</option><option value="2">2학년</option><option value="3">3학년</option></select>
+   <select id="lgC" aria-label="반"><option value="">반</option></select>
+   <select id="lgN" aria-label="번호"><option value="">번호</option></select>
+  </div>
+  <input id="lgPw" type="password" placeholder="비밀번호" autocomplete="current-password" inputmode="text">
+  <div class="err" id="lgErr"></div>
+  <div class="btns"><button type="button" id="lgCancel">취소</button><button type="submit" class="go" id="lgGo">로그인</button></div>
+  <div class="foot">처음이라 계정이 없거나 비밀번호를 잊었으면 <a href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문나무</a>에서 가입하거나 선생님께 말해 주세요.</div>
+ </form>
+</div>
+<script id="stu-login">
+/* ══════════ 🎒 학생 로그인 — 질문나무 계정 그대로, 세션은 질문나무·도장판과 같은 키(supabase-js 기본 키) ══════════
+   같은 주소(scienceisjo.github.io) 아래라 localStorage 를 공유한다 → 여기서 로그인하면 세 앱이 함께 열린다.
+   로그인하면 elec_stu·elec_mode 도 써 두어 혼자 탐구 페이지(전기·기체·별과우주)가 관문 없이 바로 시작된다. */
+(function(){
+const STU = { key:'sb-hmzklbrksfdhzsgwzfyg-auth-token', dom:'haenuri.app', code:'8314', ses:null, prof:null };
+const pad2 = v => String(v).padStart(2, '0');
+function stuRead(){ try { STU.ses = JSON.parse(localStorage.getItem(STU.key) || 'null'); } catch(e) { STU.ses = null; } return STU.ses; }
+function stuWrite(j){
+  if(!j){ localStorage.removeItem(STU.key); STU.ses = null; return; }
+  if(!j.expires_at) j.expires_at = Math.floor(Date.now() / 1000) + (j.expires_in || 3600);
+  localStorage.setItem(STU.key, JSON.stringify(j)); STU.ses = j;
+}
+async function stuToken(){
+  const s = stuRead(); if(!s || !s.access_token) return null;
+  if((s.expires_at || 0) - 60 > Math.floor(Date.now() / 1000)) return s.access_token;
+  if(!s.refresh_token) return null;
+  const r = await fetch(SB.url + '/auth/v1/token?grant_type=refresh_token', { method:'POST',
+    headers:{ apikey:SB.key, 'Content-Type':'application/json' }, body: JSON.stringify({ refresh_token: s.refresh_token }) });
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok || !j.access_token){ stuWrite(null); return null; }
+  stuWrite(j); return j.access_token;
+}
+async function stuProfile(){
+  const tok = await stuToken(); if(!tok) return null;
+  const uid = STU.ses.user && STU.ses.user.id; let p = null;
+  try {
+    const r = await fetch(SB.url + '/rest/v1/profiles?select=name,grade,class_no,number&id=eq.' + uid, { headers:{ apikey:SB.key, Authorization:'Bearer ' + tok } });
+    const rows = await r.json().catch(() => []); p = Array.isArray(rows) && rows[0] || null;
+  } catch(e) {}
+  if(!p){ const m = (STU.ses.user && STU.ses.user.user_metadata) || {}; if(m.grade) p = { name:m.name || '', grade:+m.grade, class_no:+m.class, number:+m.number }; }
+  if(p && p.grade && p.class_no && p.number){ STU.prof = p; return p; }
+  STU.prof = null; return null;
+}
+const sidOf = p => String(p.grade) + pad2(p.class_no) + pad2(p.number);
+function stuApply(p){ /* 혼자 탐구 관문 생략용 — 21쪽이 읽는 공용 키 */
+  try {
+    localStorage.setItem('elec_stu', JSON.stringify({ sid:sidOf(p), name:p.name || '', code:STU.code }));
+    localStorage.setItem('elec_mode', 'solo');
+  } catch(e) {}
+  if(typeof setGrade === 'function' && String(p.grade) !== localStorage.getItem('sc_grade')) setGrade(String(p.grade));
+}
+async function stuLogin(g, c, n, pw){
+  const email = 's' + g + '_' + c + '_' + n + '@' + STU.dom;
+  const r = await fetch(SB.url + '/auth/v1/token?grant_type=password', { method:'POST',
+    headers:{ apikey:SB.key, 'Content-Type':'application/json' }, body: JSON.stringify({ email, password:pw }) });
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok || !j.access_token){
+    const raw = String(j.error_code || j.error_description || j.msg || j.error || '');
+    throw new Error(/invalid|credential/i.test(raw) ? '학년·반·번호 또는 비밀번호가 맞지 않아요.' : (raw || '로그인하지 못했어요. 인터넷을 확인해 주세요.'));
+  }
+  stuWrite(j);
+  const p = await stuProfile();
+  if(!p){ stuWrite(null); throw new Error('계정은 있는데 학년·반·번호 정보가 없어요. 선생님께 말해 주세요.'); }
+  stuApply(p); return p;
+}
+async function stuLogout(){
+  try { const tok = await stuToken(); if(tok) await fetch(SB.url + '/auth/v1/logout', { method:'POST', headers:{ apikey:SB.key, Authorization:'Bearer ' + tok } }); } catch(e) {}
+  stuWrite(null); STU.prof = null;
+  try { localStorage.removeItem('elec_stu'); localStorage.removeItem('elec_mode'); } catch(e) {}
+  paintStu(); paintToday();
+}
+
+/* ── 띠 ── */
+function paintStu(){
+  const bar = $('#stubar'); if(!bar) return; const p = STU.prof;
+  if(p) bar.innerHTML = '<span class="who">🎒 <span class="cls">' + p.grade + '학년 ' + p.class_no + '반 ' + p.number + '번</span> ' + esc(p.name || '') + '</span>'
+      + '<button type="button" class="lk" data-stu="out">로그아웃</button>';
+  else bar.innerHTML = '<button type="button" class="lgbtn" data-stu="in">🎒 로그인</button><span>한 번 로그인하면 오늘 수업 · 질문나무 · 도장판이 바로 열려요</span>';
+}
+
+/* ── 오늘 수업 카드 ── */
+const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+const mdLab = ymd => { const d = new Date(ymd + 'T00:00:00'); return (d.getMonth() + 1) + '/' + d.getDate() + ' (' + DOW[d.getDay()] + ')'; };
+const soloLink = u => u ? u + (u.includes('?') ? '&' : '?') + 'solo=1' : '';
+async function paintToday(){
+  const box = $('#today'); if(!box) return; const p = STU.prof;
+  if(!p){ box.hidden = true; return; }
+  const cls = String(p.grade) + pad2(p.class_no), td = today(), from = addDays(td, -14), to = addDays(td, 14);
+  let rows = [];
+  try {
+    const r = await fetch(SB.url + '/rest/v1/class_today?select=day,period,lesson,url&cls=eq.' + cls + '&day=gte.' + from + '&day=lte.' + to + '&order=day.asc,period.asc', { headers:{ apikey:SB.key } });
+    rows = await r.json(); if(!Array.isArray(rows)) rows = [];
+  } catch(e) { rows = []; }
+  const item = (x, k, verb) => '<div class="ti ' + k + '"><span class="per">' + (k === 'today' ? (x.period ? x.period + '교시' : '오늘') : mdLab(x.day)) + '</span><span class="nm">' + esc(x.lesson) + '</span>'
+      + (x.url ? '<a class="go' + (k === 'today' ? '' : ' soft') + '" href="' + esc(soloLink(x.url)) + '">' + verb + '</a>' : '<span class="tn">링크 없음</span>') + '</div>';
+  const tod = rows.filter(x => x.day === td), past = rows.filter(x => x.day < td), nxt = rows.filter(x => x.day > td);
+  let h = '<div class="th">📖 ' + p.grade + '학년 ' + p.class_no + '반 과학 <small>' + mdLab(td) + '</small></div><div class="tl">';
+  if(tod.length) h += tod.map(x => item(x, 'today', '수업 페이지 열기 →')).join('');
+  else h += '<div class="ti"><span class="nm">오늘은 과학 수업이 없어요.</span></div>';
+  if(past.length){ const x = past[past.length - 1]; h += item(x, 'past', '지난 수업 다시 열기'); }
+  if(nxt.length){ const x = nxt[0]; h += item(x, 'next', '미리 보기'); }
+  h += '</div>';
+  if(!rows.length) h += '<div class="tn">선생님이 아직 이번 주 계획을 올리지 않았어요. 아래 「수업 페이지」에서 찾아 들어가도 돼요.</div>';
+  else h += '<div class="tn">열면 표지 없이 바로 <b>혼자 탐구</b>로 시작돼요(로그인이 곧 참여예요).</div>';
+  box.innerHTML = h; box.hidden = false;
+}
+
+/* ── 로그인 모달 ── */
+const M = $('#lgm');
+function fillSel(sel, n, unit){ const cur = sel.value; sel.innerHTML = '<option value="">' + unit + '</option>' + Array.from({ length:n }, (_, i) => '<option value="' + (i + 1) + '">' + (i + 1) + unit + '</option>').join(''); if(cur) sel.value = cur; }
+fillSel($('#lgC'), 20, '반'); fillSel($('#lgN'), 50, '번');
+function openLg(){ M.classList.add('on'); $('#lgErr').className = 'err'; setTimeout(() => $('#lgG').focus(), 50); }
+function closeLg(){ M.classList.remove('on'); }
+$('#lgCancel').addEventListener('click', closeLg);
+M.addEventListener('click', e => { if(e.target === M) closeLg(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && M.classList.contains('on')) closeLg(); });
+$('#lgmForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const g = $('#lgG').value, c = $('#lgC').value, n = $('#lgN').value, pw = $('#lgPw').value, err = $('#lgErr'), go = $('#lgGo');
+  const say = t => { err.textContent = t; err.className = 'err show'; };
+  if(!g || !c || !n){ say('학년·반·번호를 모두 골라 주세요.'); return; }
+  if(!pw){ say('비밀번호를 적어 주세요.'); $('#lgPw').focus(); return; }
+  go.disabled = true; go.textContent = '들어가는 중…';
+  try {
+    const p = await stuLogin(g, c, n, pw);
+    closeLg(); $('#lgPw').value = ''; paintStu(); paintToday();
+    if(typeof toast === 'function') toast('🎒 ' + (p.name || '') + ' 님, 환영해요! 이제 질문나무·도장판·수업 페이지가 바로 열려요');
+  } catch(ex) { say(ex.message || String(ex)); }
+  go.disabled = false; go.textContent = '로그인';
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-stu]'); if(!b) return;
+  if(b.dataset.stu === 'in') openLg();
+  else if(b.dataset.stu === 'out' && confirm('로그아웃할까요?\n질문나무·도장판에서도 함께 로그아웃돼요.')) stuLogout();
+});
+
+/* ── 시작: 이미 로그인돼 있으면(질문나무에서 했어도) 그대로 이어 받는다 ── */
+(async function(){
+  paintStu();
+  if(!stuRead()) return;
+  const p = await stuProfile();
+  if(p){
+    let have = null; try { have = JSON.parse(localStorage.getItem('elec_stu') || 'null'); } catch(e) {}
+    if(!have || have.sid !== sidOf(p) || !have.code) stuApply(p);
+  }
+  paintStu(); paintToday();
+})();
+})();
 </script>
 </body>
 </html>
