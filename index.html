@@ -465,7 +465,10 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .mine-page .mh .pct{font-family:var(--body);font-size:12.5px;color:var(--ink-mute)}
 .mine-page .mh a{margin-left:auto;font-size:13px;font-weight:700;color:var(--leaf)}
 .ans{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
-.ans .al{font-size:12.5px;font-weight:800;color:var(--sky);margin-bottom:4px}
+.ans .al{font-size:14px;font-weight:800;color:var(--sky);margin-bottom:4px;line-height:1.4}
+.ans .aq{font-size:14px;line-height:1.6;color:var(--ink);padding:8px 11px;border-radius:10px;background:rgba(53,111,149,.07);border-left:3px solid rgba(53,111,149,.45);word-break:keep-all;margin-bottom:6px}
+.ans .aq.ph{color:var(--ink-mute);border-left-style:dashed}
+.ans .al2{font-size:11.5px;font-weight:800;color:var(--ink-mute);letter-spacing:.02em;margin:6px 0 2px}
 .ans .at{white-space:pre-wrap;word-break:break-word;line-height:1.65;font-size:15px}
 .ans .av{font-size:12px;color:var(--ink-mute);margin-top:2px}
 .fb{margin-top:8px;padding:9px 12px;border-radius:12px;background:#fff7e0;border:1px solid #f0dca0;font-size:14px;line-height:1.55}
@@ -1997,6 +2000,7 @@ if(['sheet','eval','less','mine'].includes(h0)
   <div class="foot">처음이라 계정이 없거나 비밀번호를 잊었으면 <a href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문나무</a>에서 가입하거나 선생님께 말해 주세요.</div>
  </form>
 </div>
+<script src="solo-prompts.js"></script>
 <script id="stu-login">
 /* ══════════ 🎒 학생 로그인 — 질문나무 계정 그대로, 세션은 질문나무·도장판과 같은 키(supabase-js 기본 키) ══════════
    같은 주소(scienceisjo.github.io) 아래라 localStorage 를 공유한다 → 여기서 로그인하면 세 앱이 함께 열린다.
@@ -2234,7 +2238,13 @@ function paintMine(){
     keys.forEach(k=>{
       const a=latestAns(r.id,k), text=(a&&a.text)||((r.texts||{})[k])||'', fbs=MINE.fb.filter(f=>f.rec===r.id&&f.key===k);
       const lab=(a&&a.label&&a.label!==k)?a.label:(KEY_LABEL[k]||k);
-      h+='<div class="ans" data-key="'+esc(k)+'"><div class="al">✍️ '+esc(lab)+'</div><div class="at">'+(text?esc(text):'<span style="color:var(--ink-mute)">(아직 안 씀)</span>')+'</div>'
+      /* 문제 전문 — solo-prompts.js(21쪽에서 뽑은 표). 없으면 제출 때 저장한 짧은 제목만 */
+      const pr=(window.SOLO_PROMPTS&&SOLO_PROMPTS[r.page]&&SOLO_PROMPTS[r.page][k])||null;
+      const title=(pr&&pr.t)?((pr.c?pr.c+' › ':'')+pr.t):lab;
+      h+='<div class="ans" data-key="'+esc(k)+'"><div class="al">'+(/^[☀-➿\u{1F300}-\u{1FAFF}]/u.test(title)?'':'✍️ ')+esc(title)+'</div>'
+        +(pr&&pr.q?'<div class="aq">'+esc(pr.q)+'</div>':'')
+        +(pr&&pr.ph&&!(pr&&pr.q)?'<div class="aq ph">'+esc(pr.ph)+'</div>':'')
+        +'<div class="al2">내 답</div><div class="at">'+(text?esc(text):'<span style="color:var(--ink-mute)">(아직 안 씀)</span>')+'</div>'
         +(a?'<div class="av">v'+a.version+' · '+fmtT(a.created_at)+'</div>':'');
       fbs.forEach(f=>{h+='<div class="fb'+(!f.seen_at?' new':'')+(f.answered_at?' done':'')+'"><div class="fbh">💬 선생님 피드백 · '+fmtT(f.created_at)+(f.answered_at?' · ✏️ 고쳐 씀':'')+'</div>'+esc(f.note)+'</div>';});
       const open=fbs.some(f=>!f.answered_at);
