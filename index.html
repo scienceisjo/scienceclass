@@ -480,6 +480,30 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .rev .rbtn:disabled{opacity:.5}
 .rev .rmsg{font-size:12.5px;color:var(--ink-mute)}
 .mine-empty{margin-top:14px;padding:16px;border-radius:14px;background:var(--paper-hi);border:1px dashed var(--line);color:var(--ink-mute);font-size:14px;line-height:1.6}
+/* 🌳 질문나무 피드백 */
+.mine-sec{margin-top:22px}
+.mine-h{margin:0;font-family:var(--jua);font-weight:400;font-size:19px;display:flex;align-items:center;gap:8px}
+.mine-h .mine-n{font-family:var(--body);font-size:12.5px;color:var(--ink-mute);font-weight:700}
+.mine-q{margin-top:12px;border:1.5px solid var(--line);border-radius:18px;background:var(--paper-hi);padding:13px 16px}
+.mine-q.new{border-color:#d8432f;box-shadow:0 0 0 2px rgba(216,67,47,.14)}
+.mine-q .qh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-mute)}
+.mine-q .qh .unit{padding:1px 9px;border-radius:99px;border:1px solid var(--line);background:#fff;font-weight:700}
+.mine-q .qh a{margin-left:auto;font-size:13px;font-weight:700;color:var(--leaf)}
+.mine-q .qt{margin-top:6px;font-size:15.5px;line-height:1.6;word-break:keep-all}
+.mine-q .qt .was{display:block;font-size:12.5px;color:var(--ink-mute);margin-top:2px}
+.mine-q .qsol{margin-top:6px;font-size:13.5px;line-height:1.55;color:var(--ink);padding:7px 10px;border-radius:10px;background:rgba(53,111,149,.07);border:1px dashed rgba(53,111,149,.3)}
+.mine-q .qsol b{color:var(--sky)}
+.mine-q .fb{margin-top:8px}
+.mine-q .fb.st{background:#eef8ef;border-color:#bfe3c4}
+.mine-q .fb.st .fbh{color:#2c6b36}
+.mine-q .fb.rf{background:#f3eefc;border-color:#d9c9f3}
+.mine-q .fb.rf .fbh{color:#5a3f9e}
+.mine-q .fb.sv{background:#e9f3fb;border-color:#bcd8ee}
+.mine-q .fb.sv .fbh{color:#1f5f8f}
+.fb .newb{display:inline-block;margin-left:6px;padding:0 6px;border-radius:99px;background:#d8432f;color:#fff;font-size:10.5px;font-weight:800;vertical-align:1px}
+.mine-q .qact{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.mine-q .qact a{font-family:var(--body);font-size:13.5px;font-weight:700;padding:7px 13px;border-radius:99px;border:1.5px solid var(--leaf);color:var(--leaf);background:transparent;text-decoration:none}
+.mine-q .qact a.pri{background:var(--leaf);color:#fff}
 </style>
 </head>
 <body>
@@ -530,7 +554,7 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
     </a>
     <button class="room r-mine" type="button" data-go="mine" id="roomMine" hidden>
       <span class="ic">📮</span>
-      <span class="tx"><span class="tt">내 제출물 · 피드백<span class="nbadge" id="mineBadge" hidden>0</span></span><span class="dd">혼자 탐구에서 쓴 글 · 선생님 피드백 보고 고쳐 쓰기</span></span>
+      <span class="tx"><span class="tt">피드백 우편함 · 내 제출물<span class="nbadge" id="mineBadge" hidden>0</span></span><span class="dd">질문나무 피드백 · 혼자 탐구에서 쓴 글과 피드백 보고 고쳐 쓰기</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
     <a class="room r-guide" href="guide/">
@@ -586,9 +610,16 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 
 <!-- ══════════ 내 제출물 ══════════ -->
 <section class="view" id="v-mine">
-  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📮 내 제출물 · 피드백</h2></div>
-  <p class="vlead">혼자 탐구에서 <b>제출</b>한 글이 차시별로 모입니다. 선생님 피드백이 달리면 여기에 뜨고, 고쳐 써서 다시 제출하면 새 판본으로 남아요 — 수업 페이지에도 그대로 반영됩니다.</p>
-  <div id="mineList"><div class="mine-empty">불러오는 중…</div></div>
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📮 피드백 우편함 · 내 제출물</h2></div>
+  <p class="vlead">선생님이 내 글에 단 피드백이 한곳에 모입니다. <b>질문나무</b>의 되묻기·도장·다듬기·해결 피드백과, <b>혼자 탐구</b>에서 제출한 글의 피드백이에요. 피드백을 읽고 고쳐 쓰면 새 판본으로 남고, 질문나무·수업 페이지에도 그대로 반영됩니다.</p>
+  <div class="mine-sec" id="mineQSec">
+    <h3 class="mine-h">🌳 질문나무 피드백 <span class="mine-n" id="mineQN"></span></h3>
+    <div id="mineQList"><div class="mine-empty">불러오는 중…</div></div>
+  </div>
+  <div class="mine-sec">
+    <h3 class="mine-h">🔬 혼자 탐구 제출물 <span class="mine-n" id="mineSN"></span></h3>
+    <div id="mineList"><div class="mine-empty">불러오는 중…</div></div>
+  </div>
 </section>
 
 <!-- ══════════ 평가 ══════════ -->
@@ -1948,7 +1979,7 @@ if(sbOn()) syncDown();
 /* ══════════════ 시작 ══════════════ */
 setGrade(grade);
 const h0 = location.hash.replace('#','');
-if(['sheet','eval','less'].includes(h0)
+if(['sheet','eval','less','mine'].includes(h0)
    || (['prog','tools'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
 </script>
 <div class="lgm" id="lgm" role="dialog" aria-modal="true" aria-labelledby="lgmT">
@@ -2026,7 +2057,7 @@ async function stuLogout(){
   try { const tok = await stuToken(); if(tok) await fetch(SB.url + '/auth/v1/logout', { method:'POST', headers:{ apikey:SB.key, Authorization:'Bearer ' + tok } }); } catch(e) {}
   stuWrite(null); STU.prof = null;
   try { localStorage.removeItem('elec_stu'); localStorage.removeItem('elec_mode'); } catch(e) {}
-  paintStu(); paintToday(); MINE={recs:[],ans:[],fb:[]}; paintMineBadge();
+  paintStu(); paintToday(); MINE=MINE0(); paintMineBadge();
 }
 
 /* ── 띠 ── */
@@ -2082,7 +2113,8 @@ $('#lgmForm').addEventListener('submit', async e => {
   go.disabled = true; go.textContent = '들어가는 중…';
   try {
     const p = await stuLogin(g, c, n, pw);
-    closeLg(); $('#lgPw').value = ''; paintStu(); paintToday(); loadMine();
+    closeLg(); $('#lgPw').value = ''; paintStu(); paintToday();
+    loadMine().then(() => { if($('#v-mine') && $('#v-mine').classList.contains('on')) paintMine(); });
     if(typeof toast === 'function') toast('🎒 ' + (p.name || '') + ' 님, 환영해요! 이제 질문나무·도장판·수업 페이지가 바로 열려요');
   } catch(ex) { say(ex.message || String(ex)); }
   go.disabled = false; go.textContent = '로그인';
@@ -2102,36 +2134,98 @@ const PAGE_NAME={'elec-friction':'⚡ 마찰 전기','elec-induction':'⚡ 정�
  'gas-pressure':'🎈 압력','gas-gaspressure':'🎈 기체의 압력','gas-boyle':'🎈 압력과 부피','gas-charles':'🎈 온도와 부피','gas-cases':'🎈 부피 변화 조사',
  'star-parallax':'🌌 연주 시차','star-brightness':'🌌 별의 밝기와 거리','star-magnitude':'🌌 별의 등급','star-color':'🌌 별의 색과 온도','star-milkyway':'🌌 우리은하','star-objects':'🌌 천체 관측','star-nebula':'🌌 성운과 성단','star-expanding':'🌌 팽창하는 우주'};
 const KEY_LABEL={askTa:'나의 질문/생각',emRule:'표에서 찾은 규칙',essay:'사고력·블록 답',labRule:'실험 규칙',blockAns:'블록 질문 답',ruleTa:'표에서 찾은 규칙',ruleTxt:'표에서 찾은 규칙',conclTa:'나의 결론',eqTa:'확인 문제 서술형',open:'내 생각(밝기 줄이기)',why:'예상한 까닭',law:'내 말로 옴의 법칙',guess:'내 생각(예상)',summary:'내 말로 정리',note:'표에서 읽어 낸 것',rule:'표에서 찾은 규칙',pin:'누름못 풍선 설명',obs:'관찰 기록',balloon:'풍선 설명',block1:'블록 답(공기가 미는 까닭)',conclusion:'결론 문장',jtube:'J자 관 설명',block2:'봉지 여행 블록',compare:'보일·샤를 구분',topic:'영상 주제',principle:'원리 한 줄',sb1:'스토리보드 1',sb2:'스토리보드 2',sb3:'스토리보드 3',sb4:'스토리보드 4',sb5:'스토리보드 5',sb6:'스토리보드 6',roles:'역할 나누기',review:'오늘의 한 줄',concl:'나의 결론'};
-let MINE={recs:[],ans:[],fb:[]};
+const MINE0=()=>({recs:[],ans:[],fb:[],qs:[]});
+let MINE=MINE0();
 async function stuGet(path){ const tok=await stuToken(); if(!tok)throw new Error('로그인이 풀렸어요');
   const r=await fetch(SB.url+'/rest/v1/'+path,{headers:{apikey:SB.key,Authorization:'Bearer '+tok}}); const j=await r.json().catch(()=>null);
   if(!r.ok)throw new Error((j&&(j.message||j.hint))||('불러오지 못했어요 ('+r.status+')')); return j; }
 async function stuRpc(name,args){ const tok=await stuToken(); if(!tok)throw new Error('로그인이 풀렸어요');
   const r=await fetch(SB.url+'/rest/v1/rpc/'+name,{method:'POST',headers:{apikey:SB.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify(args||{})}); const j=await r.json().catch(()=>null);
   if(!r.ok)throw new Error((j&&(j.message||j.hint))||('실패 ('+r.status+')')); return j; }
-async function loadMine(){
-  if(!STU.prof){MINE={recs:[],ans:[],fb:[]};paintMineBadge();return;}
+async function stuPatch(path,body){ const tok=await stuToken(); if(!tok)throw new Error('로그인이 풀렸어요');
+  const r=await fetch(SB.url+'/rest/v1/'+path,{method:'PATCH',headers:{apikey:SB.key,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(body||{})});
+  if(!r.ok){const j=await r.json().catch(()=>null);throw new Error((j&&(j.message||j.hint))||('실패 ('+r.status+')'));} return true; }
+const stuUid=()=>(STU.ses&&STU.ses.user&&STU.ses.user.id)||'';
+const hasTxt=v=>typeof v==='string'&&v.trim().length>0;
+/* 🌳 질문나무 — 선생님 피드백(되묻기·도장·다듬기·해결)이 달린 내 질문.
+   17번 SQL(피드백 우편함)을 아직 안 돌린 서버면 새 칸이 없어 400 이 난다 → 되묻기·도장만으로 다시 받고, 안 본 표시는 끈다. */
+async function loadMineQs(){
+  const uid=stuUid(); if(!uid)return {rows:[],full:false};
+  const base='questions?user_id=eq.'+uid+'&order=question_date.desc,id.desc&limit=300';
   try{
-    const [recs,ans,fb]=await Promise.all([
+    const rows=await stuGet(base+'&select=id,text,refined_text,unit,question_date,solve,teacher_nudge,teacher_stamp,teacher_solve_note,teacher_refine_note,teacher_fb_at,fb_unread'
+      +'&or=(teacher_nudge.not.is.null,teacher_stamp.not.is.null,teacher_solve_note.not.is.null,teacher_refine_note.not.is.null)');
+    return {rows:Array.isArray(rows)?rows:[],full:true};
+  }catch(e){
+    const rows=await stuGet(base+'&select=id,text,refined_text,unit,question_date,solve,teacher_nudge,teacher_stamp&or=(teacher_nudge.not.is.null,teacher_stamp.not.is.null)');
+    return {rows:(Array.isArray(rows)?rows:[]).map(q=>Object.assign(q,{fb_unread:false})),full:false};
+  }
+}
+const qHasFb=q=>hasTxt(q.teacher_nudge)||hasTxt(q.teacher_stamp)||hasTxt(q.teacher_solve_note)||hasTxt(q.teacher_refine_note);
+async function loadMine(){
+  if(!STU.prof){MINE=MINE0();paintMineBadge();return;}
+  const next=MINE0();
+  const [solo,qs]=await Promise.allSettled([
+    Promise.all([
       stuGet('solo_records?select=id,page,pct,progress,updated_at,texts:state->texts,sub:state->sub&order=updated_at.desc'),
       stuGet('solo_answers?select=id,rec,page,key,label,version,text,feedback_id,created_at&order=version.desc'),
-      stuGet('solo_feedback?select=id,rec,page,key,answer_id,note,created_at,seen_at,answered_at,resolved_at&order=created_at.asc')]);
-    MINE={recs:Array.isArray(recs)?recs:[],ans:Array.isArray(ans)?ans:[],fb:Array.isArray(fb)?fb:[]};
-  }catch(e){ MINE={recs:[],ans:[],fb:[],err:e.message||String(e)}; }
-  paintMineBadge();
+      stuGet('solo_feedback?select=id,rec,page,key,answer_id,note,created_at,seen_at,answered_at,resolved_at&order=created_at.asc')]),
+    loadMineQs()]);
+  if(solo.status==='fulfilled'){const [recs,ans,fb]=solo.value;Object.assign(next,{recs:Array.isArray(recs)?recs:[],ans:Array.isArray(ans)?ans:[],fb:Array.isArray(fb)?fb:[]});}
+  else next.err=solo.reason&&(solo.reason.message||String(solo.reason));
+  if(qs.status==='fulfilled'){
+    next.qsFull=qs.value.full;
+    next.qs=qs.value.rows.filter(qHasFb).sort((a,b)=>(b.fb_unread?1:0)-(a.fb_unread?1:0)||String(b.teacher_fb_at||b.question_date||'').localeCompare(String(a.teacher_fb_at||a.question_date||''))||b.id-a.id);
+  } else next.qErr=qs.reason&&(qs.reason.message||String(qs.reason));
+  MINE=next; paintMineBadge();
 }
 function paintMineBadge(){
   const room=$('#roomMine'), b=$('#mineBadge'); if(!room)return;
   room.hidden=!STU.prof;
-  const unseen=MINE.fb.filter(f=>!f.seen_at).length;
+  const unseen=MINE.fb.filter(f=>!f.seen_at).length+MINE.qs.filter(q=>q.fb_unread).length;
   b.hidden=!unseen; b.textContent=unseen;
+}
+const QURI='https://scienceisjo.github.io/questionuri/';
+const STAMP_MSG={observe:{e:'👀',s:'본 것을 정확히 적었어요'},testable:{e:'🎯',s:'이건 확인해볼 수 있는 질문이에요'},unknown:{e:'🤔',s:'선생님도 몰라요. 같이 찾아봐요'},connect:{e:'🔗',s:'지난 시간이랑 이어졌어요'},onemore:{e:'🌱',s:'한 걸음만 더 가볼까요?'},pick:{e:'⭐',s:'수업에서 다룰게요'}};
+function paintMineQ(){
+  const box=$('#mineQList'), n=$('#mineQN'); if(!box)return;
+  if(n) n.textContent=MINE.qs.length?MINE.qs.length+'개':'';
+  if(!STU.prof){box.innerHTML='<div class="mine-empty">🎒 로그인하면 질문나무에 달린 선생님 피드백이 보여요.</div>';return;}
+  if(MINE.qErr){box.innerHTML='<div class="mine-empty">불러오지 못했어요 — '+esc(MINE.qErr)+'</div>';return;}
+  if(!MINE.qs.length){box.innerHTML='<div class="mine-empty">아직 피드백이 달린 질문이 없어요. 질문나무에 심은 질문에 선생님이 되묻기·도장·피드백을 달면 여기에 모입니다.</div>';return;}
+  const NEW='<span class="newb">NEW</span>';
+  box.innerHTML=MINE.qs.map(q=>{
+    const st=hasTxt(q.teacher_stamp)?STAMP_MSG[q.teacher_stamp.trim()]:null;
+    const refined=hasTxt(q.refined_text)&&q.refined_text.trim()!==String(q.text||'').trim();
+    const ans=q.solve&&hasTxt(q.solve.answer)?q.solve.answer.trim():'';
+    const link=QURI+'?q='+q.id, nb=q.fb_unread?NEW:'';
+    let h='<div class="mine-q'+(q.fb_unread?' new':'')+'" data-qid="'+q.id+'"><div class="qh"><span>📅 '+esc(q.question_date||'')+'</span>'+(q.unit?'<span class="unit">📑 '+esc(q.unit)+'</span>':'')+(q.fb_unread?'<span style="color:#d8432f;font-weight:800">새 피드백</span>':'')+'</div>';
+    h+='<div class="qt">❓ '+esc(refined?q.refined_text.trim():(q.text||''))+(refined?'<span class="was">✨ 다듬기 전 — '+esc(q.text||'')+'</span>':'')+'</div>';
+    if(ans&&hasTxt(q.teacher_solve_note)) h+='<div class="qsol"><b>🔬 내가 쓴 해결 답변</b> — '+esc(ans.length>160?ans.slice(0,160)+'…':ans)+'</div>';
+    if(hasTxt(q.teacher_nudge)) h+='<div class="fb"><div class="fbh">🌿 선생님의 되묻기'+nb+'</div>'+esc(q.teacher_nudge)+'</div>';
+    if(st) h+='<div class="fb st"><div class="fbh">🏷️ 선생님 도장'+nb+'</div>'+st.e+' '+esc(st.s)+'</div>';
+    else if(hasTxt(q.teacher_stamp)) h+='<div class="fb st"><div class="fbh">🏷️ 선생님 도장'+nb+'</div>'+esc(q.teacher_stamp)+'</div>';
+    if(hasTxt(q.teacher_refine_note)) h+='<div class="fb rf"><div class="fbh">✨ 다듬기 피드백'+nb+'</div>'+esc(q.teacher_refine_note)+'</div>';
+    if(hasTxt(q.teacher_solve_note)) h+='<div class="fb sv"><div class="fbh">🔬 해결 피드백'+nb+'</div>'+esc(q.teacher_solve_note)+'</div>';
+    h+='<div class="qact"><a class="pri" href="'+esc(link)+'">🌳 질문나무에서 이 질문 열기 →</a>';
+    if(hasTxt(q.teacher_nudge)) h+='<span style="font-size:12.5px;color:var(--ink-mute);align-self:center">되묻기로 질문을 키우거나, 다듬기·해결을 고쳐 써요</span>';
+    return h+'</div></div>';
+  }).join('');
+  /* 본 것으로 표시 — 학생 앱(질문나무)과 같은 칸을 끈다. 17번 SQL 전이면 칸이 없으니 건너뛴다 */
+  const ids=MINE.qs.filter(q=>q.fb_unread).map(q=>q.id);
+  if(ids.length&&MINE.qsFull&&stuUid()){
+    stuPatch('questions?user_id=eq.'+stuUid()+'&id=in.('+ids.join(',')+')',{fb_unread:false,fb_seen_at:new Date().toISOString()})
+      .then(()=>{MINE.qs.forEach(q=>{if(ids.includes(q.id))q.fb_unread=false;});paintMineBadge();}).catch(()=>{});
+  }
 }
 function latestAns(rec,key){ return MINE.ans.find(a=>a.rec===rec&&a.key===key)||null; }   /* version desc 정렬이라 첫 것이 최신 */
 function paintMine(){
-  const box=$('#mineList'); if(!box)return;
-  if(!STU.prof){box.innerHTML='<div class="mine-empty">🎒 로그인하면 내가 제출한 글과 선생님 피드백이 보여요.</div>';return;}
+  paintMineQ();
+  const box=$('#mineList'), sn=$('#mineSN'); if(!box)return;
+  if(!STU.prof){if(sn)sn.textContent='';box.innerHTML='<div class="mine-empty">🎒 로그인하면 내가 제출한 글과 선생님 피드백이 보여요.</div>';return;}
   if(MINE.err){box.innerHTML='<div class="mine-empty">불러오지 못했어요 — '+esc(MINE.err)+'<br><small>선생님이 아직 서버(혼자탐구 이사 SQL)를 준비하지 않았을 수 있어요.</small></div>';return;}
   const recs=MINE.recs.filter(r=>Object.keys(r.sub||{}).length||MINE.ans.some(a=>a.rec===r.id)||MINE.fb.some(f=>f.rec===r.id));
+  if(sn) sn.textContent=recs.length?recs.length+'차시':'';
   if(!recs.length){box.innerHTML='<div class="mine-empty">아직 제출한 글이 없어요. 수업 페이지에서 📮 <b>제출</b>을 누른 글이 여기에 모입니다.</div>';return;}
   box.innerHTML=recs.map(r=>{
     const keys=[...new Set([...Object.keys(r.sub||{}),...MINE.ans.filter(a=>a.rec===r.id).map(a=>a.key),...MINE.fb.filter(f=>f.rec===r.id).map(f=>f.key)])];
@@ -2173,14 +2267,17 @@ $('#roomMine').addEventListener('click',()=>{paintMine();loadMine().then(paintMi
 
 /* ── 시작: 이미 로그인돼 있으면(질문나무에서 했어도) 그대로 이어 받는다 ── */
 (async function(){
+  const mineOn = () => $('#v-mine') && $('#v-mine').classList.contains('on');   /* 수업 페이지 🔔 → #mine 로 바로 왔을 때 */
   paintStu();
-  if(!stuRead()) return;
+  if(!stuRead()){ if(mineOn()) { paintMine(); openLg(); } return; }
   const p = await stuProfile();
   if(p){
     let have = null; try { have = JSON.parse(localStorage.getItem('elec_stu') || 'null'); } catch(e) {}
     if(!have || have.sid !== sidOf(p) || !have.code) stuApply(p);
   }
-  paintStu(); paintToday(); loadMine();
+  paintStu(); paintToday();
+  if(mineOn()) paintMine();
+  loadMine().then(() => { if(mineOn()) paintMine(); });
 })();
 })();
 </script>
