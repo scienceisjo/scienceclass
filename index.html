@@ -205,10 +205,11 @@ body.teacher #roomProgress,body.teacher #roomTools{display:flex}
 .trow .tt2 b{font-family:var(--jua);font-weight:400;font-size:14.8px;display:block;line-height:1.35}
 .trow .tt2 small{font-size:11.8px;color:var(--ink-mute);display:block;line-height:1.5}
 .trow .tar{flex:none;color:var(--ink-mute);font-size:13px}
-.tmode{margin-top:12px;font-family:var(--body);font-size:11.5px;padding:5px 13px;border-radius:99px;
+/* 교사용 끄개 — 켜져 있을 때만 보인다. 켜는 것은 teacher.html(교사용 입구) 쪽 */
+.tmode{display:none;margin-top:12px;font-family:var(--body);font-size:11.5px;padding:5px 13px;border-radius:99px;
  border:1.5px solid var(--line);background:transparent;color:var(--ink-mute);cursor:pointer;opacity:.5}
 .tmode:hover{opacity:1}
-body.teacher .tmode{opacity:1;border-color:var(--leaf);color:var(--leaf);background:rgba(47,125,85,.08)}
+body.teacher .tmode{display:inline-block;opacity:1;border-color:var(--leaf);color:var(--leaf);background:rgba(47,125,85,.08)}
 
 .ptabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
 .ptab{font-family:var(--jua);font-size:13.5px;padding:7px 15px;border-radius:999px;cursor:pointer;
@@ -700,14 +701,15 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
     요일이 바뀌는 4일(10/7·11/3·1/5·1/6)을 반영했습니다.<br>
     📅 <b>달력</b>의 학사일정은 26학년도 연간 학사일정 최종본, 반별 교시는 컴시간 시간표(9/13 기준)에서 가져왔어요.
     시간표가 바뀌면 <b>🕘 시간표</b>에서 고치거나 <b>🔄 서버 시간표</b>로 다시 읽고, 날짜를 눌러(✎) 그날의 메모나 「휴 …」(수업 없음)를 적을 수 있습니다.<br>
-    🧑‍🏫 학생에게는 이 방이 보이지 않습니다. 맨 아래 교사용 버튼으로 껐다 켤 수 있어요.
+    🧑‍🏫 학생에게는 이 방이 보이지 않습니다. 들어오는 문은 <b>교사용 입구 링크(.../scienceclass/teacher.html)</b> 하나뿐이고,
+    끌 때는 맨 아래 <b>🧑‍🏫 교사용 켜짐</b> 단추를 누르면 됩니다.
   </p>
   <input type="file" id="pFile" accept="application/json,.json" hidden>
 </section>
 
 <footer id="app-credit">
   © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-  최종 업데이트: 2026-09-15<br>
+  최종 업데이트: 2026-09-23<br>
   <button class="tmode" id="tmode" type="button" title="교사용 켜기">🧑‍🏫</button>
 </footer>
 </div>
@@ -1974,8 +1976,11 @@ function setTeacher(on){
   if(!on && ($('#v-prog').classList.contains('on') || $('#v-tools').classList.contains('on'))) show('home');
 }
 $('#tmode').addEventListener('click', () => setTeacher(!document.body.classList.contains('teacher')));
-setTeacher(localStorage.getItem('sc_teacher') === '1'
-  || new URLSearchParams(location.search).get('t') === '1');
+/* 켜는 문은 «teacher.html»(교사용 입구) 하나 — 학생 화면에는 켜는 단추가 없다.
+   ?t=1 은 예전 링크를 위해 남기고, ?t=0 은 공용 컴퓨터를 학생 화면으로 되돌린다. */
+const _tq = new URLSearchParams(location.search).get('t');
+setTeacher(_tq === '0' ? false
+  : (localStorage.getItem('sc_teacher') === '1' || _tq === '1'));
 drawProg(); drawCloud(); drawTools();
 if(sbOn()) syncDown();
 

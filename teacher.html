@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>교사용 입구 · 해누리 과학 시간</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#2f7d55">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+ --paper:#fdf7ea; --paper-hi:#fffdf6; --paper-lo:#f4ead4;
+ --line:#e2d2ae; --ink:#2f2a20; --ink-mute:#7d7160; --leaf:#2f7d55; --plum:#6f58a8;
+ --jua:"Jua",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+ --body:"Gowun Dodum","Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--ink);line-height:1.7;min-height:100dvh;display:grid;place-items:center;padding:24px;
+ background:radial-gradient(760px 460px at 8% 100%, rgba(112,88,168,.14), transparent 58%), var(--paper)}
+.card{max-width:420px;width:100%;background:var(--paper-hi);border:1.5px solid var(--line);border-radius:20px;
+ padding:26px 24px;text-align:center;box-shadow:0 14px 34px -20px rgba(72,56,24,.5)}
+h1{font-family:var(--jua);font-weight:400;font-size:22px;line-height:1.4}
+h1 .e{display:block;font-size:34px;margin-bottom:6px}
+p{font-size:14px;color:var(--ink-mute);margin-top:8px}
+.go{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.go a{display:flex;align-items:center;gap:10px;justify-content:center;text-decoration:none;font-family:var(--jua);font-size:16px;
+ padding:13px 16px;border-radius:14px;border:1.5px solid var(--plum);background:var(--plum);color:#fff}
+.go a.ghost{background:transparent;color:var(--plum)}
+.go a.back{border-color:var(--line);color:var(--ink-mute)}
+.note{margin-top:16px;font-size:12.4px;color:var(--ink-mute);border-top:1px dashed var(--line);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1><span class="e">🧑‍🏫</span>교사용으로 들어갑니다</h1>
+  <p id="msg">이 기기에 교사용 표시를 남기고 옮겨 가는 중…</p>
+  <div class="go" id="go">
+    <a href="./#prog">📊 진도 트래커 열기</a>
+    <a class="ghost" href="./#tools">🧰 만든 것 모음</a>
+    <a class="back" href="./?t=0">🎒 학생 화면으로 되돌리기</a>
+  </div>
+  <div class="note">이 주소는 <b>선생님만</b> 쓰는 입구입니다. 학생 화면(첫 화면)에는 교사용 단추가 보이지 않아요.
+    수업용 공용 컴퓨터에서는 쓰고 나서 <b>학생 화면으로 되돌리기</b>를 눌러 주세요.</div>
+</div>
+<script>
+/* 🧑‍🏫 교사용 입구 — 이 기기에 sc_teacher 를 남기고 허브로 넘긴다.
+   ?off=1 이면 반대로 지운다(공용 컴퓨터 정리용). 같은 폴더라 localStorage 를 그대로 공유한다. */
+(function(){
+  var off = /(?:^|[?&])off=1(?:&|$)/.test(location.search);
+  try{
+    if(off) localStorage.removeItem('sc_teacher');
+    else localStorage.setItem('sc_teacher', '1');
+  }catch(e){}
+  var hash = location.hash || '#prog';                    /* teacher.html#tools 처럼 골라 올 수 있다 */
+  var to = off ? './?t=0' : ('./' + (hash === '#' ? '#prog' : hash));
+  var msg = document.getElementById('msg');
+  if(off && msg) msg.textContent = '교사용 표시를 지웠어요. 학생 화면으로 돌아갑니다…';
+  setTimeout(function(){ location.replace(to); }, 350);   /* 실패해도 아래 단추로 들어갈 수 있다 */
+})();
+</script>
+<noscript><p style="text-align:center;margin-top:12px"><a href="./?t=1#prog">📊 진도 트래커 열기</a></p></noscript>
+</body>
+</html>
