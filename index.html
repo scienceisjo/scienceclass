@@ -264,6 +264,18 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .prog th.lh .lx button:hover{color:var(--leaf);border-color:var(--leaf)}
 .prog th.addcol{min-width:58px;background:var(--paper-lo);border-right:0}
 .prog th.addcol button{font-size:20px;border:none;background:transparent;cursor:pointer;color:var(--leaf);padding:10px 12px}
+/* 차시 열 — 사이에 끼워 넣기(＋)와 끌어서 옮기기 */
+.prog th.lh{cursor:grab}
+.prog th.lh .ln{display:flex;align-items:center;justify-content:center;gap:3px}
+.prog th.lh .ins{border:1px dashed var(--line);background:transparent;border-radius:6px;color:var(--ink-mute);
+ font-size:11px;line-height:1;padding:2px 5px;cursor:pointer}
+.prog th.lh .ins:hover{color:var(--leaf);border-color:var(--leaf);border-style:solid;background:rgba(47,125,85,.08)}
+.prog th.lh .grip{color:var(--line);font-size:11px;cursor:grab;user-select:none}
+.prog th.lh:hover .grip{color:var(--ink-mute)}
+.prog th.lh.dragging{opacity:.4;cursor:grabbing}
+.prog th.lh.dz-l{box-shadow:inset 3px 0 0 var(--leaf)}
+.prog th.lh.dz-r{box-shadow:inset -3px 0 0 var(--leaf)}
+.prog th.addcol.dz{box-shadow:inset 3px 0 0 var(--leaf)}
 .prog td.cell{text-align:center;position:relative}
 .prog td.cell .mm{position:absolute;right:2px;bottom:2px;width:19px;height:19px;line-height:1;
   border:none;background:transparent;border-radius:5px;cursor:pointer;font-size:11px;
@@ -714,7 +726,8 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 <section class="view" id="v-prog">
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📊 진도 트래커</h2></div>
   <p class="vlead">칸을 누르면 그 반이 그 차시를 마친 것으로 표시됩니다(수업한 날짜도 함께 기록돼요).
-    차시는 표 오른쪽 <b>＋</b>로 늘리고, 차시 이름을 눌러 고치고, <b>✕</b>로 지울 수 있습니다.<br>📅 <b>달력</b>에는 학사일정과 반별 과학 교시가 미리 들어 있어요 — 칸을 누르면 그날 그 반이 할 차시를 정하고, ✨ 자동 배정으로 남은 차시를 한꺼번에 깔 수 있습니다.</p>
+    차시는 표 오른쪽 <b>＋</b>로 뒤에 늘리고, 차시 번호 옆 <b>＋</b>로 <b>그 차시 앞에 끼워 넣습니다</b>.
+    차시 이름을 눌러 고치고, <b>✕</b>로 지우고, 머리 칸을 <b>끌어서(⠿) 순서를 바꿀 수 있어요</b>(태블릿에서는 <b>‹ ›</b>).<br>📅 <b>달력</b>에는 학사일정과 반별 과학 교시가 미리 들어 있어요 — 칸을 누르면 그날 그 반이 할 차시를 정하고, ✨ 자동 배정으로 남은 차시를 한꺼번에 깔 수 있습니다.</p>
 
   <div id="pCloud"></div>
 
@@ -755,7 +768,7 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
   </div>
 
   <div class="pick" id="pPick" hidden>
-    <div class="pick-h">➕ 차시 고르기
+    <div class="pick-h">➕ 차시 고르기<span id="pickWhere"></span>
       <button class="x" type="button" data-pkclose="1">닫기</button></div>
     <div id="pickBody"></div>
     <div class="pick-foot">
@@ -773,7 +786,8 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
     1·2학년 시험 5일(9/22·23, 12/15~17), 창체 3일(9/28, 11/6, 11/23),
     학교 행사 3일(12/24 체험, 12/31 예술제, 1/7 종업식)을 빼고,
     요일이 바뀌는 4일(10/7·11/3·1/5·1/6)을 반영했습니다.<br>
-    📅 <b>달력</b>의 학사일정은 26학년도 연간 학사일정 최종본, 반별 교시는 컴시간 시간표(9/13 기준)에서 가져왔어요.
+    📅 <b>달력</b>의 학사일정은 26학년도 연간 학사일정 최종본, 반별 교시는 컴시간 시간표(9/13 기준)에서 가져왔어요
+    — 다만 <b>204반은 월3·수4</b>로 손수 고쳤습니다(컴시간 자료가 바뀌기 전 것이라 화5로 들어와 있었습니다).
     시간표가 바뀌면 <b>🕘 시간표</b>에서 고치거나 <b>🔄 서버 시간표</b>로 다시 읽고, 날짜를 눌러(✎) 그날의 메모나 「휴 …」(수업 없음)를 적을 수 있습니다.<br>
     🧑‍🏫 학생에게는 이 방이 보이지 않습니다. 들어오는 문은 <b>교사용 입구 링크(.../scienceclass/teacher.html)</b> 하나뿐이고,
     끌 때는 맨 아래 <b>🧑‍🏫 교사용 켜짐</b> 단추를 누르면 됩니다.
@@ -1216,7 +1230,9 @@ function drawProg(){
   /* 표 */
   const head = '<thead><tr><th class="cls">반</th>'
     + L.map((l, i) =>
-        '<th class="lh"><span class="ln">' + (i + 1) + '차시</span>'
+        '<th class="lh" draggable="true" data-lid="' + l.id + '" title="끌어서 순서를 바꿀 수 있어요">'
+        + '<span class="ln"><button type="button" class="ins" data-insl="' + l.id + '" title="여기(이 차시 앞)에 새 차시 넣기">＋</button>'
+        + (i + 1) + '차시<span class="grip" aria-hidden="true">⠿</span></span>'
         + '<span class="lt" data-ren="' + l.id + '" title="눌러서 이름 고치기">' + esc(l.name) + '</span>'
         + '<span class="lx">'
         + '<button type="button" data-mv="' + l.id + '" data-d="-1" title="왼쪽으로">‹</button>'
@@ -1294,7 +1310,7 @@ function memoHTML(t, C, L){
 
 /* ── 조작 ── */
 $('#v-prog').addEventListener('click', e => {
-  const b = e.target.closest('[data-t],[data-newt],[data-addl],[data-ren],[data-del],[data-mv],[data-lurl],[data-c],'
+  const b = e.target.closest('[data-t],[data-newt],[data-addl],[data-insl],[data-ren],[data-del],[data-mv],[data-lurl],[data-c],'
     + '[data-cls],[data-rent],[data-delt],[data-exp],[data-imp],[data-per],[data-fill],[data-m]');
   if(!b) return;
   const t = curT(), d = b.dataset;
@@ -1310,6 +1326,7 @@ $('#v-prog').addEventListener('click', e => {
   }
 
   if(d.addl){ openPick(); return; }
+  if(d.insl){ openPick(t.lessons.findIndex(x => x.id === d.insl)); return; }
 
   if(d.lurl){
     const l = t.lessons.find(x => x.id === d.lurl); if(!l) return;
@@ -1707,14 +1724,21 @@ const CAL = {
   swap:{ '2026-10-07':[5,'🔁 금요일 시간표'], '2026-11-03':[5,'🔁 금요일 시간표'], '2027-01-05':[4,'🔁 목요일 시간표'], '2027-01-06':[5,'🔁 금요일 시간표'] }
 };
 /* 반 → { 요일(1=월) : [교시…] } — 과학A(2학년)·과학B(1학년) */
-const TT2026 = { '201반':{2:[3],4:[3]}, '202반':{1:[5],3:[1]}, '203반':{1:[6],4:[4]}, '204반':{1:[3],2:[5]},
+/* 204반은 2학기에 바뀐 시간표라 컴시간 9/13 자료(화5)가 낡았다 → 실제는 월3·수4 (2026-09-26 선생님 확인) */
+const TT2026 = { '201반':{2:[3],4:[3]}, '202반':{1:[5],3:[1]}, '203반':{1:[6],4:[4]}, '204반':{1:[3],3:[4]},
   '209반':{1:[1],5:[3]}, '210반':{2:[4],5:[1]}, '211반':{2:[1],4:[2]}, '212반':{3:[6],5:[6]}, '105반':{5:[4]}, '106반':{4:[5]} };
 const WD = ['', '월', '화', '수', '목', '금', '토', '일'];
 
+/* 🕘 서버 시간표(컴시간 9/13)에서 받아 둔 낡은 칸은 한 번만 지워 위 TT2026 으로 돌린다.
+   지금 저장돼 있는 값이 「낡은 그대로」일 때만 지우므로, 손으로 고쳐 둔 시간표는 건드리지 않는다. */
 function calFix(t){
+  const TT_STALE = { '204반': '{"1":[3],"2":[5]}' };   /* 화5 → 수4 (2026-09-26). calFix 가 이 파일 위쪽에서 먼저 불려서 안에 둔다 */
   ['plan', 'days', 'tt'].forEach(k => { if(!t[k] || typeof t[k] !== 'object') t[k] = {}; });
   if(t.memo){ ['@plan', '@days', '@tt'].forEach(k => {   /* 서버에서 memo 에 실려 온 것 풀기 */
     if(t.memo[k] && typeof t.memo[k] === 'object'){ t[k.slice(1)] = t.memo[k]; } delete t.memo[k]; }); }
+  Object.keys(TT_STALE).forEach(nm => {
+    if(t.tt[nm] && JSON.stringify(t.tt[nm]) === TT_STALE[nm]) delete t.tt[nm];
+  });
   return t;
 }
 function calPack(b){
@@ -2000,9 +2024,17 @@ function drawPick(){
   btn.textContent = total ? total + '개 추가' : '추가';
 }
 
-function openPick(){ pickSel = []; $('#pickCustom').value = ''; $('#pPick').hidden = false; drawPick();
-  $('#pPick').scrollIntoView({ block:'nearest', behavior:'smooth' }); }
-function closePick(){ $('#pPick').hidden = true; pickSel = []; }
+/* 어디에 넣을지 — null 이면 맨 뒤, 숫자면 그 자리(그 차시 앞) */
+let pickAt = null;
+function openPick(at){
+  pickAt = (typeof at === 'number' && at >= 0) ? at : null;
+  pickSel = []; $('#pickCustom').value = ''; $('#pPick').hidden = false;
+  const w = $('#pickWhere'); const t = curT();
+  w.textContent = (pickAt == null) ? '' : ' — ' + (pickAt + 1) + '차시 「' + (t.lessons[pickAt] || {}).name + '」 앞에 넣기';
+  drawPick();
+  $('#pPick').scrollIntoView({ block:'nearest', behavior:'smooth' });
+}
+function closePick(){ $('#pPick').hidden = true; pickSel = []; pickAt = null; const w = $('#pickWhere'); if(w) w.textContent = ''; }
 
 $('#v-prog').addEventListener('click', e => {
   const b = e.target.closest('[data-pk],[data-pkall],[data-pkadd],[data-pkclose]');
@@ -2038,7 +2070,9 @@ $('#v-prog').addEventListener('click', e => {
       var y = (b in BANK_ORDER) ? BANK_ORDER[b] : 1e9;
       return x - y;
     });
-    list.forEach(nm => { if(!have.has(nm)) t.lessons.push({ id:uid(), name:nm }); });
+    const fresh = list.filter(nm => !have.has(nm)).map(nm => ({ id:uid(), name:nm }));
+    if(pickAt == null) t.lessons.push(...fresh);
+    else t.lessons.splice(Math.min(pickAt, t.lessons.length), 0, ...fresh);   /* 고른 차시 앞에 순서대로 */
     closePick(); pSave(); drawProg(); return;
   }
 });
@@ -2046,6 +2080,58 @@ $('#v-prog').addEventListener('click', e => {
 $('#pickCustom').addEventListener('input', drawPick);
 $('#pickCustom').addEventListener('keydown', e => {
   if(e.key === 'Enter'){ e.preventDefault(); $('[data-pkadd]').click(); }
+});
+
+/* ── 차시 열을 끌어서 옮기기 ──────────────────────────────────────────
+   머리 칸(th.lh)을 잡아 끌면 그 자리에 놓인다. 손가락(터치)에서는 끌기가 안 되므로
+   ‹ › 단추를 그대로 남겨 두었다. 표는 그릴 때마다 새로 만들어지니 #pTable 에 위임한다. */
+let dragLid = null;
+const pTbl = $('#pTable');
+function dragClear(){
+  pTbl.querySelectorAll('.dz-l,.dz-r,.dz,.dragging')
+      .forEach(el => el.classList.remove('dz-l', 'dz-r', 'dz', 'dragging'));
+}
+pTbl.addEventListener('dragstart', e => {
+  const th = e.target.closest ? e.target.closest('th.lh') : null;
+  if(!th || (e.target.closest && e.target.closest('button'))){ e.preventDefault(); return; }
+  dragLid = th.dataset.lid; th.classList.add('dragging');
+  try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragLid); } catch(_) {}
+});
+pTbl.addEventListener('dragend', () => { dragLid = null; dragClear(); });
+pTbl.addEventListener('dragover', e => {
+  if(!dragLid) return;
+  const th = e.target.closest && e.target.closest('th.lh,th.addcol');
+  if(!th) return;
+  e.preventDefault();
+  try { e.dataTransfer.dropEffect = 'move'; } catch(_) {}
+  pTbl.querySelectorAll('.dz-l,.dz-r,.dz').forEach(el => el.classList.remove('dz-l', 'dz-r', 'dz'));
+  if(th.classList.contains('addcol')) th.classList.add('dz');
+  else if(th.dataset.lid !== dragLid){
+    const r = th.getBoundingClientRect();
+    th.classList.add(e.clientX < r.left + r.width / 2 ? 'dz-l' : 'dz-r');
+  }
+});
+pTbl.addEventListener('drop', e => {
+  if(!dragLid) return;
+  const th = e.target.closest && e.target.closest('th.lh,th.addcol');
+  if(!th) return;
+  e.preventDefault();
+  const t = curT(), L = t.lessons;
+  const from = L.findIndex(x => x.id === dragLid);
+  if(from < 0){ dragLid = null; dragClear(); return; }
+  let to;
+  if(th.classList.contains('addcol')) to = L.length;
+  else {
+    const idx = L.findIndex(x => x.id === th.dataset.lid);
+    if(idx < 0){ dragLid = null; dragClear(); return; }
+    const r = th.getBoundingClientRect();
+    to = idx + (e.clientX < r.left + r.width / 2 ? 0 : 1);
+  }
+  const [x] = L.splice(from, 1);
+  if(to > from) to--;
+  L.splice(Math.max(0, Math.min(to, L.length)), 0, x);
+  dragLid = null; dragClear(); pSave(); drawProg();
+  toast('🔀 ' + x.name + ' → ' + (L.indexOf(x) + 1) + '차시로 옮겼어요');
 });
 
 /* ── 교사용 켜고 끄기 ── */
