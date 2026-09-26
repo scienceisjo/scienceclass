@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>과학 시간 숲 · 땅 밑 연결</title>
+<meta name="theme-color" content="#0b1d22">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+<link rel="stylesheet" href="forest.css">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{background:#07100f}
+body{color:#f6ead2;font-family:'Pretendard Variable',Pretendard,'Malgun Gothic',sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.track{height:360vh;position:relative}
+.stick{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.chap{position:absolute;left:0;right:0;padding:0 24px;text-align:center;pointer-events:none;opacity:0;will-change:opacity,transform}
+.chap h1{font:700 clamp(30px,5.6vw,76px)/1.12 'Gowun Batang',serif;letter-spacing:-.02em;color:#fff4dc;text-shadow:0 6px 40px rgba(0,0,0,.45)}
+.chap h2{font:700 clamp(21px,3.3vw,42px)/1.32 'Gowun Batang',serif;color:#fff4dc;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+.chap p{margin:16px auto 0;max-width:620px;font-size:clamp(14px,1.45vw,18px);line-height:1.75;color:#d9c7a3}
+.chap .kick{font:600 12px/1 'Pretendard Variable',sans-serif;letter-spacing:.32em;color:#f2c97a;margin-bottom:18px}
+.hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-size:12px;letter-spacing:.2em;color:#d9c7a3;opacity:.7;pointer-events:none;transition:opacity .4s}
+.hint::after{content:'';display:block;width:1px;height:34px;margin:10px auto 0;background:linear-gradient(#d9c7a3,transparent);animation:drip 2.2s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.back{position:absolute;left:16px;top:calc(14px + env(safe-area-inset-top,0px));z-index:3;color:#f6ead2;text-decoration:none;font-size:14px;padding:10px 16px;min-height:44px;display:inline-flex;align-items:center;
+  border-radius:999px;background:rgba(7,16,15,.45);box-shadow:0 0 0 1px rgba(246,234,210,.28);backdrop-filter:blur(6px)}
+.back:focus-visible{outline:2px solid #ffe7b0;outline-offset:3px}
+.tour{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;width:min(640px,92vw);pointer-events:none;opacity:0;transition:opacity .5s}
+.tour.on{opacity:1}.tour.on button{pointer-events:auto}
+.tour .cap{min-height:3.2em;text-align:center;font-size:clamp(14px,1.4vw,17px);line-height:1.6;color:#f6ead2;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.tour .cap b{font-family:'Gowun Batang',serif;color:#ffe7b0;font-size:1.08em}
+.tour button{font:600 15px/1 'Pretendard Variable',sans-serif;color:#1b1206;background:linear-gradient(#ffe6a8,#f0bf63);border:0;border-radius:999px;padding:15px 26px;min-height:48px;cursor:pointer;
+  box-shadow:0 0 0 1px rgba(255,231,176,.35),0 10px 40px -8px rgba(242,201,122,.7)}
+.tour button.ghost{background:transparent;color:#f6ead2;box-shadow:0 0 0 1px rgba(246,234,210,.4)}
+.tour button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.step{display:flex;gap:6px}.step span{width:22px;height:3px;border-radius:2px;background:rgba(246,234,210,.22);transition:.4s}.step span.on{background:#f2c97a}
+@media (prefers-reduced-motion:reduce){.hint::after{animation:none}}
+@media (max-width:640px){#c2{top:12vh!important}#c0{top:13vh!important}}
+</style>
+</head>
+<body>
+<div class="track" id="track">
+  <div class="stick" id="stick">
+    <canvas id="cv" aria-hidden="true"></canvas>
+    <div class="fz-lays" id="lays"></div>
+    <a class="back" href="./">← 과학 시간으로</a>
+    <div class="chap" id="c0" style="top:12vh">
+      <div class="kick">HAENURI SCIENCE</div>
+      <h1>과학 시간 숲</h1>
+      <p>우리가 쓰는 도구 여섯 그루가 자랍니다. 나무를 누르면 그곳으로 갑니다.<br>아래로 내려가면, 나무들이 땅 밑에서 어떻게 이어져 있는지 보입니다.</p>
+    </div>
+    <div class="chap" id="c1" style="top:34vh">
+      <div class="kick">BELOW THE GROUND</div>
+      <h2>보이는 것은 도구이고,<br>숲을 살아 있게 하는 것은 땅 밑의 연결입니다.</h2>
+    </div>
+    <div class="chap" id="c2" style="top:5vh">
+      <div class="kick">ONE QUESTION'S JOURNEY</div>
+      <h2>내 질문 하나는 뿌리를 따라<br>피드백이 되고, 기록이 됩니다.</h2>
+    </div>
+    <div class="hint" id="hint">SCROLL</div>
+    <div class="tour" id="tour">
+      <div class="step" id="steps"></div>
+      <div class="cap" id="cap">빛나는 뿌리는 도구 사이를 오가는 기록입니다.</div>
+      <div style="display:flex;gap:10px"><button type="button" id="go">✦ 질문 하나 따라가기</button><button type="button" class="ghost" id="stop" hidden>멈추기</button></div>
+    </div>
+  </div>
+</div>
+<script src="forest.js"></script>
+<script>
+/* ── 학생용 숲: 나무 · 뿌리마디 · 따라가기 (고치는 곳은 이 세 배열) ── */
+const TREES = [
+  { id:'sheet',  f:.09, s:.86, name:'학습지',      sub:'차시별 학습지 받기',   url:'./#sheet', self:true, hue:[160,34] },
+  { id:'lesson', f:.25, s:.96, name:'수업 페이지', sub:'단원별 수업과 혼자 탐구', url:'./#less', self:true, hue:[146,38] },
+  { id:'tree',   f:.43, s:1.12,name:'질문나무',    sub:'질문을 심고 다듬기',   url:'https://scienceisjo.github.io/questionuri/', hue:[138,44] },
+  { id:'stamp',  f:.61, s:.95, name:'칭찬 도장판', sub:'인정받고 기록되기',    url:'https://scienceisjo.github.io/class-tools/stamp-board/', hue:[96,36] },
+  { id:'eval',   f:.77, s:.8,  name:'평가 일정',   sub:'수행평가와 준비물',    url:'./#eval', self:true, hue:[170,30] },
+  { id:'map',    f:.92, s:.74, name:'과학 지도',   sub:'어디서 와서 어디로',   url:'https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/', hue:[120,30] }
+];
+const HUBS = [
+  { id:'acct', f:.24, d:.30, name:'학생 계정 하나', sub:'한 번 로그인으로 모든 나무에',  links:['sheet','lesson','tree','stamp'] },
+  { id:'mail', f:.77, d:.52, name:'피드백 우편함',  sub:'되묻기 · 다듬기 · 해결',        links:['tree','lesson','stamp'] },
+  { id:'rec',  f:.42, d:.80, name:'관찰 기록',      sub:'도장의 한 줄이 생활기록부 근거로', links:['stamp','tree','eval'] }
+];
+const TOUR = [
+  ['tree',  '<b>질문을 심습니다.</b><br>수업 중에 생긴 궁금증 하나를 질문나무에 심습니다.'],
+  ['mail',  '<b>선생님이 되묻습니다.</b><br>질문은 뿌리를 타고 우편함에 닿고, 선생님의 되묻기가 돌아옵니다.'],
+  ['tree',  '<b>내가 다듬습니다.</b><br>되묻기를 읽고 질문을 고쳐 다시 냅니다. 처음 질문도 함께 남습니다.'],
+  ['stamp', '<b>도장으로 인정받습니다.</b><br>다듬은 질문에 도장이 찍히고, 선생님이 한 줄 기록을 남깁니다.'],
+  ['rec',   '<b>기록이 쌓입니다.</b><br>그 한 줄이 학기말 생활기록부를 쓸 때의 근거가 됩니다.']
+];
+/* ─────────────────────────────────────────────────────── */
+const $ = s => document.querySelector(s);
+const FP = /[#&]p=([\d.]+)/.exec(location.hash);
+function chap(id, a, b, c, d, p){ const e = $('#' + id); let o = 0;
+  if(p >= a && p <= d) o = p < b ? (p - a) / (b - a) : p > c ? 1 - (p - c) / (d - c) : 1;
+  e.style.opacity = o; e.style.transform = `translateY(${(1 - o) * 18}px)`; }
+const steps = i => { $('#steps').innerHTML = TOUR.map((_, j) => '<span' + (j <= i ? ' class="on"' : '') + '></span>').join(''); };
+const F = Forest({ box:$('#stick'), canvas:$('#cv'), lays:$('#lays'), mode:'full', track:$('#track'), forceP:FP ? +FP[1] : null,
+  trees:TREES, hubs:HUBS, tour:TOUR,
+  onFrame:(pp, touring) => {
+    chap('c0', -1, 0, .01, .07, pp); chap('c1', .26, .36, .5, .6, pp); chap('c2', .64, .74, 1.1, 1.2, touring ? 0 : pp);
+    $('#hint').style.opacity = pp < .05 && !touring ? .7 : 0;
+    $('#tour').classList.toggle('on', pp > .78 || touring);
+  } });
+const UI = {
+  start:() => { $('#go').hidden = true; $('#stop').hidden = false; },
+  step:(i, txt) => { steps(i); $('#cap').innerHTML = txt; },
+  done:() => { $('#cap').innerHTML = '<b>한 바퀴를 돌았습니다.</b><br>다음 질문은 이 기록 위에서 다시 자랍니다.'; },
+  end:() => { $('#go').hidden = false; $('#stop').hidden = true; steps(-1); $('#cap').innerHTML = '빛나는 뿌리는 도구 사이를 오가는 기록입니다.'; }
+};
+steps(-1);
+$('#go').addEventListener('click', () => F.tour(UI));
+$('#stop').addEventListener('click', () => F.stopTour());
+if(location.hash === '#tour') setTimeout(() => F.tour(UI), 800);
+</script>
+</body>
+</html>

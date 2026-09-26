@@ -428,6 +428,46 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
  box-shadow:0 14px 34px -14px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;word-break:keep-all;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
+/* 🤖 AI 진도 계획 가져오기 */
+.ai-pick{border-color:#8a72c4}
+.ai-pick .pick-h{color:#6f58a8}
+.ai-steps{margin:12px 0 0 20px;display:grid;gap:12px;font-size:13.5px;line-height:1.55;color:var(--ink-dim);word-break:keep-all}
+.ai-steps b{color:var(--ink)}
+.ai-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:7px}
+.ai-pick textarea{width:100%;margin-top:7px;font:13px/1.5 var(--body);padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);resize:vertical}
+.ai-pick textarea:focus{outline:2px solid #8a72c4;outline-offset:1px}
+.ai-see summary{cursor:pointer;font-size:12.5px;color:var(--ink-mute);margin-top:6px}
+.ai-chk{font-size:12.5px;color:var(--ink-dim);display:flex;gap:5px;align-items:center}
+#aiPrev{margin-top:12px}
+.ai-err{color:#b3423a;font-weight:700;font-size:13.5px}
+.ai-sum{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:10px 12px;border-radius:12px;background:rgba(138,114,196,.09);font-size:13.5px}
+.ai-per{font-size:12.5px;color:var(--ink-mute);margin:6px 2px 0}
+.ai-warn{margin:9px 0 0 18px;font-size:12.8px;color:#8a4a12;line-height:1.55;word-break:keep-all}
+.ai-notes{margin-top:8px;font-size:12.8px;color:var(--ink-dim)}.ai-notes ul{margin:4px 0 0 18px}
+.ai-tblw{overflow-x:auto;margin-top:10px}
+.ai-tbl{border-collapse:collapse;font-size:12.8px;min-width:100%}
+.ai-tbl th,.ai-tbl td{border-bottom:1px solid var(--line-soft);padding:5px 8px;text-align:left;white-space:nowrap}
+.ai-tbl th{color:var(--ink-mute);font-weight:700}
+.ai-tbl tr.bad td{color:#b3423a;background:rgba(179,66,58,.05)}
+.ai-more{font-size:12px;color:var(--ink-mute);margin:4px 2px 0}
+.ai-go{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:13.5px}
+.ai-go label{display:flex;gap:5px;align-items:center}.ai-go small{color:var(--ink-mute);font-size:11.5px}
+.ai-go .go{margin-left:auto;background:var(--leaf);border-color:var(--leaf);color:#fff}
+.ai-go .go:disabled{opacity:.45;cursor:default}
+.pcal-h .pbtn.ai{border-color:#8a72c4;color:#6f58a8}
+/* 🌳 첫 화면 숲 (forest.js) — 홈에서만, 옛 머리말 대신 */
+.fz-hero{position:relative;height:clamp(460px,72vh,680px);overflow:hidden;background:#0b1d22;color:#f6ead2}
+.fz-hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fz-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;pointer-events:none;background:linear-gradient(rgba(253,247,234,0),var(--paper))}
+.fz-title{position:absolute;left:0;right:0;top:clamp(16px,4.2vh,44px);text-align:center;padding:0 16px;pointer-events:none}
+.fz-title .kick{font:600 11.5px/1 "Pretendard Variable",Pretendard,sans-serif;letter-spacing:.3em;color:#f2c97a}
+.fz-title h1{margin-top:12px;font:700 clamp(24px,3.9vw,46px)/1.22 "Gowun Batang",serif;letter-spacing:-.02em;color:#fff4dc;text-shadow:0 6px 34px rgba(0,0,0,.5)}
+.fz-deep{position:absolute;right:16px;bottom:86px;z-index:2;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:10px 16px;border-radius:999px;
+  font:600 13.5px/1 "Pretendard Variable",Pretendard,sans-serif;color:#1b1206;text-decoration:none;background:linear-gradient(#ffe6a8,#f0bf63);box-shadow:0 8px 30px -8px rgba(242,201,122,.7)}
+.fz-deep:focus-visible{outline:2px solid #fff;outline-offset:3px}
+body:has(#v-home.on) .wrap > header{display:none}
+body:not(:has(#v-home.on)) .fz-hero{display:none}
+@media (max-width:640px){.fz-deep{left:50%;right:auto;transform:translateX(-50%);bottom:78px}}
 </style>
 <style id="stu-css">
 /* ── 🎒 학생 로그인 · 오늘 수업 ── */
@@ -515,8 +555,16 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .mine-q .qact a{font-family:var(--body);font-size:13.5px;font-weight:700;padding:7px 13px;border-radius:99px;border:1.5px solid var(--leaf);color:var(--leaf);background:transparent;text-decoration:none}
 .mine-q .qact a.pri{background:var(--leaf);color:#fff}
 </style>
+<link rel="stylesheet" href="forest.css">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+<section class="fz-hero" id="fzHero" aria-label="과학 시간 숲 — 나무를 누르면 그곳으로 갑니다">
+  <canvas id="fzCv" aria-hidden="true"></canvas>
+  <div class="fz-lays" id="fzLays"></div>
+  <div class="fz-title"><div class="kick">HAENURI SCIENCE · 2026</div><h1>해누리와 승재쌤이<br>함께하는 과학 시간</h1></div>
+  <a class="fz-deep" href="forest.html">🌱 땅 밑 연결 보기</a>
+</section>
 <div class="wrap">
 
 <header>
@@ -685,6 +733,26 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
   <div id="pSum"></div>
 
   <div id="pCal"></div>
+
+  <div class="pick ai-pick" id="pAI" hidden>
+    <div class="pick-h">🤖 AI 로 진도 계획 받기 · <span id="aiBoard"></span>
+      <button class="x" type="button" data-aiclose="1">닫기</button></div>
+    <ol class="ai-steps">
+      <li><b>프롬프트 복사</b> — 이 진도표의 차시·반·시간표·쉬는 날·끝낸 차시가 들어 있어요.
+        <div class="ai-row"><button class="pbtn" type="button" data-aicopy="1">📋 프롬프트 복사</button>
+        <button class="pbtn" type="button" data-aiexport="1">📤 지금 계획 JSON 내려받기</button></div>
+        <details class="ai-see"><summary>프롬프트 보기</summary><textarea id="aiPrompt" readonly rows="10"></textarea></details></li>
+      <li><b>다른 AI 에 붙이기</b> — ChatGPT·Gemini·Claude 등에 프롬프트를 붙이고, <b>학사일정·시간표·캘린더</b>(PDF·사진·표 복사)를 같이 올려 주세요.</li>
+      <li><b>받은 답 붙여 넣기</b> — JSON 이나 마크다운 표 그대로, 또는 파일(.json·.md)로.
+        <textarea id="aiIn" rows="6" placeholder="AI 가 준 답을 통째로 붙여 넣으세요 (```json … ``` 코드 블록이 있어도 괜찮아요)"></textarea>
+        <div class="ai-row"><button class="pbtn" type="button" data-aiprev="1">🔍 미리보기</button>
+        <button class="pbtn" type="button" data-aifile="1">📂 파일로 올리기</button>
+        <label class="ai-chk"><input type="checkbox" id="aiNewLes" checked> 표에 없는 차시 이름은 새 차시로 추가</label>
+        <button class="pbtn warn" type="button" data-aiundo="1" id="aiUndo" hidden>↩️ 넣기 전으로 되돌리기</button></div>
+        <input type="file" id="aiFile" accept=".json,.md,.txt,application/json,text/markdown,text/plain" hidden></li>
+    </ol>
+    <div id="aiPrev"></div>
+  </div>
 
   <div class="pick" id="pPick" hidden>
     <div class="pick-h">➕ 차시 고르기
@@ -2019,6 +2087,314 @@ if(['sheet','eval','less','mine'].includes(h0)
   <div class="foot">처음이라 계정이 없거나 비밀번호를 잊었으면 <a href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">질문나무</a>에서 가입하거나 선생님께 말해 주세요.</div>
  </form>
 </div>
+<script id="ai-plan">
+/* ══════════════════════════════════════════════════════════════
+   🤖 AI 진도 계획 가져오기 (2026-09-25)
+   ① 지금 진도표(차시·반·시간표·쉬는 날·끝낸 차시)를 담은 프롬프트를 복사해 다른 AI 에게 준다
+      (선생님은 학사일정·시간표·캘린더 파일을 같이 붙인다)
+   ② AI 가 돌려준 JSON(scienceclass-plan v1) 또는 마크다운 표를 붙여 넣거나 파일로 올린다
+   ③ 미리보기에서 칸 수·경고를 보고 적용 → 달력(plan)·쉬는 날(days)·시간표(tt)에 들어간다
+   ④ 적용 직전 진도표를 통째로 보관해 두어 「되돌리기」 한 번이 된다
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+const AIKEY = 'sc_prog_before_ai';
+let aiParsed = null;
+const nrm = s => String(s == null ? '' : s).replace(/[\s·.,:()\[\]「」'"`~\-–—_]/g, '').replace(/\p{Extended_Pictographic}|️/gu, '').toLowerCase();
+const dnorm = v => { const m = /(\d{4})\s*[-./년]\s*(\d{1,2})\s*[-./월]\s*(\d{1,2})/.exec(String(v || '')); return m ? m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0') : ''; };
+const cnorm = v => { let s = String(v || '').replace(/\s/g, ''); const m = /^(\d)-(\d{1,2})$/.exec(s); if(m) s = m[1] + m[2].padStart(2, '0'); if(/^\d+$/.test(s)) s += '반'; return s; };
+
+function doneList(t, c){
+  const out = []; t.lessons.forEach((l, i) => { if(t.done[c.id + '|' + l.id]) out.push(i + 1); });
+  if(!out.length) return '없음';
+  const r = []; let a = out[0], b = out[0];
+  for(let i = 1; i <= out.length; i++){ if(out[i] === b + 1){ b = out[i]; continue; } r.push(a === b ? a : a + '~' + b); a = b = out[i]; }
+  return r.join(', ') + '차시';
+}
+function offList(t, from){
+  const o = {};
+  Object.keys(CAL.off).forEach(d => { if(d >= from) o[d] = '수업 없음 · ' + CAL.off[d]; });
+  Object.keys(CAL.swap).forEach(d => { if(d >= from) o[d] = CAL.swap[d][1].replace(/^\S+\s*/, '') + '로 수업'; });
+  Object.keys(CAL.note).forEach(d => { if(d >= from && !o[d]) o[d] = '수업 있음 · ' + CAL.note[d]; });
+  Object.keys(t.days || {}).forEach(d => { if(d >= from){ const x = t.days[d]; o[d] = (x.off ? '수업 없음 · ' : '메모 · ') + (x.txt || ''); } });
+  return Object.keys(o).sort().map(d => '- ' + d + ' (' + WD[isoWd(new Date(d + 'T00:00:00'))] + ') ' + o[d]).join('\n') || '- (아직 없음)';
+}
+function aiPrompt(t){
+  const td = today(), from = (td >= CAL.first && td <= CAL.last) ? td : CAL.first;
+  return [
+'너는 중학교 과학 교사의 진도 계획을 돕는 조수야. 아래 「지금 진도표」와 내가 함께 붙이는 자료(학사일정·시간표·캘린더)를 보고,',
+'반마다 남은 차시를 실제 수업이 있는 날짜·교시에 차례대로 배정해 줘. 결과는 맨 아래 「돌려줄 형식」의 JSON 한 덩어리로만 줘.',
+'',
+'## 지금 진도표',
+'- 진도표 이름: ' + t.name,
+'- 계획 기간: ' + from + ' ~ ' + CAL.last + ' (주말 제외)',
+'',
+'### 차시 목록 (번호 = lesson 값)',
+t.lessons.map((l, i) => (i + 1) + '. ' + l.name).join('\n') || '(비어 있음 — 자료를 보고 차시 목록도 제안해 줘)',
+'',
+'### 반 · 요일별 과학 교시 · 이미 끝낸 차시',
+t.classes.map(c => '- ' + c.name + ' : ' + ttStr(ttOf(t, c)) + ' / 끝낸 차시 ' + doneList(t, c) + (c.periods ? ' / 학기 수업 횟수 ' + c.periods : '')).join('\n'),
+'',
+'### 이미 알고 있는 쉬는 날 · 요일 바뀌는 날',
+offList(t, from),
+'',
+'## 규칙',
+'1. 내가 붙인 학사일정·캘린더에서 시험·행사·휴업·체험학습·단축수업처럼 수업이 없거나 바뀌는 날을 찾아 빼고, 위 목록에 없던 날은 days 에 적어 줘.',
+'2. 내가 붙인 시간표가 위 교시와 다르면 새 시간표를 timetable 에 「화3 목3」 꼴로 적고, 그 시간표로 배정해 줘.',
+'3. 반마다 「끝낸 차시」 다음 번호부터 번호 순서대로, 한 수업 칸에 한 차시씩 넣어 줘. 차시를 건너뛰거나 두 번 넣지 마.',
+'4. 차시가 아닌 수업(평가 안내, 보충, 자습 등)이 필요하면 lesson 대신 text 에 적어 줘.',
+'5. 차시가 남는 반, 수업 칸이 남는 반, 확신이 없는 날은 notes 에 한 줄씩 적어 줘. 모르는 날짜를 지어내지 마.',
+'6. 날짜는 YYYY-MM-DD, period 는 교시 숫자, class 는 위 반 이름 그대로.',
+'',
+'## 돌려줄 형식 (이 JSON 만, ```json 코드 블록 하나로)',
+'```json',
+'{',
+'  "format": "scienceclass-plan",',
+'  "version": 1,',
+'  "board": ' + JSON.stringify(t.name) + ',',
+'  "from": "' + from + '",',
+'  "to": "' + CAL.last + '",',
+'  "timetable": { "' + ((t.classes[0] || {}).name || '201반') + '": "화3 목3" },',
+'  "days": [ { "date": "2026-10-09", "off": true, "text": "한글날" }, { "date": "2026-11-18", "off": false, "text": "단축수업" } ],',
+'  "plan": [',
+'    { "date": "' + from + '", "class": "' + ((t.classes[0] || {}).name || '201반') + '", "period": 3, "lesson": 6, "title": "차시 이름(확인용)" },',
+'    { "date": "' + from + '", "class": "' + ((t.classes[1] || t.classes[0] || {}).name || '202반') + '", "period": 1, "text": "수행평가 안내" }',
+'  ],',
+'  "notes": [ "212반은 수업 칸이 2개 모자라 25·26차시를 못 넣었습니다" ]',
+'}',
+'```',
+'timetable·days·notes 는 바꿀 것이 없으면 빈 칸({} / [])으로 두면 돼. JSON 대신 마크다운 표(| 날짜 | 반 | 교시 | 차시 |)로 줘도 읽을 수 있어.'
+  ].join('\n');
+}
+
+/* ── 읽기: JSON 또는 마크다운 ── */
+function parseAny(txt){
+  const s = String(txt || '').trim(); if(!s) throw new Error('붙여 넣은 내용이 없어요.');
+  const fence = /```(?:json)?\s*([\s\S]*?)```/i.exec(s);
+  const cand = [fence && fence[1], s, s.slice(s.indexOf('{'), s.lastIndexOf('}') + 1)].filter(Boolean);
+  for(const c of cand){ try { const o = JSON.parse(c); if(o && typeof o === 'object') return fromJSON(o); } catch(e){} }
+  return fromMD(s);
+}
+function fromJSON(o){
+  if(Array.isArray(o)) o = { plan:o };
+  const days = Array.isArray(o.days) ? o.days
+    : Object.keys(o.days || {}).map(d => Object.assign({ date:d }, typeof o.days[d] === 'object' ? o.days[d] : { text:String(o.days[d]) }));
+  return { board:o.board || '', timetable:o.timetable || {}, days:days, plan:Array.isArray(o.plan) ? o.plan : [],
+    notes:Array.isArray(o.notes) ? o.notes : (o.notes ? [String(o.notes)] : []), lessons:Array.isArray(o.lessons) ? o.lessons : null, src:'JSON' };
+}
+function fromMD(s){
+  const out = { board:'', timetable:{}, days:[], plan:[], notes:[], lessons:null, src:'마크다운' };
+  const lines = s.split(/\r?\n/);
+  let hdr = null, sect = '';
+  const cells = l => l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(x => x.trim());
+  lines.forEach(l => {
+    const h = /^#{1,6}\s*(.+)/.exec(l); if(h){ sect = h[1]; hdr = null; return; }
+    if(/^\s*\|/.test(l)){
+      const c = cells(l);
+      if(c.every(x => /^:?-{2,}:?$/.test(x))) return;
+      if(!hdr){ hdr = c.map(x => x.replace(/\s/g, '')); return; }
+      const g = k => { const i = hdr.findIndex(x => k.some(kk => x.indexOf(kk) >= 0)); return i >= 0 ? c[i] : ''; };
+      if(hdr.some(x => /교시/.test(x)) && hdr.some(x => /날짜|일자/.test(x))){
+        const les = g(['차시', '내용', '수업']), num = /^(\d+)\s*(차시)?\b/.exec(les);
+        out.plan.push({ date:g(['날짜', '일자']), class:g(['반']), period:g(['교시']), lesson:num ? +num[1] : undefined, title:les, md:true });
+      } else if(hdr.some(x => /요일/.test(x)) && hdr.some(x => /반/.test(x))){
+        const cl = cnorm(g(['반'])); out.timetable[cl] = ((out.timetable[cl] || '') + ' ' + g(['요일']).slice(0, 1) + g(['교시'])).trim();
+      } else if(hdr.some(x => /날짜|일자/.test(x))){
+        const tx = g(['내용', '메모', '행사', '사유']), off = g(['수업없음', '휴', '구분']);
+        out.days.push({ date:g(['날짜', '일자']), off:/o|y|예|휴|없음|✕|x/i.test(off) || /휴|시험|고사|방학|휴업|체험/.test(tx), text:tx });
+      }
+      return;
+    }
+    hdr = null;
+    const li = /^\s*[-*]\s*(.+)/.exec(l);
+    if(li && /노트|참고|note|확인/i.test(sect)) out.notes.push(li[1]);
+    else if(li && dnorm(li[1])) { const tx = li[1].replace(/^[^\d]*\d{4}\s*[-./년]\s*\d{1,2}\s*[-./월]\s*\d{1,2}\s*일?\s*(\([^)]*\))?\s*/, '');
+      out.days.push({ date:dnorm(li[1]), off:/^(휴|✕|x)|수업\s*없|시험|고사|휴업|체험/.test(tx), text:tx.replace(/^(휴|✕|x)\s*/i, '') }); }
+  });
+  if(!out.plan.length && !out.days.length && !Object.keys(out.timetable).length) throw new Error('JSON 도 마크다운 표도 찾지 못했어요. AI 에게 「돌려줄 형식」대로 다시 달라고 해 주세요.');
+  return out;
+}
+
+/* ── 맞춰 보기: 반·차시·교시를 이 진도표에 붙인다 ── */
+function resolve(t, r, addNew){
+  const warn = [], cls = {}, lesByNm = {};
+  t.classes.forEach(c => { cls[cnorm(c.name)] = c; });
+  t.lessons.forEach((l, i) => { lesByNm[nrm(l.name)] = i; });
+  const newLes = [];
+  const findLes = (num, title, mayAdd) => {
+    if(num != null && num !== '' && !isNaN(+num)){
+      const i = +num - 1; if(i >= 0 && i < t.lessons.length){
+        if(title && nrm(title) && nrm(title) !== nrm(t.lessons[i].name) && lesByNm[nrm(title)] != null && lesByNm[nrm(title)] !== i)
+          warn.push('「' + title + '」가 ' + num + '차시와 이름이 달라 이름 쪽(' + (lesByNm[nrm(title)] + 1) + '차시)으로 넣었어요.');
+        else return { i:i }; } }
+    if(title && lesByNm[nrm(title)] != null) return { i:lesByNm[nrm(title)] };
+    if(title){ const hit = t.lessons.findIndex(l => nrm(l.name).indexOf(nrm(title)) >= 0 || nrm(title).indexOf(nrm(l.name)) >= 0);
+      if(hit >= 0 && nrm(title).length >= 2) return { i:hit }; }
+    if(title && mayAdd){ let j = newLes.indexOf(title); if(j < 0){ newLes.push(title); j = newLes.length - 1; } return { n:j }; }
+    return null;
+  };
+  const tt = {};
+  Object.keys(r.timetable || {}).forEach(k => {
+    const c = cls[cnorm(k)]; if(!c){ warn.push('시간표의 「' + k + '」는 이 진도표에 없는 반이라 뺐어요.'); return; }
+    const v = r.timetable[k], o = typeof v === 'string' ? parseTT(v) : (() => { const x = {};
+      Object.keys(v || {}).forEach(w => { const wd = /^\d$/.test(w) ? +w : WD.indexOf(String(w).slice(0, 1)); if(wd >= 1 && wd <= 5) x[wd] = [].concat(v[w]).map(Number).filter(p => p >= 1 && p <= 8).sort((a, b) => a - b); }); return x; })();
+    if(Object.keys(o).length) tt[c.name] = o; else warn.push(k + ' 시간표를 읽지 못했어요 (' + JSON.stringify(v) + ').');
+  });
+  const days = {};
+  (r.days || []).forEach(d => { const ds = dnorm(d.date); if(!ds){ warn.push('날짜를 읽지 못한 쉬는 날: ' + JSON.stringify(d)); return; }
+    days[ds] = { off:!!(d.off === true || d.off === 'true' || d.off === 1), txt:String(d.text || d.txt || d.memo || '').trim() }; });
+  const ttx = Object.assign({}, t.tt, tt);
+  const tmp = Object.assign({}, t, { tt:ttx, days:Object.assign({}, t.days, days) });
+  const plan = []; let skipped = 0;
+  (r.plan || []).forEach(p => {
+    const ds = dnorm(p.date), c = cls[cnorm(p.class || p.cls || p['반'])], pe = parseInt(p.period || p.p || p['교시'], 10);
+    if(!ds || !c || !(pe >= 1 && pe <= 8)){ skipped++; if(skipped <= 5) warn.push('읽지 못한 줄: ' + [p.date, p.class, p.period, p.lesson || p.title || p.text].join(' / ')); return; }
+    let v = null;
+    if(p.lesson != null && p.lesson !== '' || p.title && !p.text){ const f = findLes(p.lesson, p.title, addNew && !p.md); if(f) v = f; }
+    if(!v && (p.text || p.title)) v = { t:String(p.text || p.title) };
+    if(!v){ skipped++; warn.push(ds + ' ' + c.name + ' ' + pe + '교시: 차시를 알 수 없어 뺐어요.'); return; }
+    const sl = slotsOf(tmp, ds);
+    const inTT = sl.some(s => s.c.id === c.id && s.p === pe);
+    plan.push({ ds:ds, c:c, p:pe, v:v, inTT:inTT });
+  });
+  if(skipped > 5) warn.push('…읽지 못한 줄이 모두 ' + skipped + '개예요.');
+  const outTT = plan.filter(x => !x.inTT);
+  if(outTT.length) warn.push('시간표·학사일정상 수업이 없는 칸 ' + outTT.length + '개가 있어요 (예: ' + outTT.slice(0, 3).map(x => x.ds.slice(5) + ' ' + x.c.name + ' ' + x.p + '교시').join(', ') + '). 넣기는 하지만 달력에는 보이지 않아요.');
+  const seen = {}; plan.forEach(x => { if(x.v.i == null) return; const k = x.c.id + '|' + x.v.i; if(seen[k]) warn.push(x.c.name + ' ' + (x.v.i + 1) + '차시가 두 번 들어 있어요 (' + seen[k] + ', ' + x.ds.slice(5) + ').'); else seen[k] = x.ds.slice(5); });
+  plan.forEach(x => { if(x.v.i != null && t.done[x.c.id + '|' + t.lessons[x.v.i].id]) x.doneAlready = true; });
+  const dn = plan.filter(x => x.doneAlready).length; if(dn) warn.push('이미 끝낸 차시 ' + dn + '칸이 섞여 있어요 (그대로 넣습니다).');
+  return { tt:tt, days:days, plan:plan, newLes:newLes, warn:warn, notes:r.notes || [], src:r.src, board:r.board };
+}
+
+function preview(){
+  const t = curT(), box = $('#aiPrev');
+  let r; try { r = parseAny($('#aiIn').value); } catch(ex){ box.innerHTML = '<p class="ai-err">' + esc(ex.message) + '</p>'; aiParsed = null; return; }
+  const x = resolve(t, r, $('#aiNewLes').checked); aiParsed = x;
+  const lname = v => v.i != null ? (v.i + 1) + '차시 ' + t.lessons[v.i].name : v.n != null ? '＋새 차시 ' + x.newLes[v.n] : '✎ ' + v.t;
+  const rng = x.plan.length ? x.plan.map(p => p.ds).sort() : [];
+  const per = t.classes.map(c => { const n = x.plan.filter(p => p.c.id === c.id).length; return n ? c.name + ' ' + n : ''; }).filter(Boolean).join(' · ');
+  const rows = x.plan.slice().sort((a, b) => (a.ds + a.p).localeCompare(b.ds + b.p)).slice(0, 14)
+    .map(p => '<tr' + (p.inTT ? '' : ' class="bad"') + '><td>' + p.ds.slice(5).replace('-', '/') + ' ' + WD[isoWd(new Date(p.ds + 'T00:00:00'))] + '</td><td>' + esc(p.c.name) + '</td><td>' + p.p + '</td><td>' + esc(lname(p.v)) + '</td></tr>').join('');
+  if(x.board && nrm(x.board) !== nrm(t.name)) x.warn.unshift('AI 가 적은 진도표는 「' + x.board + '」인데 지금 연 표는 「' + t.name + '」예요. 맞는 표에 넣는지 확인해 주세요.');
+  box.innerHTML = '<div class="ai-sum"><b>' + esc(x.src) + '으로 읽었어요</b>'
+    + '<span>📅 수업 칸 <b>' + x.plan.length + '</b>' + (rng.length ? ' (' + rng[0].slice(5).replace('-', '/') + ' ~ ' + rng[rng.length - 1].slice(5).replace('-', '/') + ')' : '') + '</span>'
+    + '<span>🚫 쉬는 날·메모 <b>' + Object.keys(x.days).length + '</b></span>'
+    + '<span>🕘 시간표 바뀜 <b>' + Object.keys(x.tt).length + '</b>반</span>'
+    + (x.newLes.length ? '<span>＋ 새 차시 <b>' + x.newLes.length + '</b></span>' : '') + '</div>'
+    + (per ? '<p class="ai-per">' + esc(per) + '</p>' : '')
+    + (x.warn.length ? '<ul class="ai-warn">' + x.warn.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul>' : '')
+    + (x.notes.length ? '<details class="ai-notes" open><summary>AI 가 남긴 메모 ' + x.notes.length + '</summary><ul>' + x.notes.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul></details>' : '')
+    + (rows ? '<div class="ai-tblw"><table class="ai-tbl"><thead><tr><th>날짜</th><th>반</th><th>교시</th><th>차시</th></tr></thead><tbody>' + rows + '</tbody></table>'
+      + (x.plan.length > 14 ? '<p class="ai-more">… 외 ' + (x.plan.length - 14) + '칸</p>' : '') + '</div>' : '')
+    + '<div class="ai-go"><label><input type="radio" name="aiMode" value="merge" checked> 합치기 <small>겹치는 칸만 새 것으로</small></label>'
+    + '<label><input type="radio" name="aiMode" value="replace"> 이 기간 새로 <small>들어온 반의 ' + (rng.length ? rng[0].slice(5).replace('-', '/') + '~' + rng[rng.length - 1].slice(5).replace('-', '/') : '') + ' 계획을 비우고</small></label>'
+    + '<button class="pbtn go" type="button" data-aiapply="1"' + (x.plan.length || Object.keys(x.days).length || Object.keys(x.tt).length ? '' : ' disabled') + '>✅ 진도표에 넣기</button></div>';
+}
+function apply(){
+  const t = curT(), x = aiParsed; if(!x) return;
+  const mode = (document.querySelector('input[name="aiMode"]:checked') || {}).value || 'merge';
+  try { localStorage.setItem(AIKEY, JSON.stringify({ id:t.id, at:new Date().toISOString(), board:t })); } catch(e){}
+  const newIds = x.newLes.map(n => { const l = { id:uid(), name:n }; t.lessons.push(l); return l.id; });
+  Object.assign(t.tt, x.tt);
+  Object.keys(x.days).forEach(d => { const v = x.days[d]; if(!v.off && !v.txt) delete t.days[d]; else t.days[d] = v; });
+  if(mode === 'replace' && x.plan.length){
+    const ds = x.plan.map(p => p.ds).sort(), a = ds[0], b = ds[ds.length - 1], ids = new Set(x.plan.map(p => p.c.id));
+    Object.keys(t.plan).forEach(k => { const [d, c] = k.split('|'); if(d >= a && d <= b && ids.has(c)) delete t.plan[k]; });
+  }
+  x.plan.forEach(p => { const k = p.ds + '|' + p.c.id + '|' + p.p;
+    t.plan[k] = p.v.i != null ? { l:t.lessons[p.v.i].id } : p.v.n != null ? { l:newIds[p.v.n] } : { t:p.v.t }; });
+  pSave(); if(x.plan.length) calGoto(x.plan.map(p => p.ds).sort()[0]); drawProg();
+  $('#pAI').hidden = true; aiParsed = null;
+  toast('🤖 넣었어요 — 수업 칸 ' + x.plan.length + ' · 쉬는 날 ' + Object.keys(x.days).length + ' · 시간표 ' + Object.keys(x.tt).length + '반. 달력에서 확인해 주세요');
+  aiUndoBtn();
+}
+function aiUndoBtn(){
+  const u = $('#aiUndo'); if(!u) return; let b = null;
+  try { b = JSON.parse(localStorage.getItem(AIKEY) || 'null'); } catch(e){}
+  u.hidden = !(b && b.id === curT().id);
+  if(b) u.title = new Date(b.at).toLocaleString('ko-KR') + ' 에 넣기 전 상태로';
+}
+function undo(){
+  let b = null; try { b = JSON.parse(localStorage.getItem(AIKEY) || 'null'); } catch(e){}
+  const t = curT(); if(!b || b.id !== t.id){ alert('되돌릴 기록이 없어요.'); return; }
+  if(!confirm('AI 계획을 넣기 전(' + new Date(b.at).toLocaleString('ko-KR') + ') 상태로 되돌릴까요?\n그 뒤에 체크한 수업 기록도 함께 되돌아갑니다.')) return;
+  const i = P.tables.findIndex(x => x.id === t.id); P.tables[i] = calFix(b.board);
+  try { localStorage.removeItem(AIKEY); } catch(e){}
+  pSave(P.tables[i]); drawProg(); toast('↩️ 넣기 전으로 되돌렸어요');
+}
+function exportJSON(){
+  const t = curT(), L = {}; t.lessons.forEach((l, i) => { L[l.id] = i; });
+  const plan = Object.keys(t.plan).sort().map(k => { const [d, cid, p] = k.split('|'), c = t.classes.find(x => x.id === cid), v = t.plan[k];
+    if(!c) return null; return v.l != null && L[v.l] != null ? { date:d, class:c.name, period:+p, lesson:L[v.l] + 1, title:t.lessons[L[v.l]].name } : { date:d, class:c.name, period:+p, text:v.t || '' }; }).filter(Boolean);
+  const tt = {}; t.classes.forEach(c => { tt[c.name] = ttStr(ttOf(t, c)); });
+  const o = { format:'scienceclass-plan', version:1, board:t.name, from:CAL.first, to:CAL.last,
+    lessons:t.lessons.map(l => l.name), timetable:tt,
+    days:Object.keys(t.days).sort().map(d => ({ date:d, off:!!t.days[d].off, text:t.days[d].txt || '' })), plan:plan, notes:[] };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(o, null, 2)], { type:'application/json' }));
+  a.download = '진도계획_' + t.name.replace(/\s+/g, '') + '_' + today() + '.json'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function open(){
+  const t = curT(), box = $('#pAI');
+  $('#aiPrompt').value = aiPrompt(t); $('#aiIn').value = ''; $('#aiPrev').innerHTML = ''; aiParsed = null;
+  $('#aiBoard').textContent = t.name; box.hidden = false; aiUndoBtn();
+  box.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* 달력 머리에 단추 끼우기 — drawCal 을 감싼다 */
+const _dc = drawCal;
+drawCal = function(){ _dc.apply(this, arguments);
+  const h = document.querySelector('#pCal .pcal-h'); if(!h || h.querySelector('[data-aiplan]')) return;
+  const b = document.createElement('button'); b.className = 'pbtn ai'; b.type = 'button'; b.dataset.aiplan = '1'; b.textContent = '🤖 AI 계획 가져오기';
+  const af = h.querySelector('[data-autofill]'); h.insertBefore(b, af || null);
+};
+
+$('#v-prog').addEventListener('click', async e => {
+  const d = e.target.closest('button') ? e.target.closest('button').dataset : {};
+  if(d.aiplan) open();
+  else if(d.aiclose) $('#pAI').hidden = true;
+  else if(d.aicopy){
+    const v = $('#aiPrompt').value;
+    try { await navigator.clipboard.writeText(v); } catch(ex){ $('#aiPrompt').select(); document.execCommand('copy'); }
+    toast('📋 프롬프트를 복사했어요 — 학사일정·시간표 파일과 함께 AI 에게 붙여 넣으세요');
+  }
+  else if(d.aiprev) preview();
+  else if(d.aiapply) apply();
+  else if(d.aiundo) undo();
+  else if(d.aiexport) exportJSON();
+  else if(d.aifile) $('#aiFile').click();
+});
+$('#aiFile').addEventListener('change', e => { const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader(); rd.onload = () => { $('#aiIn').value = rd.result; preview(); }; rd.readAsText(f, 'utf-8'); e.target.value = ''; });
+$('#aiIn').addEventListener('paste', () => setTimeout(preview, 30));
+$('#aiNewLes').addEventListener('change', () => { if($('#aiIn').value.trim()) preview(); });
+if(document.querySelector('#pCal .pcal-h')) drawCal();   /* 이 스크립트보다 먼저 그려진 달력에도 단추를 */
+})();
+</script>
+<script src="forest.js"></script>
+<script id="fz-hero-js">
+/* 🌳 첫 화면 숲 — 학생이 쓰는 방 여섯 그루 (자세한 연결은 forest.html) */
+(function(){
+  if(!window.Forest || !document.getElementById('fzHero')) return;
+  const EXT = { tree:'https://scienceisjo.github.io/questionuri/', stamp:'https://scienceisjo.github.io/class-tools/stamp-board/', map:'https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/' };
+  Forest({ box:document.getElementById('fzHero'), canvas:document.getElementById('fzCv'), lays:document.getElementById('fzLays'), mode:'hero',
+    trees:[
+      { id:'sheet',  f:.09, s:1.04, name:'학습지',      sub:'차시별 학습지',     go:'sheet', hue:[160,34] },
+      { id:'lesson', f:.25, s:.9,  name:'수업 페이지', sub:'단원별 수업',       go:'less',  hue:[146,38] },
+      { id:'tree',   f:.43, s:.74, name:'질문나무',    sub:'질문 심고 다듬기',  url:EXT.tree,  hue:[138,44] },
+      { id:'stamp',  f:.61, s:.7,  name:'칭찬 도장판', sub:'내 도장·교환소',    url:EXT.stamp, hue:[96,36] },
+      { id:'eval',   f:.77, s:.9,  name:'평가 일정',   sub:'수행평가·준비물',   go:'eval',  hue:[170,30] },
+      { id:'map',    f:.92, s:1.02, name:'과학 지도',   sub:'어디서 와서 어디로', url:EXT.map,  hue:[120,30] }
+    ],
+    hubs:[
+      { id:'acct', f:.26, d:.1, links:['sheet','lesson','tree','stamp'] },
+      { id:'mail', f:.7,  d:.5, links:['tree','lesson','stamp'] },
+      { id:'rec',  f:.47, d:.9, links:['stamp','tree','eval'] }
+    ],
+    onTree:t => { if(t.go && typeof show === 'function') show(t.go); }
+  });
+})();
+</script>
 <script src="solo-prompts.js"></script>
 <script id="stu-login">
 /* ══════════ 🎒 학생 로그인 — 질문나무 계정 그대로, 세션은 질문나무·도장판과 같은 키(supabase-js 기본 키) ══════════

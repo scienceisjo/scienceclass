@@ -1,0 +1,15 @@
+/* 수업 도구 숲 — 이름표 (forest.js 와 짝) */
+.fz-lays{position:absolute;inset:0;pointer-events:none}
+.fz-lab{position:absolute;left:0;top:0;pointer-events:auto;text-decoration:none;color:#f6ead2;background:none;border:0;padding:4px 6px;cursor:pointer;font:inherit;
+  display:flex;flex-direction:column;align-items:center;text-align:center;transform:translate(-50%,-100%);will-change:transform;opacity:0;transition:opacity .6s}
+.fz-lab.on{opacity:1}
+.fz-lab .no{font:600 11px/1 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.24em;color:#f2c97a;opacity:.85}
+.fz-lab b{font:700 clamp(15px,1.55vw,22px)/1.2 'Gowun Batang',serif;margin-top:6px;color:#f6ead2;text-shadow:0 2px 14px rgba(0,0,0,.6);white-space:nowrap}
+.fz-lab small{font:400 clamp(11px,.95vw,13px)/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#d9c7a3;margin-top:4px;opacity:.92;white-space:nowrap}
+.fz-lab i{display:block;width:1px;height:clamp(16px,3vh,32px);margin-top:8px;background:linear-gradient(#f6ead2,transparent);opacity:.6}
+.fz-lab:hover b,.fz-lab:focus-visible b,.fz-lab.lit b{color:#ffe7b0}
+.fz-lab:focus-visible{outline:2px solid #ffe7b0;outline-offset:4px;border-radius:8px}
+.fz-lab.hub{transform:translate(-50%,0);cursor:default}
+.fz-lab.hub i{order:-1;margin:0 0 8px;background:linear-gradient(transparent,#f2c97a)}
+.fz-lab.hub b{color:#ffe7b0}
+@media (max-width:640px){.fz-lab small{display:none}.fz-lab b{font-size:13.5px}.fz-lab .no{font-size:10px}.fz-lab.hub small{display:block;font-size:11px}}
