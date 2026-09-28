@@ -388,6 +388,7 @@ table.prog{border-collapse:separate;border-spacing:0;font-size:13px}
 .cproj{display:flex;flex-wrap:wrap;gap:6px;padding:9px 12px;border-top:1px solid var(--line-soft);background:var(--paper)}
 .cproj .pchip{font-size:11.5px}
 .cproj .pchip small{color:var(--ink-mute)}
+.cproj .cprojn{flex-basis:100%;font-size:11.5px;color:var(--ink-mute);margin-top:2px}
 .cfold .cgrid,.cfold .cproj{display:none}
 @media(max-width:640px){.cgrid{grid-template-columns:repeat(5,minmax(0,1fr)) .35fr .35fr}.cday{min-height:60px;padding:4px 3px}
  .cslot{padding:2px 4px;font-size:10.5px}}
@@ -1720,6 +1721,9 @@ $('#v-prog').addEventListener('submit', async e => {
    ══════════════════════════════════════════════════════════════ */
 const CAL = {
   first:'2026-08-18', last:'2027-01-07',
+  /* 진도를 끝내야 하는 날 — 기말고사(12/15) 하루 전. 남은 수업·자동 배정·AI 계획은 여기까지만 센다.
+     그 뒤(12/18~1/7)에도 수업은 있지만 진도가 아니라 마무리 시간이라 따로 표시한다. */
+  pend:'2026-12-14',
   /* 1·2학년에게 수업이 없는 날 */
   off:{ '2026-08-18':'개학식 · 창체5', '2026-09-22':'중간고사(1·2학년)', '2026-09-23':'중간고사(1·2학년)',
         '2026-09-24':'추석 연휴', '2026-09-25':'추석 연휴', '2026-09-28':'창체6', '2026-10-05':'대체휴일', '2026-10-09':'한글날', '2026-10-12':'진로체험의 날',
@@ -1835,20 +1839,25 @@ function drawCal(){
 function projHTML(t){
   const td = today(), L = t.lessons;
   const lIdx = {}; L.forEach((l, i) => { lIdx[l.id] = i; });
+  const pend = CAL.pend || CAL.last;      /* 진도 마감(기말고사 전날) — 그 뒤 수업은 따로 센다 */
   const chips = t.classes.map(c => {
-    let left = 0, lastDay = '', planned = 0;
+    let left = 0, lastDay = '', planned = 0, after = 0;
     for(let d = new Date(CAL.first + 'T00:00:00'); dstr(d) <= CAL.last; d.setDate(d.getDate() + 1)){
       const ds = dstr(d);
       slotsOf(t, ds).forEach(sl => { if(sl.c.id !== c.id) return;
         const v = t.plan[ds + '|' + c.id + '|' + sl.p];
         if(v) { planned++; lastDay = ds; }
-        if(ds >= td && !v) left++; });
+        if(ds >= td && !v){ if(ds <= pend) left++; else after++; } });
     }
     const todo = L.filter(l => !t.done[c.id + '|' + l.id] && !Object.keys(t.plan).some(k => k.split('|')[1] === c.id && t.plan[k].l === l.id)).length;
-    return '<span class="pchip' + (todo > left ? ' tight' : '') + '"><b>' + esc(c.name) + '</b> 빈 수업 ' + left + '회'
-      + (todo ? ' · 못 넣은 차시 ' + todo + '개' : '') + (lastDay ? ' <small>· 계획 끝 ' + lastDay.slice(5).replace('-', '/') + '</small>' : '') + '</span>';
+    return '<span class="pchip' + (todo > left ? ' tight' : '') + '"><b>' + esc(c.name) + '</b> 기말 전 빈 수업 ' + left + '회'
+      + (todo ? ' · 못 넣은 차시 ' + todo + '개' : '')
+      + (after ? ' <small>· 기말 뒤 ' + after + '회</small>' : '')
+      + (lastDay ? ' <small>· 계획 끝 ' + lastDay.slice(5).replace('-', '/') + '</small>' : '') + '</span>';
   }).join('');
-  return '<div class="cproj">' + chips + '</div>';
+  return '<div class="cproj">' + chips
+    + '<div class="cprojn">진도는 <b>' + pend.slice(5).replace('-', '/') + '</b>(기말고사 전날)까지로 셉니다.'
+    + ' 그 뒤 수업은 「기말 뒤」로 따로 적었어요.</div></div>';
 }
 function calGoto(ds){ calYM = { y:+ds.slice(0, 4), m:+ds.slice(5, 7) }; }
 function parseTT(str){
@@ -1930,8 +1939,9 @@ $('#v-prog').addEventListener('click', e => {
 function autoFill(t){
   if(!t.lessons.length){ alert('차시가 없어요. 표 오른쪽 위 ＋로 먼저 담아 주세요.'); return; }
   const td = today();
-  const from = prompt('어느 날부터 채울까요? (YYYY-MM-DD)\n그날부터 학기 끝까지, 반마다 남은 차시를 빈 수업 칸에 차례로 넣습니다.',
-    (td >= CAL.first && td <= CAL.last) ? td : CAL.first);
+  const pend = CAL.pend || CAL.last;
+  const from = prompt('어느 날부터 채울까요? (YYYY-MM-DD)\n그날부터 ' + pend + '(기말고사 전날)까지, 반마다 남은 차시를 빈 수업 칸에 차례로 넣습니다.',
+    (td >= CAL.first && td <= pend) ? td : CAL.first);
   if(from === null) return;
   if(!/^\d{4}-\d{2}-\d{2}$/.test(from.trim())){ alert('날짜는 2026-10-05 처럼 적어 주세요.'); return; }
   const rep = [];
@@ -1939,7 +1949,7 @@ function autoFill(t){
     const used = new Set(Object.keys(t.plan).filter(k => k.split('|')[1] === c.id).map(k => t.plan[k].l).filter(Boolean));
     const q = t.lessons.filter(l => !t.done[c.id + '|' + l.id] && !used.has(l.id));
     let n = 0, lastDs = '';
-    for(let d = new Date(from.trim() + 'T00:00:00'); dstr(d) <= CAL.last && q.length; d.setDate(d.getDate() + 1)){
+    for(let d = new Date(from.trim() + 'T00:00:00'); dstr(d) <= pend && q.length; d.setDate(d.getDate() + 1)){
       const ds = dstr(d);
       slotsOf(t, ds).forEach(sl => { if(sl.c.id !== c.id || !q.length) return;
         const k = ds + '|' + c.id + '|' + sl.p; if(t.plan[k]) return;
@@ -2227,7 +2237,7 @@ function aiPrompt(t){
 '',
 '## 지금 진도표',
 '- 진도표 이름: ' + t.name,
-'- 계획 기간: ' + from + ' ~ ' + CAL.last + ' (주말 제외)',
+'- 계획 기간: ' + from + ' ~ ' + (CAL.pend || CAL.last) + ' (주말 제외 · 이 날이 기말고사 전날이라 진도는 여기까지 끝나야 해)',
 '',
 '### 차시 목록 (번호 = lesson 값)',
 t.lessons.map((l, i) => (i + 1) + '. ' + l.name).join('\n') || '(비어 있음 — 자료를 보고 차시 목록도 제안해 줘)',
@@ -2253,7 +2263,7 @@ offList(t, from),
 '  "version": 1,',
 '  "board": ' + JSON.stringify(t.name) + ',',
 '  "from": "' + from + '",',
-'  "to": "' + CAL.last + '",',
+'  "to": "' + (CAL.pend || CAL.last) + '",',
 '  "timetable": { "' + ((t.classes[0] || {}).name || '201반') + '": "화3 목3" },',
 '  "days": [ { "date": "2026-10-09", "off": true, "text": "한글날" }, { "date": "2026-11-18", "off": false, "text": "단축수업" } ],',
 '  "plan": [',
