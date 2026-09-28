@@ -81,6 +81,14 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room.r-stamp .ic{background:rgba(224,145,43,.16);border-color:rgba(224,145,43,.4)}
 .room.r-guide .ic{background:rgba(179,120,58,.13);border-color:rgba(179,120,58,.34)}
 .room.r-map   .ic{background:rgba(92,132,168,.15);border-color:rgba(92,132,168,.38)}
+.room.r-talk  .ic{background:rgba(138,74,30,.12);border-color:rgba(138,74,30,.34)}
+/* 칠판 다시보기 — 설명 화면 목록 */
+.talkhow{margin-top:14px;border:1.5px dashed var(--line);border-radius:14px;padding:11px 14px;font-size:13px;color:var(--ink-dim);line-height:1.8;background:rgba(255,253,246,.6)}
+.talkhow b{color:var(--ink)}
+.wrow .wt .tchip{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:99px;font-family:var(--body);font-size:11px;font-weight:700;color:#8a4a1e;background:rgba(138,74,30,.1);border:1px solid rgba(138,74,30,.3);vertical-align:2px}
+.wgroup.talkgroup>h3{color:#8a4a1e}
+.talkgroup .wrow:hover{border-color:#8a4a1e}
+.talkgroup .wrow .wgo{color:#8a4a1e}
 
 .view{display:none;animation:fade .22s ease both}
 .view.on{display:block}
@@ -613,6 +621,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
       <span class="tx"><span class="tt">수업 페이지</span><span class="dd">단원별 수업 자료와 가상 실험실</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
+    <button class="room r-talk" type="button" data-go="talk">
+      <span class="ic">🎞️</span>
+      <span class="tx"><span class="tt">칠판 다시보기</span><span class="dd">수업 때 띄운 설명을 한 장씩 넘기며 복습</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
     <a class="room r-tree ext" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">
       <span class="ic">🌳</span>
       <span class="tx"><span class="tt">질문나무</span><span class="dd">궁금한 것을 질문으로 키우기</span></span>
@@ -716,6 +729,16 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 </section>
 
 
+<!-- ══════════ 칠판 다시보기 ══════════ -->
+<section class="view" id="v-talk">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🎞️ 칠판 다시보기</h2></div>
+  <p class="vlead">수업 때 칠판에 띄운 설명을 그대로 올려 둡니다. 한 장씩 넘기면 학습지 빈칸의 답이 수업 때처럼 차례로 열려요.
+    결석했을 때, 학습지를 다 못 채웠을 때, 시험 전에 다시 보세요.</p>
+  <div id="talkList"></div>
+  <div class="talkhow">👆 <b>넘기기</b> — 화면 누르기 · 옆으로 밀기 · → 키 &nbsp;|&nbsp; <b>뒤로</b> — ← 키 &nbsp;|&nbsp; <b>☰ 목차</b>로 원하는 장에 바로 가기<br>
+    📱 휴대폰은 <b>가로로 돌려서</b> 보면 글씨가 커져요.</div>
+</section>
+
 <!-- ══════════ 만든 것 모음 (교사용) ══════════ -->
 <section class="view" id="v-tools">
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🧰 만든 것 모음</h2></div>
@@ -814,7 +837,7 @@ function toast(msg){
 <script>
 'use strict';
 /* ══════════════════════════════════════════════════════════════
-   ★ 선생님이 고치는 곳은 아래 네 덩어리(UNITS · SHEETS · EVAL · TOOLS)뿐입니다.
+   ★ 선생님이 고치는 곳은 아래 다섯 덩어리(UNITS · SHEETS · EVAL · TALKS · TOOLS)뿐입니다.
      - SHEETS의 url 에 OneDrive 공유 링크를 붙여 넣으면 바로 열립니다.
      - url 이 비어 있으면 "준비 중"으로 흐리게 표시됩니다.
      - UNITS의 map 에 나선지도 단원 id(m13-14 처럼)를 넣으면
@@ -910,6 +933,21 @@ const EXAM_DAYS = [
   { t:'중간고사', when:'2026-09-22', d:'9월 22일(화) ~ 23일(수)' },
   { t:'기말고사', when:'2026-12-15', d:'12월 15일(화) ~ 17일(목)' },
 ];
+
+/* ── 칠판 다시보기 (학년별) ─────────────────────────
+   수업 때 칠판에 띄운 설명 화면(강의 HTML)을 학생이 다시 넘겨 보는 방.
+   줄 하나 = 설명 화면 하나. sheet 는 짝이 되는 학습지(칩으로 보임), url 이 비면 「준비 중」.
+   url 끝의 ?s=1 = 학생 모드(선생님 대본 단추를 감춘다) — 새 줄에도 꼭 붙이세요. */
+const TALKS = {
+ '1':[],
+ '2':[
+  { unit:'⚡ VII. 전기와 자기', items:[
+    { ic:'🔀', t:'한 줄로 이을까, 나란히 이을까', sheet:'학습지 5',
+      d:'저항의 직렬·병렬연결 — 도로·버블티·미끄럼틀·갈림길 비유와 전구 실험',
+      url:'https://scienceisjo.github.io/electricity/05-series-parallel-lecture.html?s=1' },
+  ]},
+ ]
+};
 
 /* ── 만든 것 모음 (교사용 전용) ────────────────────
    여기에 줄만 더하면 '🧰 만든 것 모음' 방에 카드가 생깁니다. */
@@ -1101,6 +1139,23 @@ function budgetHTML(C, L){
     + '<div class="pnext">' + chips + '</div>';
 }
 
+function drawTalks(){
+  const groups = (TALKS[grade] || []).filter(g => g.items && g.items.length);
+  $('#talkList').innerHTML = groups.length
+    ? groups.map(g =>
+        '<div class="wgroup talkgroup"><h3>' + esc(g.unit) + '<span class="cnt">' + g.items.length + '개</span></h3><div class="wlist">'
+        + g.items.map(i => {
+            const inner = '<span class="wi">' + i.ic + '</span>'
+              + '<span class="wt"><b>' + esc(i.t) + (i.sheet ? '<span class="tchip">' + esc(i.sheet) + '</span>' : '') + '</b>'
+              + '<small>' + esc(i.d || '') + '</small></span>';
+            return i.url
+              ? '<a class="wrow" href="' + esc(i.url) + '" target="_blank" rel="noopener">' + inner + '<span class="wgo">넘겨 보기 ↗</span></a>'
+              : '<div class="wrow todo">' + inner + '<span class="wgo">준비 중</span></div>';
+          }).join('')
+        + '</div></div>').join('')
+    : emptyBox('🎞️', '아직 올라온 설명이 없어요', '수업에서 칠판에 띄운 설명이 생기면 여기에 하나씩 올라옵니다.');
+}
+
 function drawTools(){
   $('#toolList').innerHTML = TOOLS.map(g =>
     '<div class="tgroup"><h3>' + esc(g.g) + '</h3><div class="tlist">'
@@ -1121,7 +1176,7 @@ function setGrade(g){
   grade = g; localStorage.setItem('sc_grade', g);
   document.querySelectorAll('.gbtn').forEach(b => b.classList.toggle('on', b.dataset.g === g));
   $('#gnote').textContent = g + '학년 과학 시간입니다 — 학년은 언제든 바꿀 수 있어요';
-  drawUnits(); drawSheets(); drawEval();
+  drawUnits(); drawSheets(); drawEval(); drawTalks();
 }
 document.querySelectorAll('.gbtn').forEach(b =>
   b.addEventListener('click', () => setGrade(b.dataset.g)));
@@ -2180,7 +2235,7 @@ if(sbOn()) syncDown();
 /* ══════════════ 시작 ══════════════ */
 setGrade(grade);
 const h0 = location.hash.replace('#','');
-if(['sheet','eval','less','mine'].includes(h0)
+if(['sheet','eval','less','talk','mine'].includes(h0)
    || (['prog','tools'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
 </script>
 <div class="lgm" id="lgm" role="dialog" aria-modal="true" aria-labelledby="lgmT">
