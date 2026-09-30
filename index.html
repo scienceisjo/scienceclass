@@ -939,7 +939,19 @@ const EXAM_DAYS = [
    줄 하나 = 설명 화면 하나. sheet 는 짝이 되는 학습지(칩으로 보임), url 이 비면 「준비 중」.
    url 끝의 ?s=1 = 학생 모드(선생님 대본 단추를 감춘다) — 새 줄에도 꼭 붙이세요. */
 const TALKS = {
- '1':[],
+ '1':[
+  { unit:'🎈 VI. 기체의 성질', items:[
+    { ic:'📌', t:'압력 — 일정한 면적에 작용하는 힘', sheet:'학습지 1',
+      d:'연필 양끝 누르기 → 스펀지 실험대 → 압력 = 힘 ÷ 면적 → 단위 N/m² → 압력 바구니',
+      url:'https://scienceisjo.github.io/gas-properties/01-pressure-lecture.html?s=1' },
+    { ic:'🎈', t:'기체의 압력 — 입자의 충돌', sheet:'학습지 2',
+      d:'입자가 벽에 부딪혀 가하는 힘 → 모든 방향 → 입자 수와 충돌 횟수 → 생활 속 기체 압력',
+      url:'https://scienceisjo.github.io/gas-properties/02-gas-pressure-lecture.html?s=1' },
+    { ic:'💉', t:'압력과 부피 — 온도가 일정할 때', sheet:'학습지 3',
+      d:'주사기로 누르기 → 입자로 설명하기 → 표와 그래프 → 생활에서 찾기',
+      url:'https://scienceisjo.github.io/gas-properties/03-boyle-lecture.html?s=1' },
+  ]},
+ ],
  '2':[
   { unit:'⚡ VII. 전기와 자기', items:[
     { ic:'🔀', t:'한 줄로 이을까, 나란히 이을까', sheet:'학습지 5',
