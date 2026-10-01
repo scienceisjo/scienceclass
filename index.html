@@ -491,6 +491,19 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 @media (max-width:640px){.fz-deep{left:50%;right:auto;transform:translateX(-50%);bottom:78px}}
 </style>
 <style id="stu-css">
+/* ── 🧪 지금 하는 프로젝트 (학년별 홈 배너) ── */
+.feat{display:flex;align-items:center;gap:14px;margin:0 0 14px;padding:14px 16px;border-radius:var(--r);text-decoration:none;color:var(--ink);
+  background:linear-gradient(135deg,#eaf3f9 0%,var(--paper-hi) 65%);border:2px solid var(--sky);box-shadow:var(--shadow);transition:transform .15s}
+.feat[hidden]{display:none}
+.feat:hover{transform:translateY(-2px)}
+.feat .fi{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:28px;background:#fff;border:1px solid var(--line-soft)}
+.feat .ft{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.feat .ft .kick{font-size:12px;font-weight:700;color:var(--sky);letter-spacing:.3px}
+.feat .ft b{font-family:var(--jua);font-weight:400;font-size:19px;line-height:1.3}
+.feat .ft small{font-size:13px;color:var(--ink-dim);line-height:1.5}
+.feat .fgo{flex:none;font-weight:700;font-size:14px;padding:9px 14px;border-radius:99px;background:var(--sky);color:#fff;white-space:nowrap}
+@media (max-width:480px){ .feat .fgo{display:none} }
+
 /* ── 🎒 학생 로그인 · 오늘 수업 ── */
 .stubar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:4px auto 10px;font-size:13.5px;color:var(--ink-dim)}
 .stubar .who{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:99px;background:var(--paper-hi);border:1.5px solid var(--line);font-weight:700;color:var(--ink)}
@@ -605,6 +618,7 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 <!-- ══════════ 홈 ══════════ -->
 <section class="view on" id="v-home">
   <section class="today" id="today" hidden aria-live="polite"></section>
+  <a class="feat" id="feat" hidden target="_blank" rel="noopener"></a>
   <div class="rooms">
     <button class="room r-sheet" type="button" data-go="sheet">
       <span class="ic">📄</span>
@@ -856,7 +870,9 @@ const UNITS = {
   {no:5, ic:'💪', name:'힘의 작용', desc:'힘의 표현 · 중력 · 탄성력 · 마찰력 · 부력',
    url:'', kind:'todo', map:'m13-05'},
   {no:6, ic:'🎈', name:'기체의 성질', desc:'압력 · 입자의 충돌 · 압력↔부피 · 온도↔부피',
-   url:'https://scienceisjo.github.io/gas-properties/', kind:'lesson', map:'m13-06'},
+   url:'https://scienceisjo.github.io/gas-properties/', kind:'lesson', map:'m13-06',
+   activity:{title:'🧪 기체 시뮬레이터 만들기', desc:'순서대로 따라 하며 나만의 기체 시뮬레이터 키우기 · 막혔을 때 대처법 · 올리는 법',
+     url:'https://scienceisjo.github.io/gas-properties/model-fixing.html'}},
   {no:7, ic:'🪐', name:'태양계', desc:'천체 망원경 · 행성 두 집단 · 활동하는 태양 · 자전과 공전 · 달의 위상 · 일식과 월식',
    url:'https://scienceisjo.github.io/solar-system/', kind:'lesson', map:'m13-07'},
  ],
@@ -1186,12 +1202,28 @@ function emptyBox(icon, title, body){
   return '<div class="empty"><span class="be">' + icon + '</span><b>' + title + '</b><br>' + body + '</div>';
 }
 
+/* ══════════════ 지금 하는 프로젝트 (학년별 홈 배너) ══════════════
+   학년 키에 넣으면 그 학년 홈 맨 위(오늘 수업 아래)에 뜬다. 끝나면 지우면 된다. */
+const FEATURE = {
+ '1': { ic:'🧪', kick:'기체의 성질 · 개인 프로젝트', title:'기체 시뮬레이터 만들기 — 순서대로 따라 하기',
+        desc:'오늘 할 일 · 막혔을 때 대처법 · 완성한 앱 올리는 법까지 한 페이지에서 순서대로', go:'시작하기 ›',
+        url:'https://scienceisjo.github.io/gas-properties/model-fixing.html' }
+};
+function drawFeature(){
+  const a = $('#feat'); if(!a) return;
+  const f = FEATURE[grade];
+  if(!f){ a.hidden = true; a.innerHTML = ''; return; }
+  a.href = f.url; a.hidden = false;
+  a.innerHTML = '<span class="fi">' + f.ic + '</span><span class="ft"><span class="kick">' + esc(f.kick) + '</span><b>' + esc(f.title)
+    + '</b><small>' + esc(f.desc) + '</small></span><span class="fgo">' + esc(f.go) + '</span>';
+}
+
 /* ══════════════ 학년 · 화면 전환 ══════════════ */
 function setGrade(g){
   grade = g; localStorage.setItem('sc_grade', g);
   document.querySelectorAll('.gbtn').forEach(b => b.classList.toggle('on', b.dataset.g === g));
   $('#gnote').textContent = g + '학년 과학 시간입니다 — 학년은 언제든 바꿀 수 있어요';
-  drawUnits(); drawSheets(); drawEval(); drawTalks();
+  drawUnits(); drawSheets(); drawEval(); drawTalks(); drawFeature();
 }
 document.querySelectorAll('.gbtn').forEach(b =>
   b.addEventListener('click', () => setGrade(b.dataset.g)));
