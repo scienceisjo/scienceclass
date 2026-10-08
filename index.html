@@ -638,7 +638,7 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
     </button>
     <button class="room r-lab" type="button" data-go="lab">
       <span class="ic">🧪</span>
-      <span class="tx"><span class="tt">해누리 실험실</span><span class="dd">센서로 측정하고 함께 탐구하는 실험 자료</span></span>
+      <span class="tx"><span class="tt">해누리 실험실</span><span class="dd">모둠 연구소 · 안전수칙 · 센서 실험 자료</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
     <button class="room r-talk" type="button" data-go="talk">
@@ -754,6 +754,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🧪 해누리 실험실</h2></div>
   <p class="vlead">실험 전 안내부터 센서로 측정하는 방법까지, 수업 화면을 보며 함께 탐구해요.</p>
   <div class="wlist">
+    <a class="wrow" href="https://scienceisjo.github.io/haenuri-science-lab/?view=board" target="_blank" rel="noopener">
+      <span class="wi">🏛️</span>
+      <span class="wt"><b>해누리 과학연구소</b><small>칭찬으로 성장하는 우리 모둠 연구소 · 안전수칙 · 수업 마무리 시상식</small></span>
+      <span class="wgo">전자칠판 ↗</span>
+    </a>
     <a class="wrow" href="lab/ohm-inquiry.html" target="_blank" rel="noopener">
       <span class="wi">⚡</span>
       <span class="wt"><b>센서로 확인하는 옴의 법칙</b><small>전류·전압 센서로 알아보는 전압, 전류, 저항의 관계 · 탐구 안내</small></span>
@@ -1032,6 +1037,8 @@ const TOOLS = [
      url:'https://scienceisjo.github.io/class-tools/pdf-tool/' },
  ]},
  { g:'🔬 수업에서 쓰는 것', items:[
+   { ic:'🏛️', t:'해누리 과학연구소 · 교사 화면', d:'휴대폰으로 모둠 칭찬·도움 기록 · 역할 추첨 · 시상식',
+     url:'https://scienceisjo.github.io/haenuri-science-lab/?view=teacher' },
    { ic:'🌏', t:'과학 탐험 월드', d:'만든 수업 웹앱·실험실·게임 전체 허브', url:SW },
    { ic:'📖', t:'웹앱 설명서', d:'앱마다 무엇이고 어떻게 쓰는지 (인쇄용)',
      url:'https://scienceisjo.github.io/scienceworld/webapp-manual.html' },
