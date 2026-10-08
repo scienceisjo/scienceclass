@@ -81,6 +81,7 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room.r-stamp .ic{background:rgba(224,145,43,.16);border-color:rgba(224,145,43,.4)}
 .room.r-guide .ic{background:rgba(179,120,58,.13);border-color:rgba(179,120,58,.34)}
 .room.r-map   .ic{background:rgba(92,132,168,.15);border-color:rgba(92,132,168,.38)}
+.room.r-lab .ic{background:rgba(34,154,108,.12);border-color:rgba(34,154,108,.34)}
 .room.r-talk  .ic{background:rgba(138,74,30,.12);border-color:rgba(138,74,30,.34)}
 /* 칠판 다시보기 — 설명 화면 목록 */
 .talkhow{margin-top:14px;border:1.5px dashed var(--line);border-radius:14px;padding:11px 14px;font-size:13px;color:var(--ink-dim);line-height:1.8;background:rgba(255,253,246,.6)}
@@ -635,6 +636,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
       <span class="tx"><span class="tt">수업 페이지</span><span class="dd">단원별 수업 자료와 가상 실험실</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
+    <button class="room r-lab" type="button" data-go="lab">
+      <span class="ic">🧪</span>
+      <span class="tx"><span class="tt">해누리 실험실</span><span class="dd">센서로 측정하고 함께 탐구하는 실험 자료</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
     <button class="room r-talk" type="button" data-go="talk">
       <span class="ic">🎞️</span>
       <span class="tx"><span class="tt">칠판 다시보기</span><span class="dd">수업 때 띄운 설명을 한 장씩 넘기며 복습</span></span>
@@ -743,6 +749,20 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 </section>
 
 
+<!-- ══════════ 해누리 실험실 ══════════ -->
+<section class="view" id="v-lab">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🧪 해누리 실험실</h2></div>
+  <p class="vlead">실험 전 안내부터 센서로 측정하는 방법까지, 수업 화면을 보며 함께 탐구해요.</p>
+  <div class="wlist">
+    <a class="wrow" href="lab/ohm-inquiry.html" target="_blank" rel="noopener">
+      <span class="wi">⚡</span>
+      <span class="wt"><b>센서로 확인하는 옴의 법칙</b><small>전류·전압 센서로 알아보는 전압, 전류, 저항의 관계 · 탐구 안내</small></span>
+      <span class="wgo">탐구 시작 ↗</span>
+    </a>
+  </div>
+  <div class="talkhow">컴퓨터에서는 <b>방향키</b>로 안내를 넘길 수 있어요. 큰 화면에서 열면 사진과 실험 과정을 더 자세히 볼 수 있습니다.</div>
+</section>
+
 <!-- ══════════ 칠판 다시보기 ══════════ -->
 <section class="view" id="v-talk">
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🎞️ 칠판 다시보기</h2></div>
@@ -835,7 +855,7 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 
 <footer id="app-credit">
   © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
-  최종 업데이트: 2026-09-28<br>
+  최종 업데이트: 2026-10-08<br>
   <button class="tmode" id="tmode" type="button" title="교사용 켜기">🧑‍🏫</button>
 </footer>
 </div>
@@ -2300,7 +2320,7 @@ if(sbOn()) syncDown();
 /* ══════════════ 시작 ══════════════ */
 setGrade(grade);
 const h0 = location.hash.replace('#','');
-if(['sheet','eval','less','talk','mine'].includes(h0)
+if(['sheet','eval','less','lab','talk','mine'].includes(h0)
    || (['prog','tools'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
 </script>
 <div class="lgm" id="lgm" role="dialog" aria-modal="true" aria-labelledby="lgmT">
