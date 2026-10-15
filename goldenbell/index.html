@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>골든벨 문제은행 · 해누리 과학 시간</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#2f7d55">
+<link rel="icon" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+ --paper:#fdf7ea; --paper-hi:#fffdf6; --paper-lo:#f4ead4;
+ --line:#e2d2ae; --ink:#2f2a20; --ink-mute:#7d7160; --leaf:#2f7d55; --plum:#6f58a8; --gold:#c98a12;
+ --jua:"Jua",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+ --body:"Gowun Dodum","Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--ink);line-height:1.65;background:var(--paper);min-height:100dvh}
+.wrap{max-width:980px;margin:0 auto;padding:22px 16px 40px}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+h1{font-family:var(--jua);font-weight:400;font-size:clamp(24px,4.4vw,34px);line-height:1.3}
+.lead{font-size:14px;color:var(--ink-mute);margin-top:4px}
+.back{font-size:13px;color:var(--ink-mute);text-decoration:none}
+.go{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:var(--jua);font-size:17px;padding:12px 18px;border-radius:14px;
+ background:linear-gradient(135deg,#ffcf4a,#ff9a3c);color:#3a2300;box-shadow:0 6px 18px -8px rgba(255,140,40,.8)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0 6px;position:sticky;top:0;background:var(--paper);padding:8px 0;z-index:2}
+.bar button{font-family:var(--jua);font-size:15px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper-hi);color:var(--ink);cursor:pointer}
+.bar button.on{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.bar input{flex:1;min-width:160px;font:inherit;font-size:14px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff}
+.how{background:var(--paper-hi);border:1.5px dashed var(--line);border-radius:16px;padding:12px 16px;font-size:13.5px;color:var(--ink-mute);margin-top:14px}
+.how b{color:var(--ink)}
+.unit{font-family:var(--jua);font-size:20px;margin:26px 0 8px;color:var(--leaf)}
+.sheet{background:var(--paper-hi);border:1.5px solid var(--line);border-radius:18px;margin-bottom:12px;overflow:hidden}
+.sheet>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 16px;font-family:var(--jua);font-size:17px}
+.sheet>summary::-webkit-details-marker{display:none}
+.sheet>summary .no{flex:0 0 auto;font-size:13px;color:#fff;background:var(--plum);border-radius:999px;padding:2px 10px}
+.sheet>summary .n{margin-left:auto;font-family:var(--body);font-size:13px;color:var(--ink-mute)}
+.sheet[open]>summary{border-bottom:1.5px dashed var(--line)}
+ol{list-style:none;padding:6px 16px 12px}
+li{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+li:last-child{border-bottom:none}
+li .k{flex:0 0 auto;width:2.2em;font-family:var(--jua);color:var(--plum);font-size:15px}
+li .b{flex:1;min-width:0;word-break:keep-all}
+li .q{font-size:15px}
+li .ch{display:block;font-size:13.5px;color:var(--ink-mute);margin-top:2px}
+li .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--paper-lo);color:var(--ink-mute)}
+.tag.ox{background:#e7f0ff;color:#2f5fb3} .tag.mc{background:#f3e8ff;color:#7a3fb8} .tag.short{background:#e8f7ec;color:#2f7d45}
+.ans{display:none;margin-top:5px;font-size:14px;color:var(--leaf)}
+.ans b{font-family:var(--jua);font-weight:400;font-size:16px}
+.ans .e{display:block;color:var(--ink-mute);font-size:13px}
+body.show .ans{display:block}
+.empty{text-align:center;color:var(--ink-mute);padding:40px 0}
+#app-credit{text-align:center;font-size:12px;color:var(--ink-mute);padding:20px 0 30px;line-height:1.7}
+@media print{
+ .bar,.how,.go,.back,#app-credit{display:none}
+ body{background:#fff}
+ .sheet{break-inside:avoid-page;border-color:#ccc}
+ .sheet:not([open]) ol{display:block}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../teacher.html#tools">← 승재쌤과학 교사용</a>
+  <div class="top" style="margin-top:8px">
+    <div>
+      <h1>🔔 골든벨 문제은행</h1>
+      <div class="lead" id="lead">불러오는 중…</div>
+    </div>
+    <a class="go" id="goGB" href="https://scienceisjo.github.io/class-tools/stamp-board/#gb">🔔 골든벨 열기</a>
+  </div>
+
+  <div class="how">
+    <b>쓰는 법</b> — 칭찬 도장판의 <b>🔔 골든벨</b> 탭에서 반을 고르고 <b>🎲 랜덤 출제</b>(학습지 범위를 눌러 뽑기) 또는 <b>✋ 골라서 출제</b>(문제를 하나씩 담기)로 오늘 낼 문제를 채웁니다.
+    이 문제은행은 어느 기기에서 열어도 저절로 받아지고, 받은 뒤에는 그 기기에도 저장돼 인터넷이 끊겨도 그대로 쓸 수 있어요.
+    진행 중에는 <b>스페이스</b> 하나로 타이머 → 정답 공개 → 다음 문제, <b>G</b>는 🎰 패자부활 가챠입니다.
+  </div>
+
+  <div class="bar">
+    <span id="gTabs"></span>
+    <input id="find" placeholder="🔍 낱말로 찾기" oninput="draw()">
+    <button id="ansBtn" onclick="toggleAns()">👀 정답 보기</button>
+    <button onclick="openAll()">모두 펼치기</button>
+    <button onclick="window.print()">🖨 인쇄</button>
+  </div>
+
+  <div id="list"><div class="empty">문제은행을 불러오는 중이에요…</div></div>
+</div>
+
+<footer id="app-credit">
+  © 2026 조승재(과학이조선생) · 해누리중학교 · All rights reserved<br>
+  <span style="opacity:.85">골든벨 문제은행 · 최종 업데이트 2026-10-16</span>
+</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CIRC = ['①','②','③','④','⑤','⑥'];
+const TYPE = { ox:'O/X', mc:'객관식', short:'단답' };
+let BANK = null;
+let G = Number(localStorage.getItem('sc_grade') || 2);
+
+/* 같은 github.io 안에서는 칭찬 도장판으로, 내 컴퓨터(apps 루트)에서는 그 자리의 도장판으로 */
+if(!/github\.io$/.test(location.hostname)) $('#goGB').href = '/stamp-board/#gb';
+
+fetch('bank.json', { cache:'no-cache' })
+  .then(r => { if(!r.ok) throw r.status; return r.json(); })
+  .then(j => {
+    BANK = j;
+    if(!BANK.grades.some(x => x.g === G)) G = BANK.grades[0].g;
+    $('#lead').textContent = '1·2학년 개념정리 학습지로 만든 문제 ' + j.count + '개 · ' + j.v.replace(/-/g, '.') + ' 판';
+    draw();
+  })
+  .catch(() => {
+    $('#lead').textContent = '문제은행을 불러오지 못했어요';
+    $('#list').innerHTML = '<div class="empty">인터넷이 연결되면 다시 열어 주세요.</div>';
+  });
+
+function setG(g){ G = g; draw(); }
+function toggleAns(){
+  document.body.classList.toggle('show');
+  $('#ansBtn').textContent = document.body.classList.contains('show') ? '🙈 정답 가리기' : '👀 정답 보기';
+}
+function openAll(){ document.querySelectorAll('details.sheet').forEach(d => d.open = true); }
+
+function draw(){
+  if(!BANK) return;
+  $('#gTabs').innerHTML = BANK.grades.map(x =>
+    '<button class="' + (x.g === G ? 'on' : '') + '" onclick="setG(' + x.g + ')">' + esc(x.name) + '</button>').join(' ');
+  const f = $('#find').value.trim().toLowerCase();
+  const grade = BANK.grades.find(x => x.g === G);
+  let h = '', hit = 0;
+  grade.units.forEach(U => {
+    let uh = '';
+    U.sheets.forEach(S => {
+      const qs = S.qs.filter(q => !f || (q.q + ' ' + q.a + ' ' + (q.ch || []).join(' ') + ' ' + (q.ex || '')).toLowerCase().includes(f));
+      if(!qs.length) return;
+      hit += qs.length;
+      uh += '<details class="sheet"' + (f ? ' open' : '') + '><summary><span class="no">학습지 ' + S.no + '</span>' + esc(S.t) +
+            '<span class="n">' + qs.length + '문제</span></summary><ol>' +
+            qs.map(q => {
+              const n = q.id.slice(-2).replace(/^0/, '');
+              const ai = q.t === 'mc' ? CIRC.indexOf(String(q.a).charAt(0)) : -1;
+              return '<li><span class="k">' + n + '</span><div class="b"><div class="q">' + esc(q.q) + '</div>' +
+                (q.ch ? '<span class="ch">' + q.ch.map((c, i) => CIRC[i] + ' ' + esc(c)).join(' &nbsp; ') + '</span>' : '') +
+                '<div class="tags"><span class="tag ' + q.t + '">' + TYPE[q.t] + '</span><span class="tag">' + '★★★'.slice(0, q.lv) + '</span></div>' +
+                '<div class="ans">정답 <b>' + esc(q.a) + (ai >= 0 && q.ch[ai] ? ' ' + esc(q.ch[ai]) : '') + '</b>' +
+                (q.acc && q.acc.length ? ' <span style="color:var(--ink-mute)">(같이 인정: ' + esc(q.acc.join(', ')) + ')</span>' : '') +
+                (q.ex ? '<span class="e">' + esc(q.ex) + '</span>' : '') + '</div></div></li>';
+            }).join('') + '</ol></details>';
+    });
+    if(uh) h += '<div class="unit">' + esc(U.name) + '</div>' + uh;
+  });
+  $('#list').innerHTML = h || '<div class="empty">찾는 낱말이 들어간 문제가 없어요.</div>';
+}
+</script>
+</body>
+</html>
