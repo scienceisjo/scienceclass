@@ -194,6 +194,64 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
  text-align:center;font-size:12.2px;color:var(--ink-mute);line-height:1.95}
 #app-credit a{color:var(--ink-mute)}
 
+/* ══════════ 수행평가 미응시 관리 (교사용) ══════════ */
+#roomAbsent{display:none}
+body.teacher #roomAbsent{display:flex}
+.room.r-absent .ic{background:rgba(112,88,168,.13);border-color:rgba(112,88,168,.36)}
+.ab-new,.ab-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.ab-new[hidden]{display:none}
+.ab-new input,.ab-new select,.ab-add input,.ab-add select,.ab-row input,.ab-row select,.ab-bulk textarea{
+ font-family:var(--body);font-size:14px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);min-width:0}
+.ab-new input:focus,.ab-add input:focus,.ab-row input:focus,.ab-row select:focus,.ab-bulk textarea:focus{outline:none;border-color:var(--leaf)}
+.ab-new input[name=name]{flex:1 1 240px}
+.ab-add input[name=num]{width:84px}
+.ab-add input[name=name]{flex:1 1 120px}
+.ab-new .cgo,.ab-add .cgo{font-family:var(--jua);font-size:14px;padding:9px 18px;border-radius:11px;border:none;background:var(--leaf);color:#f2fbf5;cursor:pointer}
+.ab-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:4px;border-radius:99px;background:#b3423a;color:#fff;font-family:var(--body);font-size:11.5px;font-weight:700}
+.ab-up{margin-top:14px;padding:11px 13px;border-radius:13px;border:1.5px solid rgba(224,145,43,.45);background:rgba(224,145,43,.08);display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.ab-up>b{font-family:var(--jua);font-weight:400;font-size:14px;color:#a06318;margin-right:4px}
+.ab-upc{font-size:12.5px;padding:3px 10px;border-radius:99px;background:var(--paper-hi);border:1px solid var(--line)}
+.ab-upc.today{border-color:#b3423a;color:#b3423a;font-weight:700}
+.ab-upc i{font-style:normal;color:var(--ink-mute)}
+.ab-card{margin-top:14px;padding:16px;border-radius:var(--r);border:1.5px solid var(--line);background:var(--paper-hi);box-shadow:var(--shadow)}
+.ab-head{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:flex-start}
+.ab-head h3{font-family:var(--jua);font-weight:400;font-size:19px;line-height:1.3}
+.ab-head small{color:var(--ink-mute);font-size:12.5px}
+.ab-hb{display:flex;gap:6px;flex-wrap:wrap}
+.ab-sum{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}
+.ab-chip{font-size:12.5px;font-weight:700;padding:4px 11px;border-radius:99px;border:1.5px solid var(--line)}
+.ab-chip.miss{border-color:#b3423a;color:#b3423a;background:rgba(179,66,58,.07)}
+.ab-chip.plan{border-color:var(--sun);color:#a06318;background:rgba(224,145,43,.09)}
+.ab-chip.done{border-color:var(--leaf);color:var(--leaf);background:rgba(47,125,85,.08)}
+.ab-chip.alt{border-color:var(--sky);color:var(--sky);background:rgba(53,111,149,.08)}
+.ab-only{margin-left:auto;font-size:13px;color:var(--ink-dim);display:flex;gap:5px;align-items:center;cursor:pointer}
+.ab-bulk{margin-top:10px;font-size:13px}
+.ab-bulk summary{cursor:pointer;color:var(--ink-mute)}
+.ab-bulk p{color:var(--ink-mute);font-size:12.5px;margin:6px 0}
+.ab-bulk code{font-family:var(--body);background:var(--paper-lo);padding:1px 6px;border-radius:6px}
+.ab-bulk textarea{width:100%;display:block;margin-bottom:6px;resize:vertical}
+.ab-empty{margin-top:14px;padding:16px;text-align:center;color:var(--ink-mute);border:2px dashed var(--line);border-radius:14px}
+.ab-list{margin-top:12px;display:grid;gap:6px}
+.ab-cls{font-family:var(--jua);font-size:14px;color:#6f58a8;margin-top:8px;padding-bottom:4px;border-bottom:1.5px dashed var(--line)}
+.ab-row{display:grid;grid-template-columns:minmax(110px,1.1fr) minmax(108px,.9fr) minmax(108px,.9fr) 140px minmax(120px,1.6fr) 32px;gap:6px;align-items:center;
+ padding:7px 8px;border-radius:12px;border:1.5px solid var(--line-soft);background:var(--paper)}
+.ab-row.st-miss{border-left:5px solid #b3423a}
+.ab-row.st-plan{border-left:5px solid var(--sun)}
+.ab-row.st-done{border-left:5px solid var(--leaf);opacity:.72}
+.ab-row.st-alt{border-left:5px solid var(--sky);opacity:.72}
+.ab-row input,.ab-row select{font-size:13px;padding:6px 8px;width:100%}
+.ab-who{font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ab-who b{font-family:var(--jua);font-weight:400;font-size:15px}
+.ab-x{border:none;background:none;color:var(--ink-mute);font-size:15px;cursor:pointer;border-radius:8px;height:30px}
+.ab-x:hover{color:#b3423a;background:rgba(179,66,58,.08)}
+@media(max-width:760px){
+ .ab-row{grid-template-columns:1fr 1fr}
+ .ab-who{grid-column:1}
+ .ab-x{grid-column:2;grid-row:1;justify-self:end;width:36px}
+}
+.ab-foot{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ab-foot small{color:var(--ink-mute);font-size:12px}
+
 /* ══════════ 진도 트래커 (교사용) ══════════ */
 #roomProgress,#roomTools{display:none}
 body.teacher #roomProgress,body.teacher #roomTools{display:flex}
@@ -682,6 +740,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
       <span class="tx"><span class="tt">만든 것 모음</span><span class="dd">수업·학급 웹앱 전부 · 교사용</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
+    <button class="room r-absent" type="button" data-go="absent" id="roomAbsent">
+      <span class="ic">📋</span>
+      <span class="tx"><span class="tt">수행평가 미응시</span><span class="dd">못 본 학생 · 재응시 날짜 · 처리 결과 · 교사용</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </button>
   </div>
 
   <div class="install" id="install">
@@ -788,6 +851,15 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
   <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>🧰 만든 것 모음</h2></div>
   <p class="vlead">지금까지 만든 수업·학급 웹앱을 한곳에 모았습니다. 학생에게는 이 방이 보이지 않아요.</p>
   <div id="toolList"></div>
+</section>
+
+<!-- ══════════ 수행평가 미응시 (교사용) ══════════ -->
+<section class="view" id="v-absent">
+  <div class="vhead"><button class="back" type="button" data-back>← 처음으로</button><h2>📋 수행평가 미응시</h2></div>
+  <p class="vlead">평가마다 응시하지 못한 학생을 반·번호로 적어 두고, <b>재응시 날짜</b>를 잡고, 끝나면 <b>재응시 완료</b>나 <b>대체 처리</b>로 바꿉니다.
+    날짜를 넣으면 저절로 「재응시 예정」이 되고, 위쪽 <b>📆 다가오는 재응시</b>에 모여요. 학생에게는 이 방이 보이지 않습니다.</p>
+  <div id="aCloud"></div>
+  <div id="absBody"></div>
 </section>
 
 <!-- ══════════ 진도 트래커 (교사용) ══════════ -->
@@ -1034,6 +1106,14 @@ const TALKS = {
 /* ── 만든 것 모음 (교사용 전용) ────────────────────
    여기에 줄만 더하면 '🧰 만든 것 모음' 방에 카드가 생깁니다. */
 const TOOLS = [
+ { g:'🔬 혼자 탐구 결과 보기 (학생 기록)', items:[
+   { ic:'⚡', t:'전기와 자기 · 혼자 탐구 기록', d:'학생별 진행률 · 제출한 글 · 피드백 달기',
+     url:'https://scienceisjo.github.io/electricity/04-ohm-teacher.html' },
+   { ic:'🌌', t:'별과 우주 · 혼자 탐구 기록', d:'학생별 진행률 · 제출한 글 · 피드백 달기',
+     url:'https://scienceisjo.github.io/starandspace/teacher.html' },
+   { ic:'🎈', t:'기체의 성질 · 혼자 탐구 기록', d:'참여 코드로 들어온 학생 기록(관리 코드로 열기)',
+     url:'https://scienceisjo.github.io/gas-properties/teacher.html' },
+ ]},
  { g:'📐 수업 준비', items:[
    { ic:'🗺️', t:'과학 나선 교육과정 지도', d:'초3~고3 108단원 연계 · 성취수준 · 오개념',
      url:MAP },
@@ -1293,6 +1373,7 @@ function show(id){
   window.scrollTo({top:0, behavior:'smooth'});
   const h = (id === 'home') ? ' ' : '#' + id;
   if(location.hash !== h) history.replaceState(null, '', (id === 'home') ? location.pathname : h);
+  if(id === 'absent' && typeof drawAbsent === 'function'){ drawAbsent(); if(sbOn()) abSync(); }
 }
 document.querySelectorAll('[data-go]').forEach(b =>
   b.addEventListener('click', () => show(b.dataset.go)));
@@ -1864,7 +1945,7 @@ $('#v-prog').addEventListener('submit', async e => {
   err.hidden = true; btn.disabled = true; btn.textContent = '들어가는 중…';
   try {
     await sbLogin($('#cEmail').value.trim(), $('#cPw').value);
-    drawCloud(); await syncDown();
+    drawCloud(); await syncDown(); abSync();
   } catch(ex){
     err.hidden = false; err.textContent = ex.message;
     btn.disabled = false; btn.textContent = '들어가기';
@@ -2319,6 +2400,251 @@ pTbl.addEventListener('drop', e => {
   toast('🔀 ' + x.name + ' → ' + (L.indexOf(x) + 1) + '차시로 옮겼어요');
 });
 
+/* ══════════════ 수행평가 미응시 관리 (교사용) ══════════════
+   평가마다 응시하지 못한 학생을 적고 → 재응시 날짜·결과까지 따라간다.
+   자료: 이 기기(localStorage sc_absent_v1) + 진도 트래커와 같은 교사 로그인이면 Supabase 표 assess_absences
+   (평가 하나 = 한 줄, 내 것만 · 미응시_SETUP.sql 을 한 번 실행해야 생김). 서버 표가 없으면 이 기기에만 저장. */
+const AB_KEY = 'sc_absent_v1';
+const AB_REASON = ['질병 결석', '출석 인정 결석', '미인정 결석', '조퇴·지각', '기타'];
+const AB_STATUS = [['miss', '미응시'], ['plan', '재응시 예정'], ['done', '재응시 완료'], ['alt', '대체 처리']];
+const AB_LEFT = s => s.status === 'miss' || s.status === 'plan';
+let AB = { list: [], gone: [], cur: '', onlyLeft: false };
+try { const j = JSON.parse(localStorage.getItem(AB_KEY)); if (j && Array.isArray(j.list)) AB = Object.assign(AB, j); } catch (e) {}
+const abCloud = { k: '', msg: '' }, abRoster = {};
+const abNow = () => new Date().toISOString();
+const abId = () => 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const abCur = () => AB.list.find(a => a.id === AB.cur) || AB.list[0] || null;
+const abMD = d => { const m = /^\d{4}-(\d\d)-(\d\d)$/.exec(d || ''); return m ? (+m[1]) + '/' + (+m[2]) : ''; };
+const abToday = () => { const t = new Date(); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0'); };
+function abStore() { try { localStorage.setItem(AB_KEY, JSON.stringify(AB)); } catch (e) {} }
+
+/* ── 서버 ── */
+const abRow = (a, i) => ({ owner: SB.ses.uid, id: a.id, name: a.name, grade: a.grade, exam_date: a.date || '', note: a.note || '',
+  students: a.students, sort: i, updated_at: a.updated || abNow() });
+function abErr(e) {
+  const m = String(e && e.message || e);
+  return /(404|PGRST205|does not exist|schema cache|42P01)/i.test(m) && /(assess_absences|404)/.test(m)
+    ? '서버에 미응시 표 자리가 아직 없어요. Supabase에서 미응시_SETUP.sql을 한 번만 실행해 주세요. (그 전까지는 이 기기에만 저장돼요)'
+    : m;
+}
+let abPushT = 0;
+function abSave(a) {
+  if (a) a.updated = abNow();
+  abStore();
+  if (!sbOn()) return;
+  clearTimeout(abPushT);
+  abPushT = setTimeout(abPush, 700);
+}
+async function abPush() {
+  if (!sbOn()) return;
+  abCloud.k = 'saving'; abCloud.msg = ''; drawAbCloud();
+  try {
+    if (AB.list.length) await sbRest('assess_absences?on_conflict=owner,id', { method: 'POST',
+      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(AB.list.map(abRow)) });
+    for (const id of AB.gone.slice()) {
+      await sbRest('assess_absences?id=eq.' + encodeURIComponent(id), { method: 'DELETE' });
+      AB.gone = AB.gone.filter(x => x !== id);
+    }
+    abStore(); abCloud.k = 'saved';
+  } catch (e) { abCloud.k = 'err'; abCloud.msg = abErr(e); }
+  drawAbCloud();
+}
+async function abSync() {
+  if (!sbOn()) return;
+  abCloud.k = 'loading'; drawAbCloud();
+  try {
+    const rows = await sbRest('assess_absences?select=id,name,grade,exam_date,note,students,sort,updated_at&order=sort.asc') || [];
+    const local = new Map(AB.list.map(a => [a.id, a]));
+    rows.forEach(r => {
+      if (AB.gone.includes(r.id)) return;
+      const l = local.get(r.id);
+      if (!l || new Date(r.updated_at) > new Date(l.updated || 0))
+        local.set(r.id, { id: r.id, name: r.name, grade: r.grade, date: r.exam_date, note: r.note, students: r.students || [], updated: r.updated_at });
+    });
+    const order = rows.map(r => r.id);
+    AB.list = [...local.values()].sort((x, y) => (order.indexOf(x.id) + 1 || 999) - (order.indexOf(y.id) + 1 || 999));
+    abStore(); drawAbsent();
+    await abPush();
+  } catch (e) { abCloud.k = 'err'; abCloud.msg = abErr(e); drawAbCloud(); }
+}
+/* 명렬: 도장판·질문나무 가입 정보(profiles) — 교사 계정으로만 읽힌다. 못 읽으면 이름은 손으로 */
+async function abLoadRoster(g) {
+  if (abRoster[g] || !sbOn()) return;
+  abRoster[g] = {};
+  try {
+    const rows = await sbRest('profiles?select=name,class_no,number&grade=eq.' + g + '&class_no=not.is.null&number=not.is.null&order=class_no.asc,number.asc&limit=1000') || [];
+    rows.forEach(r => { (abRoster[g][r.class_no] = abRoster[g][r.class_no] || {})[r.number] = r.name || ''; });
+  } catch (e) { abRoster[g] = {}; }
+  abFillName();
+}
+const abRosterName = (g, c, n) => ((abRoster[g] || {})[c] || {})[n] || '';
+
+/* ── 그리기 ── */
+function drawAbCloud() {
+  const box = $('#aCloud'); if (!box) return;
+  if (!sbOn()) {
+    box.innerHTML = '<div class="cbar out"><span class="ci">☁️</span><div class="ct"><b>이 기기에만 저장되고 있어요</b>'
+      + '<small>📊 진도 트래커에서 로그인하면(같은 교사 계정) 이 목록도 어느 기기에서든 같이 보여요</small></div>'
+      + '<button class="pbtn" type="button" data-ab="login">로그인하러 가기</button></div>';
+    return;
+  }
+  const lbl = { loading: '불러오는 중…', saving: '저장 중…', saved: '저장됨 ✓', err: '서버 저장 못 함' }[abCloud.k] || '';
+  box.innerHTML = '<div class="cbar in"><span class="ci">☁️</span><div class="ct"><b>어느 기기에서든 같은 목록</b><small>' + esc(SB.ses.email || '') + '</small></div>'
+    + (lbl ? '<span class="cstat ' + (abCloud.k === 'err' ? 'err' : abCloud.k === 'saved' ? 'saved' : 'saving') + '">' + lbl + '</span>' : '') + '</div>'
+    + (abCloud.msg ? '<p class="cerr">' + esc(abCloud.msg) + '</p>' : '');
+}
+function abNewForm(open) {
+  return '<form class="ab-new" id="abNew"' + (open ? '' : ' hidden') + '>'
+    + '<input name="name" placeholder="평가 이름 (예: 옴의 법칙 실험 평가)" required maxlength="40">'
+    + '<select name="grade"><option value="2">2학년</option><option value="1">1학년</option><option value="3">3학년</option></select>'
+    + '<input name="date" type="date" title="평가한 날">'
+    + '<button class="cgo" type="submit">평가 만들기</button></form>';
+}
+function drawAbsent() {
+  const v = $('#absBody'); if (!v) return;
+  drawAbCloud();
+  const a = abCur();
+  /* 다가오는 재응시 — 모든 평가에서 */
+  const today = abToday(), up = [];
+  AB.list.forEach(x => x.students.forEach(s => { if (s.status === 'plan' && s.redo && s.redo >= today) up.push({ a: x, s }); }));
+  up.sort((p, q) => p.s.redo.localeCompare(q.s.redo));
+  let h = '';
+  if (up.length) h += '<div class="ab-up"><b>📆 다가오는 재응시</b>' + up.slice(0, 8).map(o =>
+    '<span class="ab-upc' + (o.s.redo === today ? ' today' : '') + '">' + (o.s.redo === today ? '오늘' : abMD(o.s.redo)) + ' · ' + o.a.grade + '-' + o.s.cls + ' ' + o.s.num + '번 ' + esc(o.s.name || '') + ' <i>' + esc(o.a.name) + '</i></span>').join('') + '</div>';
+  h += '<div class="ptabs">' + AB.list.map(x => {
+    const n = x.students.filter(AB_LEFT).length;
+    return '<button class="ptab' + (a && x.id === a.id ? ' on' : '') + '" type="button" data-abtab="' + x.id + '">' + esc(x.name) + (n ? ' <span class="ab-n">' + n + '</span>' : '') + '</button>';
+  }).join('') + '<button class="ptab add" type="button" data-ab="new">＋ 평가 추가</button></div>';
+  h += abNewForm(!AB.list.length);
+  if (!a) {
+    v.innerHTML = h + emptyBox('📋', '아직 만든 평가가 없어요', '위에서 평가 이름을 적고 <b>평가 만들기</b>를 누르세요. 그다음 응시하지 못한 학생을 반·번호로 적어 두면 재응시까지 따라갈 수 있어요.');
+    return;
+  }
+  const S = a.students, cnt = k => S.filter(s => s.status === k).length;
+  h += '<div class="ab-card"><div class="ab-head"><div><h3>' + esc(a.name) + '</h3><small>' + a.grade + '학년' + (a.date ? ' · 평가일 ' + abMD(a.date) : '') + (a.note ? ' · ' + esc(a.note) : '') + '</small></div>'
+    + '<div class="ab-hb"><button class="pbtn" type="button" data-ab="edit">이름·날짜 고치기</button><button class="pbtn warn" type="button" data-ab="del">평가 지우기</button></div></div>'
+    + '<div class="ab-sum"><span class="ab-chip miss">미응시 ' + cnt('miss') + '</span><span class="ab-chip plan">재응시 예정 ' + cnt('plan') + '</span>'
+    + '<span class="ab-chip done">재응시 완료 ' + cnt('done') + '</span><span class="ab-chip alt">대체 처리 ' + cnt('alt') + '</span>'
+    + '<label class="ab-only"><input type="checkbox" data-ab="only"' + (AB.onlyLeft ? ' checked' : '') + '> 아직 남은 학생만</label></div>'
+    /* 학생 더하기 */
+    + '<form class="ab-add" id="abAdd"><select name="cls" aria-label="반">' + Array.from({ length: 12 }, (_, i) => '<option value="' + (i + 1) + '">' + (i + 1) + '반</option>').join('') + '</select>'
+    + '<input name="num" type="number" min="1" max="40" placeholder="번호" aria-label="번호" required>'
+    + '<input name="name" placeholder="이름" aria-label="이름" maxlength="20">'
+    + '<select name="reason" aria-label="사유">' + AB_REASON.map(r => '<option>' + r + '</option>').join('') + '</select>'
+    + '<button class="cgo" type="submit">＋ 학생 추가</button></form>'
+    + '<details class="ab-bulk"><summary>여러 명 한꺼번에 붙여 넣기</summary><p>한 줄에 한 명씩 — <code>3반 12번 홍길동</code> 또는 <code>3 12 홍길동</code> (이름은 빼도 돼요)</p>'
+    + '<textarea id="abBulk" rows="4" placeholder="3반 12번 홍길동&#10;5 7"></textarea><button class="pbtn" type="button" data-ab="bulk">목록에 넣기</button></details>';
+  const shown = S.filter(s => !AB.onlyLeft || AB_LEFT(s)).sort((p, q) => p.cls - q.cls || p.num - q.num);
+  if (!shown.length) h += '<p class="ab-empty">' + (S.length ? '남은 학생이 없어요 — 모두 처리했습니다 ✅' : '아직 적은 학생이 없어요. 위 칸에 반·번호를 넣고 추가하세요.') + '</p>';
+  else {
+    let lastC = 0;
+    h += '<div class="ab-list">';
+    shown.forEach(s => {
+      if (s.cls !== lastC) { lastC = s.cls; h += '<div class="ab-cls">' + a.grade + '학년 ' + s.cls + '반</div>'; }
+      h += '<div class="ab-row st-' + s.status + '" data-k="' + s.k + '"><span class="ab-who"><b>' + s.num + '번</b> ' + esc(s.name || '(이름 없음)') + '</span>'
+        + '<select data-f="reason" aria-label="사유">' + AB_REASON.map(r => '<option' + (r === s.reason ? ' selected' : '') + '>' + r + '</option>').join('') + '</select>'
+        + '<select data-f="status" aria-label="상태">' + AB_STATUS.map(([k, t]) => '<option value="' + k + '"' + (k === s.status ? ' selected' : '') + '>' + t + '</option>').join('') + '</select>'
+        + '<input type="date" data-f="redo" value="' + esc(s.redo || '') + '" aria-label="재응시 날짜" title="재응시 날짜">'
+        + '<input data-f="memo" value="' + esc(s.memo || '') + '" placeholder="메모 (예: 대체 과제 제출)" maxlength="80" aria-label="메모">'
+        + '<button class="ab-x" type="button" data-ab="rm" title="목록에서 빼기" aria-label="목록에서 빼기">✕</button></div>';
+    });
+    h += '</div>';
+  }
+  h += '<div class="ab-foot"><button class="pbtn" type="button" data-ab="copy">📋 남은 학생 목록 복사</button><small>메신저·담임 선생님께 보낼 때 그대로 붙여 넣으면 돼요</small></div></div>';
+  v.innerHTML = h;
+  abLoadRoster(a.grade);
+  abFillName();
+}
+/* 반·번호를 고르면 명렬의 이름을 미리 채운다(손으로 고칠 수 있음) */
+function abFillName() {
+  const f = $('#abAdd'), a = abCur(); if (!f || !a) return;
+  const n = abRosterName(a.grade, +f.cls.value, +f.num.value);
+  if (n && (!f.name.value || f.name.dataset.auto === '1')) { f.name.value = n; f.name.dataset.auto = '1'; }
+}
+function abAddOne(a, cls, num, name, reason) {
+  cls = +cls; num = +num;
+  if (!(cls >= 1 && cls <= 20 && num >= 1 && num <= 60)) return 'bad';
+  if (a.students.some(s => s.cls === cls && s.num === num)) return 'dup';
+  a.students.push({ k: abId(), cls, num, name: (name || abRosterName(a.grade, cls, num) || '').trim(), reason: reason || AB_REASON[0], status: 'miss', redo: '', memo: '' });
+  return 'ok';
+}
+
+/* ── 조작 ── */
+$('#v-absent').addEventListener('click', e => {
+  const t = e.target.closest('[data-ab],[data-abtab]'); if (!t) return;
+  if (t.dataset.abtab) { AB.cur = t.dataset.abtab; abStore(); drawAbsent(); return; }
+  const a = abCur(), act = t.dataset.ab;
+  if (act === 'login') { show('prog'); setTimeout(() => { const b = document.querySelector('#pCloud [data-login]'); if (b) b.click(); }, 300); return; }
+  if (act === 'new') { const f = $('#abNew'); f.hidden = !f.hidden; if (!f.hidden) f.name.focus(); return; }
+  if (!a) return;
+  if (act === 'edit') {
+    const n = prompt('평가 이름', a.name); if (n === null) return;
+    const d = prompt('평가한 날 (예: 2026-10-27, 비워도 돼요)', a.date || ''); if (d === null) return;
+    const m = prompt('메모 (비워도 돼요)', a.note || ''); if (m === null) return;
+    if (n.trim()) a.name = n.trim().slice(0, 40);
+    a.date = /^\d{4}-\d\d-\d\d$/.test(d.trim()) ? d.trim() : ''; a.note = m.trim().slice(0, 80);
+    abSave(a); drawAbsent(); return;
+  }
+  if (act === 'del') {
+    if (!confirm('「' + a.name + '」 평가와 학생 ' + a.students.length + '명 기록을 지울까요? 되돌릴 수 없어요.')) return;
+    AB.list = AB.list.filter(x => x !== a); AB.gone.push(a.id); AB.cur = (AB.list[0] || {}).id || '';
+    abSave(null); drawAbsent(); toast('🗑️ 평가를 지웠어요'); return;
+  }
+  if (act === 'rm') {
+    const k = t.closest('.ab-row').dataset.k, s = a.students.find(x => x.k === k);
+    if (!s || !confirm(s.cls + '반 ' + s.num + '번 ' + (s.name || '') + ' — 목록에서 뺄까요?')) return;
+    a.students = a.students.filter(x => x.k !== k); abSave(a); drawAbsent(); return;
+  }
+  if (act === 'bulk') {
+    const lines = $('#abBulk').value.split(/\n+/).map(x => x.trim()).filter(Boolean);
+    let ok = 0, dup = 0, bad = 0;
+    lines.forEach(L => {
+      const m = /^(\d{1,2})\s*반?[\s\-·.,]*(\d{1,2})\s*번?\s*(.*)$/.exec(L);
+      const r = m ? abAddOne(a, m[1], m[2], m[3]) : 'bad';
+      if (r === 'ok') ok++; else if (r === 'dup') dup++; else bad++;
+    });
+    abSave(a); drawAbsent();
+    toast('➕ ' + ok + '명 넣었어요' + (dup ? ' · 이미 있는 ' + dup + '명은 건너뜀' : '') + (bad ? ' · 못 읽은 줄 ' + bad + '개' : ''));
+    return;
+  }
+  if (act === 'copy') {
+    const left = a.students.filter(AB_LEFT).sort((p, q) => p.cls - q.cls || p.num - q.num);
+    const txt = '[' + a.name + '] 아직 응시하지 못한 학생 ' + left.length + '명\n' + left.map(s =>
+      a.grade + '-' + s.cls + ' ' + s.num + '번 ' + (s.name || '') + ' (' + s.reason + ')' + (s.status === 'plan' && s.redo ? ' → 재응시 ' + abMD(s.redo) : '')).join('\n');
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('📋 ' + left.length + '명 목록을 복사했어요'), () => prompt('복사해 가세요', txt));
+  }
+});
+$('#v-absent').addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.ab === 'only') { AB.onlyLeft = t.checked; abStore(); drawAbsent(); return; }
+  if (t.closest('#abAdd') && (t.name === 'cls' || t.name === 'num')) { abFillName(); return; }
+  const row = t.closest('.ab-row'), a = abCur(); if (!row || !a || !t.dataset.f) return;
+  const s = a.students.find(x => x.k === row.dataset.k); if (!s) return;
+  s[t.dataset.f] = t.value;
+  if (t.dataset.f === 'redo' && t.value && s.status === 'miss') s.status = 'plan';   // 날짜를 잡으면 「재응시 예정」으로
+  abSave(a);
+  if (t.dataset.f === 'status' || t.dataset.f === 'redo') drawAbsent();
+});
+$('#v-absent').addEventListener('input', e => { if (e.target.name === 'name' && e.target.closest('#abAdd')) e.target.dataset.auto = ''; if (e.target.name === 'num' && e.target.closest('#abAdd')) abFillName(); });
+$('#v-absent').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === 'abNew') {
+    const a = { id: abId(), name: f.name.value.trim().slice(0, 40) || '수행평가', grade: +f.grade.value || 2, date: f.date.value || '', note: '', students: [], updated: abNow() };
+    AB.list.push(a); AB.cur = a.id; abSave(a); drawAbsent(); toast('📋 「' + a.name + '」을 만들었어요'); return;
+  }
+  if (f.id === 'abAdd') {
+    const a = abCur(); if (!a) return;
+    const r = abAddOne(a, f.cls.value, f.num.value, f.name.value, f.reason.value);
+    if (r === 'dup') { toast('이미 목록에 있는 학생이에요'); return; }
+    if (r === 'bad') { toast('반·번호를 확인해 주세요'); return; }
+    const keep = f.cls.value; abSave(a); drawAbsent();
+    const f2 = $('#abAdd'); f2.cls.value = keep; f2.num.focus();
+  }
+});
+drawAbsent();
+if (sbOn()) abSync();
+
 /* ── 교사용 켜고 끄기 ── */
 function setTeacher(on){
   document.body.classList.toggle('teacher', on);
@@ -2326,7 +2652,7 @@ function setTeacher(on){
   b.textContent = on ? '🧑‍🏫 교사용 켜짐 — 누르면 꺼짐' : '🧑‍🏫';
   b.title = on ? '교사용 끄기' : '교사용 켜기';
   if(on) localStorage.setItem('sc_teacher', '1'); else localStorage.removeItem('sc_teacher');
-  if(!on && ($('#v-prog').classList.contains('on') || $('#v-tools').classList.contains('on'))) show('home');
+  if(!on && ($('#v-prog').classList.contains('on') || $('#v-tools').classList.contains('on') || $('#v-absent').classList.contains('on'))) show('home');
 }
 $('#tmode').addEventListener('click', () => setTeacher(!document.body.classList.contains('teacher')));
 /* 켜는 문은 «teacher.html»(교사용 입구) 하나 — 학생 화면에는 켜는 단추가 없다.
@@ -2341,7 +2667,7 @@ if(sbOn()) syncDown();
 setGrade(grade);
 const h0 = location.hash.replace('#','');
 if(['sheet','eval','less','lab','talk','mine'].includes(h0)
-   || (['prog','tools'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
+   || (['prog','tools','absent'].includes(h0) && document.body.classList.contains('teacher'))) show(h0);
 </script>
 <div class="lgm" id="lgm" role="dialog" aria-modal="true" aria-labelledby="lgmT">
  <form class="box" id="lgmForm" autocomplete="off">
