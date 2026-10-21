@@ -82,6 +82,7 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room.r-guide .ic{background:rgba(179,120,58,.13);border-color:rgba(179,120,58,.34)}
 .room.r-map   .ic{background:rgba(92,132,168,.15);border-color:rgba(92,132,168,.38)}
 .room.r-lab .ic{background:rgba(34,154,108,.12);border-color:rgba(34,154,108,.34)}
+.room.r-sgh .ic{background:rgba(0,102,204,.11);border-color:rgba(0,102,204,.32)}
 .room.r-talk  .ic{background:rgba(138,74,30,.12);border-color:rgba(138,74,30,.34)}
 /* 칠판 다시보기 — 설명 화면 목록 */
 .talkhow{margin-top:14px;border:1.5px dashed var(--line);border-radius:14px;padding:11px 14px;font-size:13px;color:var(--ink-dim);line-height:1.8;background:rgba(255,253,246,.6)}
@@ -677,7 +678,7 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
 <!-- ══════════ 홈 ══════════ -->
 <section class="view on" id="v-home">
   <section class="today" id="today" hidden aria-live="polite"></section>
-  <a class="feat" id="feat" hidden target="_blank" rel="noopener"></a>
+  <div id="featBox"></div>
   <div class="rooms">
     <button class="room r-sheet" type="button" data-go="sheet">
       <span class="ic">📄</span>
@@ -712,6 +713,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
     <a class="room r-stamp ext" href="https://scienceisjo.github.io/class-tools/stamp-board/" target="_blank" rel="noopener">
       <span class="ic">🏅</span>
       <span class="tx"><span class="tt">칭찬 도장판</span><span class="dd">내 도장 확인하고 교환소 가기</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
+    <a class="room r-sgh ext" id="roomSgh" href="https://scienceisjo.github.io/studentgithub/" target="_blank" rel="noopener" hidden>
+      <span class="ic">🐙</span>
+      <span class="tx"><span class="tt">Studentgithub</span><span class="dd">만든 시뮬레이터·가상실험실 올리기 · 친구 것 평가하기</span></span>
       <span class="arw" aria-hidden="true"></span>
     </a>
     <button class="room r-mine" type="button" data-go="mine" id="roomMine" hidden>
@@ -1343,17 +1349,22 @@ function emptyBox(icon, title, body){
 /* ══════════════ 지금 하는 프로젝트 (학년별 홈 배너) ══════════════
    학년 키에 넣으면 그 학년 홈 맨 위(오늘 수업 아래)에 뜬다. 끝나면 지우면 된다. */
 const FEATURE = {
- '1': { ic:'🧪', kick:'기체의 성질 · 개인 프로젝트', title:'기체 시뮬레이터 만들기 — 순서대로 따라 하기',
-        desc:'오늘 할 일 · 막혔을 때 대처법 · 완성한 앱 올리는 법까지 한 페이지에서 순서대로', go:'시작하기 ›',
-        url:'https://scienceisjo.github.io/gas-properties/model-fixing.html' }
+ '1': [
+  { ic:'🧪', kick:'기체의 성질 · 개인 프로젝트', title:'기체 시뮬레이터 만들기 — 순서대로 따라 하기',
+    desc:'오늘 할 일 · 막혔을 때 대처법 · 완성한 앱 올리는 법까지 한 페이지에서 순서대로', go:'시작하기 ›',
+    url:'https://scienceisjo.github.io/gas-properties/model-fixing.html' },
+  { ic:'🔬', kick:'보일의 법칙 · 실험을 마친 뒤', title:'보일의 법칙 가상실험실 올리기',
+    desc:'주사기와 압력계 실험을 그대로 해 볼 수 있게 만든 가상실험실을 소개와 함께 올리고, 친구 것도 돌려 봐요', go:'올리기 ›',
+    url:'https://scienceisjo.github.io/studentgithub/?t=boyle' }
+ ]
 };
 function drawFeature(){
-  const a = $('#feat'); if(!a) return;
-  const f = FEATURE[grade];
-  if(!f){ a.hidden = true; a.innerHTML = ''; return; }
-  a.href = f.url; a.hidden = false;
-  a.innerHTML = '<span class="fi">' + f.ic + '</span><span class="ft"><span class="kick">' + esc(f.kick) + '</span><b>' + esc(f.title)
-    + '</b><small>' + esc(f.desc) + '</small></span><span class="fgo">' + esc(f.go) + '</span>';
+  const box = $('#featBox'); if(!box) return;
+  const list = FEATURE[grade] || [];
+  box.innerHTML = list.map(f => '<a class="feat" href="' + esc(f.url) + '" target="_blank" rel="noopener"><span class="fi">' + f.ic
+    + '</span><span class="ft"><span class="kick">' + esc(f.kick) + '</span><b>' + esc(f.title)
+    + '</b><small>' + esc(f.desc) + '</small></span><span class="fgo">' + esc(f.go) + '</span></a>').join('');
+  const sgh = $('#roomSgh'); if(sgh) sgh.hidden = grade !== '1';      // Studentgithub — 기체 단원을 배우는 1학년 홈에만
 }
 
 /* ══════════════ 학년 · 화면 전환 ══════════════ */
