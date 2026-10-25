@@ -1437,17 +1437,15 @@ const FIRST_LESSON = '학기 첫 시간 · 과학을 왜 배우는 걸까?';
 
 /* 2학기 26차시 — 평가계획서의 월별 배정과 맞춘 순서.
    옴의 법칙 → 연습 실험 → 수행평가 → 다시 진도,
-   별의 등급(절대·겉보기) → 연습 실험 → 수행평가 → 다시 진도. */
+   별과 우주는 강의 화면 6차시(2026-10-25) — 겉보기·절대 등급 → 수행평가 → 다시 진도(연습 실험은 뺌). */
 const LESSONS_G2 = [
     '학기 첫 시간 · 과학을 왜 배우는 걸까?', '⚡ 마찰 전기', '⚡ 정전기 유도',
     '⚡ 중단원 정리 ① · 회로 기호', '⚡ 전류·전압·저항', '⚡ 옴의 법칙',
     '⚡ 옴의 법칙 실험 (연습)', '⚡ 수행평가', '⚡ 직렬과 병렬',
     '⚡ 소비 전력', '⚡ 중단원 정리 ②', '⚡ 코일 주위의 자기장',
     '⚡ 전동기', '⚡ 중단원 정리 ③', '🌌 연주 시차',
-    '🌌 별의 밝기와 거리', '🌌 별의 등급', '🌌 연습 실험 (수행 대비)',
-    '🌌 수행평가', '🌌 별의 색과 온도', '🌌 중단원 정리 ①',
-    '🌌 우리은하', '🌌 천체 관측', '🌌 성운과 성단',
-    '🌌 팽창하는 우주', '🌌 중단원 정리 ②'];
+    '💬 질문 중심 수업', '🌌 별의 밝기와 등급', '🌌 겉보기·절대 등급과 별의 색',
+    '🌌 수행평가', '🌌 우리은하', '🌌 성운과 성단', '🌌 우주 팽창'];
 
 const PLAN2026 = [
   { name:'2학년 과학A', lessons:LESSONS_G2,
@@ -1867,7 +1865,9 @@ const AUTO_URL = (function(){
     '🌌 별의 등급': S + '03-magnitude.html', '🌌 연습 실험 (수행 대비)': S + '03-magnitude.html',
     '🌌 별의 색과 온도': S + '04-color.html', '🌌 우리은하': S + '05-milkyway.html',
     '🌌 천체 관측': S + '06-objects.html', '🌌 성운과 성단': S + '07-nebula.html',
-    '🌌 팽창하는 우주': S + '08-expanding.html'
+    '🌌 팽창하는 우주': S + '08-expanding.html',
+    '🌌 별의 밝기와 등급': S + '02-brightness.html', '🌌 겉보기·절대 등급과 별의 색': S + '03-magnitude.html',
+    '🌌 우주 팽창': S + '08-expanding.html'
   };
 })();
 const lessonUrl = l => (l && (l.url || AUTO_URL[l.name])) || '';
@@ -1923,6 +1923,7 @@ async function syncDown(){
       P = { active:null, calFold:P.calFold, tables: rows.map(r => calFix({ id:r.id, name:r.name,
               classes:r.classes || [], lessons:r.lessons || [], done:r.done || {}, memo:r.memo || {} })) };
       P.active = P.tables.some(t => t.id === keep) ? keep : P.tables[0].id;
+      for(const t of P.tables) if(t.__sf){ delete t.__sf; await pushBoard(t); }   /* 🌌 별과 우주 6차시로 고친 표 */
       pLocal();
       setStat('saved', mine ? '서버에 있던 진도표를 가져왔습니다. 이 기기에 있던 것은 따로 보관해 두었어요(📤 백업으로 확인).' : '');
     } else {
@@ -2003,7 +2004,23 @@ function calFix(t){
   Object.keys(TT_STALE).forEach(nm => {
     if(t.tt[nm] && JSON.stringify(t.tt[nm]) === TT_STALE[nm]) delete t.tt[nm];
   });
+  if(starFix(t)) t.__sf = 1;
   return t;
+}
+/* 🌌 별과 우주 6차시(2026-10-25) — 이미 만든 진도표의 옛 차시 이름을 새 이름으로, 없어진 차시는 지운다.
+   체크·메모·달력 계획이 하나라도 걸린 차시는 지우지 않는다(기록 보호). 바뀌면 true */
+function starFix(t){
+  if(!Array.isArray(t.lessons)) return false;
+  const REN = { '🌌 별의 밝기와 거리':'🌌 별의 밝기와 등급', '🌌 별의 등급':'🌌 겉보기·절대 등급과 별의 색', '🌌 팽창하는 우주':'🌌 우주 팽창' };
+  const DROP = ['🌌 연습 실험 (수행 대비)', '🌌 별의 색과 온도', '🌌 중단원 정리 ①', '🌌 천체 관측', '🌌 중단원 정리 ②'];
+  const used = id => Object.keys(t.done || {}).some(k => k.split('|')[1] === id)
+    || Object.keys(t.memo || {}).some(k => k.split('|')[1] === id)
+    || Object.values(t.plan || {}).some(v => v && v.l === id);
+  let ch = false;
+  t.lessons.forEach(l => { if(REN[l.name] && !t.lessons.some(x => x.name === REN[l.name])){ l.name = REN[l.name]; ch = true; } });
+  const keep = t.lessons.filter(l => !(DROP.includes(l.name) && !used(l.id)));
+  if(keep.length !== t.lessons.length){ t.lessons = keep; ch = true; }
+  return ch;
 }
 function calPack(b){
   const m = Object.assign({}, b.memo || {});
@@ -2248,11 +2265,10 @@ const LESSON_BANK = [
     '⚡ 수행평가', '⚡ 직렬과 병렬', '⚡ 소비 전력',
     '⚡ 중단원 정리 ②', '⚡ 코일 주위의 자기장', '⚡ 전동기',
     '⚡ 중단원 정리 ③'] },
-  { unit:'🌌 별과 우주', grade:'2학년', items:[
-    '🌌 연주 시차', '🌌 별의 밝기와 거리', '🌌 별의 등급',
-    '🌌 연습 실험 (수행 대비)', '🌌 수행평가', '🌌 별의 색과 온도',
-    '🌌 중단원 정리 ①', '🌌 우리은하', '🌌 천체 관측',
-    '🌌 성운과 성단', '🌌 팽창하는 우주', '🌌 중단원 정리 ②'] },
+  { unit:'🌌 별과 우주', grade:'2학년', items:[   /* 강의 화면(starandspace/lecture-01~06) 6차시에 맞춤 · 2026-10-25 */
+    '🌌 연주 시차', '💬 질문 중심 수업', '🌌 별의 밝기와 등급',
+    '🌌 겉보기·절대 등급과 별의 색', '🌌 수행평가', '🌌 우리은하',
+    '🌌 성운과 성단', '🌌 우주 팽창'] },
   { unit:'🎈 기체의 성질', grade:'1학년', items:[
     '1걸음 압력', '2걸음 기체의 압력', '3걸음 압력과 부피',
     '4걸음 온도와 부피', '5걸음 생활 속 부피 변화'] },
