@@ -83,6 +83,7 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room.r-map   .ic{background:rgba(92,132,168,.15);border-color:rgba(92,132,168,.38)}
 .room.r-lab .ic{background:rgba(34,154,108,.12);border-color:rgba(34,154,108,.34)}
 .room.r-exam .ic{background:rgba(224,145,43,.14);border-color:rgba(224,145,43,.42)}
+.room.r-recall .ic{background:rgba(47,125,85,.13);border-color:rgba(47,125,85,.36)}
 .room.r-exam.soon{opacity:.62;cursor:default}
 .room.r-exam.soon:hover{transform:none;border-color:var(--line)}
 .room.r-exam.soon .arw::after{content:""}
@@ -702,6 +703,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
     <a class="room r-exam ext soon" id="roomExam" target="_blank" rel="noopener" aria-disabled="true">
       <span class="ic">📝</span>
       <span class="tx"><span class="tt">시험 대비 문제 · 핵심 정리</span><span class="dd" id="examDd">곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
+    <a class="room r-recall ext" id="roomRecall" href="https://scienceisjo.github.io/electric-recall/" target="_blank" rel="noopener" hidden>
+      <span class="ic">✍️</span>
+      <span class="tx"><span class="tt">단권화 빈칸 복습</span><span class="dd">전기와 자기 손글씨 단권화로 아직 모르는 개념을 체크해요</span></span>
       <span class="arw" aria-hidden="true"></span>
     </a>
     <button class="room r-lab" type="button" data-go="lab">
@@ -1379,6 +1385,7 @@ const EXAM_PACK = {
 function drawExam(){
   const a = $('#roomExam'); if(!a) return;
   a.hidden = !(grade in EXAM_PACK);
+  const rc = $('#roomRecall'); if(rc) rc.hidden = grade !== '2';      // 전기와 자기 단권화 빈칸 복습 — 2학년 홈에만
   const u = (EXAM_PACK[grade] || '').trim();
   a.classList.toggle('soon', !u);
   if(u){ a.href = u; a.removeAttribute('aria-disabled'); }
