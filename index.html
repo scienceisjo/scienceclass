@@ -82,6 +82,10 @@ h1 .hl{color:var(--leaf)} h1 .hs{color:var(--sun)}
 .room.r-guide .ic{background:rgba(179,120,58,.13);border-color:rgba(179,120,58,.34)}
 .room.r-map   .ic{background:rgba(92,132,168,.15);border-color:rgba(92,132,168,.38)}
 .room.r-lab .ic{background:rgba(34,154,108,.12);border-color:rgba(34,154,108,.34)}
+.room.r-exam .ic{background:rgba(224,145,43,.14);border-color:rgba(224,145,43,.42)}
+.room.r-exam.soon{opacity:.62;cursor:default}
+.room.r-exam.soon:hover{transform:none;border-color:var(--line)}
+.room.r-exam.soon .arw::after{content:""}
 .room.r-sgh .ic{background:rgba(0,102,204,.11);border-color:rgba(0,102,204,.32)}
 .room.r-talk  .ic{background:rgba(138,74,30,.12);border-color:rgba(138,74,30,.34)}
 /* 칠판 다시보기 — 설명 화면 목록 */
@@ -695,6 +699,11 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
       <span class="tx"><span class="tt">수업 페이지</span><span class="dd">단원별 수업 자료와 가상 실험실</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
+    <a class="room r-exam ext soon" id="roomExam" target="_blank" rel="noopener" aria-disabled="true">
+      <span class="ic">📝</span>
+      <span class="tx"><span class="tt">시험 대비 문제 · 핵심 정리</span><span class="dd" id="examDd">곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
     <button class="room r-lab" type="button" data-go="lab">
       <span class="ic">🧪</span>
       <span class="tx"><span class="tt">해누리 실험실</span><span class="dd">모둠 연구소 · 안전수칙 · 센서 실험 자료</span></span>
@@ -1363,6 +1372,19 @@ const FEATURE = {
     url:'https://scienceisjo.github.io/questionuri/solve-lesson.html' }
  ]
 };
+/* 📝 시험 대비 문제 · 핵심 정리 — 학년별 받는 곳(OneDrive·드라이브 공유 링크). 비어 있으면 「곧 열려요」로 흐리게 */
+const EXAM_PACK = {
+ '1': '',
+ '2': ''
+};
+function drawExam(){
+  const a = $('#roomExam'); if(!a) return;
+  const u = (EXAM_PACK[grade] || '').trim();
+  a.classList.toggle('soon', !u);
+  if(u){ a.href = u; a.removeAttribute('aria-disabled'); }
+  else { a.removeAttribute('href'); a.setAttribute('aria-disabled', 'true'); }
+  $('#examDd').textContent = u ? '기말고사 대비 문제와 핵심 정리본을 받아 가세요' : '곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요';
+}
 function drawFeature(){
   const box = $('#featBox'); if(!box) return;
   const list = FEATURE[grade] || [];
@@ -1370,6 +1392,7 @@ function drawFeature(){
     + '</span><span class="ft"><span class="kick">' + esc(f.kick) + '</span><b>' + esc(f.title)
     + '</b><small>' + esc(f.desc) + '</small></span><span class="fgo">' + esc(f.go) + '</span></a>').join('');
   const sgh = $('#roomSgh'); if(sgh) sgh.hidden = grade !== '1';      // Studentgithub — 기체 단원을 배우는 1학년 홈에만
+  drawExam();
 }
 
 /* ══════════════ 학년 · 화면 전환 ══════════════ */
