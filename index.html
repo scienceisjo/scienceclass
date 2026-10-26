@@ -1372,13 +1372,13 @@ const FEATURE = {
     url:'https://scienceisjo.github.io/questionuri/solve-lesson.html' }
  ]
 };
-/* 📝 시험 대비 문제 · 핵심 정리 — 학년별 받는 곳(OneDrive·드라이브 공유 링크). 비어 있으면 「곧 열려요」로 흐리게 */
+/* 📝 시험 대비 문제 · 핵심 정리 — 학년별 받는 곳(OneDrive·드라이브 공유 링크). 비어 있으면 「곧 열려요」로 흐리게, 학년이 목록에 없으면 버튼을 숨김 */
 const EXAM_PACK = {
- '1': '',
- '2': ''
+ '2': 'https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgD9noRfQ5ibRJHMJCV-4jjUAcl4nHmDSdYvgKZSeOVspa8?e=vOlgR1'   // 중2 과학A · 해누리기말고사대비 폴더
 };
 function drawExam(){
   const a = $('#roomExam'); if(!a) return;
+  a.hidden = !(grade in EXAM_PACK);
   const u = (EXAM_PACK[grade] || '').trim();
   a.classList.toggle('soon', !u);
   if(u){ a.href = u; a.removeAttribute('aria-disabled'); }
