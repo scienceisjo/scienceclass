@@ -702,7 +702,12 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
     </button>
     <a class="room r-exam ext soon" id="roomExam" target="_blank" rel="noopener" aria-disabled="true">
       <span class="ic">📝</span>
-      <span class="tx"><span class="tt">시험 대비 문제 · 핵심 정리</span><span class="dd" id="examDd">곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요</span></span>
+      <span class="tx"><span class="tt" id="examTt">시험 대비 문제 · 핵심 정리</span><span class="dd" id="examDd">곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요</span></span>
+      <span class="arw" aria-hidden="true"></span>
+    </a>
+    <a class="room r-exam ext soon" id="roomExam2" target="_blank" rel="noopener" aria-disabled="true" hidden>
+      <span class="ic">📝</span>
+      <span class="tx"><span class="tt" id="examTt2">시험 대비 문제 · 핵심 정리</span><span class="dd" id="examDd2"></span></span>
       <span class="arw" aria-hidden="true"></span>
     </a>
     <a class="room r-recall ext" id="roomRecall" href="https://scienceisjo.github.io/electric-recall/" target="_blank" rel="noopener" hidden>
@@ -1399,19 +1404,29 @@ const FEATURE = {
  ],
  '2': []   /* 질문 중심 수업 진행 화면은 2026-10-28 부터 「칠판 다시보기」 질문 중심 수업 묶음으로 옮김 */
 };
-/* 📝 시험 대비 문제 · 핵심 정리 — 학년별 받는 곳(OneDrive·드라이브 공유 링크). 비어 있으면 「곧 열려요」로 흐리게, 학년이 목록에 없으면 버튼을 숨김 */
+/* 📝 시험 대비 문제 · 핵심 정리 — 학년별 받는 곳(OneDrive·드라이브 공유 링크). 단원마다 한 칸씩(최대 2칸).
+   url 이 비어 있으면 「곧 열려요」로 흐리게, 학년이 목록에 없으면 칸을 숨김 */
 const EXAM_PACK = {
- '2': 'https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgD9noRfQ5ibRJHMJCV-4jjUAcl4nHmDSdYvgKZSeOVspa8?e=vOlgR1'   // 중2 과학A · 해누리기말고사대비 폴더
+ '2': [
+  { t:'시험 대비 · 전기와 자기', url:'https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgD9noRfQ5ibRJHMJCV-4jjUAcl4nHmDSdYvgKZSeOVspa8?e=vOlgR1' },   // 중2 과학A · 해누리기말고사대비 폴더
+  { t:'시험 대비 · 별과 우주',   url:'https://sen1299-my.sharepoint.com/:f:/g/personal/chuseonjae_haenuri_ms_kr/IgAwtl8_6tNoQ6_IbczYl3TMAWZA00r7V45t0LkBJMN4KuU?e=Y2uBPl' }
+ ]
 };
 function drawExam(){
-  const a = $('#roomExam'); if(!a) return;
-  a.hidden = !(grade in EXAM_PACK);
+  const list = EXAM_PACK[grade] || [];
+  [['roomExam','examTt','examDd'], ['roomExam2','examTt2','examDd2']].forEach((ids, i) => {
+    const a = $('#' + ids[0]); if(!a) return;
+    const it = list[i];
+    a.hidden = !it;
+    if(!it) return;
+    const u = (it.url || '').trim();
+    a.classList.toggle('soon', !u);
+    if(u){ a.href = u; a.removeAttribute('aria-disabled'); }
+    else { a.removeAttribute('href'); a.setAttribute('aria-disabled', 'true'); }
+    $('#' + ids[1]).textContent = it.t;
+    $('#' + ids[2]).textContent = u ? '기말고사 대비 문제와 핵심 정리본을 받아 가세요' : '곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요';
+  });
   const rc = $('#roomRecall'); if(rc) rc.hidden = grade !== '2';      // 전기와 자기 단권화 빈칸 복습 — 2학년 홈에만
-  const u = (EXAM_PACK[grade] || '').trim();
-  a.classList.toggle('soon', !u);
-  if(u){ a.href = u; a.removeAttribute('aria-disabled'); }
-  else { a.removeAttribute('href'); a.setAttribute('aria-disabled', 'true'); }
-  $('#examDd').textContent = u ? '기말고사 대비 문제와 핵심 정리본을 받아 가세요' : '곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요';
 }
 function drawFeature(){
   const box = $('#featBox'); if(!box) return;
