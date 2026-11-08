@@ -2208,7 +2208,7 @@ function drawCal(){
       else if(v && v.t){ lab = v.t; cls = 'has'; }
       else if(doneAt[ds + '|' + sl.c.id]){ const l = doneAt[ds + '|' + sl.c.id]; lab = (lIdx[l.id] + 1) + '차시 ' + l.name; cls = 'done'; }
       inner += '<button type="button" class="cslot ' + cls + '" data-slot="' + k + '" title="' + esc(sl.p + '교시 ' + sl.c.name + (lab ? ' — ' + lab : ' — 차시 정하기')) + '">'
-        + '<b>' + sl.p + '교시</b>' + esc(sl.c.name) + '<i>' + (lab ? esc(lab) : '＋ 차시') + '</i></button>';
+        + '<b>' + sl.p + '교시</b>' + esc(sl.c.name) + '<i>' + (lab ? esc(lab).replace(/^(\d+)차시 [^A-Za-z0-9가-힣(]*/, '<em>$1</em>') : '＋ 차시') + '</i></button>';
     });
     cells += '<div class="cday' + (we ? ' we' : '') + (out ? ' out' : '') + (off ? ' off' : '') + (ds === td ? ' today' : '') + '" data-date="' + ds + '">' + inner + '</div>';
   }
@@ -3143,131 +3143,188 @@ if(document.querySelector('#pCal .pcal-h')) drawCal();   /* 이 스크립트보�
 })();
 </script>
 <style id="home2-css">
-/* ══════════ 2026-11-08 메인 개편 — 밝은 판 ══════════
-   흰 바탕 · Pretendard 하나 · 잎 초록 하나 · 선 아이콘 · 상자는 한 겹. 숲은 「숲 보기」를 눌렀을 때만 전체 화면으로. */
-:root{--paper:#ffffff;--paper-hi:#ffffff;--paper-lo:#f4f5f6;--line:#e6e8eb;--line-soft:#eef0f2;
- --ink:#16191d;--ink-dim:#3f4650;--ink-mute:#6b7280;--leaf:#2f7d55;--leaf-lo:#3d9467;
+/* ══════════ 2026-11-08 메인 개편 2판 — 넓은 화면·단원 색·버튼 모양 ══════════
+   회색 바탕 위 흰 칸. 단원마다 색 하나(--u): 별과 우주 남색 · 전기와 자기 주황 · 기체의 성질 하늘색.
+   누르는 것은 모두 색 채움 또는 테두리 + 화살표/아이콘. 숲은 「숲으로 보기」를 눌렀을 때만 전체 화면. */
+:root{--paper:#ffffff;--paper-hi:#ffffff;--paper-lo:#f4f5f7;--line:#e3e6ea;--line-soft:#eef0f2;
+ --ink:#15181c;--ink-dim:#3d4450;--ink-mute:#6b7280;--leaf:#2f7d55;--leaf-lo:#3d9467;--gc:#2f7d55;--bg:#f4f5f7;
  --jua:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
  --body:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
  --shadow:none;--r:14px}
-html,body{background:#fff}
+html,body{background:var(--bg)}
 body{line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:780px}
+.wrap{max-width:1240px;padding-left:24px;padding-right:24px}
 .wrap>header,#gnote{display:none!important}
-/* 숲 — 평소엔 숨기고, 「숲 보기」로 전체 화면 */
+.view:not(#v-home):not(#v-prog){max-width:1000px;margin-left:auto;margin-right:auto}
+.view{padding-top:22px}
+/* 숲 — 「숲으로 보기」로만 */
 .fz-hero{display:none!important}
 body.forest-open .fz-hero{display:block!important;position:fixed;inset:0;height:100vh;height:100dvh;z-index:90}
 body.forest-open{overflow:hidden}
-.fz-close{position:absolute;top:14px;right:14px;z-index:3;font:600 14px var(--body);color:#f6ead2;background:rgba(0,0,0,.35);
- border:1px solid rgba(242,201,122,.45);border-radius:999px;padding:9px 16px;cursor:pointer}
-/* 위 막대 */
-.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.topin{max-width:780px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:9px;flex:1;min-width:0;cursor:pointer;color:var(--ink);text-decoration:none}
-.brand .mk{width:22px;height:22px;border-radius:50%;background:var(--leaf);flex:none;box-shadow:inset -5px -4px 0 rgba(0,0,0,.16)}
-.brand b{font-size:17px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
-.topbar .grade{margin:0;gap:0;border:1px solid var(--line);border-radius:999px;padding:2px;display:flex!important}
-.topbar .gbtn{font:600 13px var(--body);padding:6px 12px;border:0;border-radius:999px;background:none;color:var(--ink-mute);box-shadow:none}
-.topbar .gbtn.on{background:var(--ink);color:#fff}
-.topbar .stubar{margin:0;gap:6px;flex-wrap:nowrap;font-size:13px}
+.fz-close{position:absolute;top:14px;right:14px;z-index:3;font:600 14px var(--body);color:#f6ead2;background:rgba(0,0,0,.4);
+ border:1px solid rgba(242,201,122,.5);border-radius:999px;padding:9px 18px;cursor:pointer}
+
+/* ── 위 막대 ── */
+.topbar{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
+.topin{max-width:1240px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer;color:var(--ink);text-decoration:none;margin-right:10px}
+.brand .mk{width:26px;height:26px;border-radius:50%;background:var(--gc);flex:none;box-shadow:inset -6px -5px 0 rgba(0,0,0,.18)}
+.brand b{font-size:18px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.topbar .grade{display:flex!important;gap:4px;margin:0;padding:0;border:0}
+.topbar .gbtn{font:700 14.5px var(--body);padding:9px 18px;border:0;border-radius:10px;background:#f0f2f4;color:var(--ink-mute);box-shadow:none;cursor:pointer}
+.topbar .gbtn:hover{background:#e6e9ec;color:var(--ink)}
+.topbar .gbtn.on{background:var(--gc);color:#fff}
+.tsp{flex:1}
+.tdd{font-size:13.5px;font-weight:700;color:#c2410c;background:#fff1e8;border-radius:8px;padding:6px 10px;white-space:nowrap}
+.tdd:empty{display:none}
+.topbar .stubar{margin:0;gap:8px;flex-wrap:nowrap;font-size:13.5px}
 .topbar .stubar>span:not(.who){display:none}
-.topbar .stubar .lgbtn{font:600 13px var(--body);padding:0;border:0;background:none;color:var(--leaf)}
-.topbar .stubar .who{padding:0;border:0;background:none;font-weight:600;gap:4px}
-.topbar .stubar .who .cls{font-family:var(--body);font-weight:700}
-.topbar .stubar .lk{font-size:12.5px;color:var(--ink-mute);text-decoration:none}
-@media(max-width:560px){.brand b{font-size:15.5px}.topbar .stubar .who{display:none}.topin{gap:8px;padding:0 14px}}
-/* 줄·제목 */
-.hsec{padding:26px 0;border-bottom:1px solid var(--line)}
-.hsh{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-.hsh h2{font-size:19px;font-weight:800;letter-spacing:-.02em}
-.hsh .pn{font-size:13px;color:var(--ink-mute);font-weight:600}
-.hsh .lnk{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--leaf);background:none;border:0;cursor:pointer;text-decoration:none;font-family:inherit}
+.topbar .stubar .lgbtn{font:700 14px var(--body);padding:9px 18px;border-radius:10px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+.topbar .stubar .lgbtn:hover{background:var(--ink);color:#fff}
+.topbar .stubar .who{padding:0;border:0;background:none;font-weight:600}
+.topbar .stubar .who .cls{font-family:var(--body);font-weight:700;color:var(--ink)}
+.topbar .stubar .lk{font:600 13px var(--body);color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#fff;cursor:pointer}
+@media(max-width:760px){.topin{gap:8px;padding:0 14px;height:58px}.brand{margin-right:0}.brand b{font-size:15px}.topbar .gbtn{padding:7px 11px;font-size:13.5px}
+ .tdd,.topbar .stubar .who{display:none}.topbar .stubar .lgbtn{padding:7px 12px}}
+@media(max-width:420px){.brand b{display:none}}
+
+/* ── 공통 버튼 ── */
 .hic{width:20px;height:20px;flex:none}.hic.sm{width:16px;height:16px}
-/* 오늘 수업 */
-#today{display:block;margin:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none;padding:30px 0 26px}
-#today[hidden]{display:none}
-.tdk{font-size:13.5px;font-weight:700;color:var(--leaf)}
-.tdh{font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1.25;margin-top:8px;word-break:keep-all}
-.tds{font-size:15px;color:var(--ink-mute);margin-top:6px}
-.tda{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.tda a,.tda button{display:inline-flex;align-items:center;gap:7px;font:600 15px var(--body);padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;cursor:pointer}
-.tda .pri{background:var(--leaf);border-color:var(--leaf);color:#fff}
-.tdn{font-size:14px;color:var(--ink-dim);margin-top:16px}
-.tdn b{font-weight:700}
-.tdhint{font-size:13.5px;color:var(--ink-mute);margin-top:12px}
-.tdhint button{font:inherit;font-weight:700;color:var(--leaf);background:none;border:0;cursor:pointer;padding:0}
-/* 학년 배너(FEATURE) — 한 겹 줄로 */
-#featBox .feat{display:flex;align-items:center;gap:14px;margin:0;padding:16px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none}
-#featBox .feat .fi{display:none}
-#featBox .feat .kick{font-size:12.5px;font-weight:700;color:var(--leaf);letter-spacing:0}
-#featBox .feat b{font-family:var(--body);font-weight:700;font-size:16px}
-#featBox .feat .fgo{font:600 13.5px var(--body);color:var(--leaf);background:none;border:0;padding:0}
-/* 차시표 */
-.prog{flex:0 1 140px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
-.prog i{display:block;height:100%;background:var(--leaf)}
-.lsn{list-style:none;margin:0;padding:0}
-.lsn li{display:grid;grid-template-columns:28px 1fr 46px auto;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
-.lsn li:first-child{border-top:0}
-.lsn .no{font-size:14px;font-weight:700;color:var(--ink-mute);font-variant-numeric:tabular-nums}
-.lsn .lt{font-size:16px;font-weight:600;color:var(--ink);word-break:keep-all}
-.lsn li.done .lt{color:var(--ink-mute)}
-.lsn li.now .lt{font-weight:800}
-.lsn .st{display:flex;justify-content:center;color:var(--leaf)}
-.lsn .now-tag{font-size:11.5px;font-weight:700;color:#fff;background:var(--leaf);padding:3px 8px;border-radius:999px}
-.lsn .acts{display:flex;gap:2px;justify-content:flex-end}
-.lsn .acts a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--ink-mute);padding:7px 9px;border-radius:9px;text-decoration:none;white-space:nowrap}
-.lsn .acts a:hover{background:var(--paper-lo);color:var(--ink)}
-.uext{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;font-size:13.5px}
-.uext a{color:var(--ink-dim);font-weight:600;text-decoration:none}
-.uext a:hover{color:var(--leaf)}
-.uext .lab{color:var(--ink-mute)}
-.past .lsn{margin-top:4px}
-.past[data-open="0"] .lsn,.past[data-open="0"] .uext{display:none}
-.past .hsh{margin:0}
-.past+.past{border-top:0}
-@media(max-width:560px){.tdh{font-size:25px}.lsn li{grid-template-columns:22px 1fr auto auto;gap:6px}.lsn .st .hic{display:none}.lsn .acts a{padding:7px 6px}.lsn .acts a span{display:none}.prog{flex-basis:70px}}
-/* 시험 대비 */
-.dday{font-size:13px;font-weight:700;color:#c2410c}
-.hrows a{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);color:var(--ink);text-decoration:none}
-.hrows a:first-child{border-top:0}
-.hrows a .t{flex:1;display:flex;flex-direction:column}
-.hrows a b{font-size:16px;font-weight:700}.hrows a small{font-size:13px;color:var(--ink-mute);margin-top:2px}
-.hrows a .go{color:var(--ink-mute)}
-.hrows .hic{color:var(--leaf)}
+.obtn{display:inline-flex;align-items:center;gap:6px;font:600 14px var(--body);padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;cursor:pointer;white-space:nowrap;transition:border-color .15s,background .15s}
+.obtn:hover{border-color:var(--u,var(--ink));color:var(--u,var(--ink))}
+.obtn .arr{font-weight:700;color:var(--ink-mute)}
+.lbtn{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);text-decoration:none;cursor:pointer;font-family:inherit;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s}
+.lbtn:hover{border-color:var(--u,var(--gc));box-shadow:0 4px 14px -8px rgba(0,0,0,.25)}
+.lbtn .hic{color:var(--u,var(--gc))}
+.lbtn .t{flex:1;min-width:0;display:flex;flex-direction:column}
+.lbtn b{font-size:15.5px;font-weight:700;line-height:1.35}
+.lbtn small{font-size:12.5px;color:var(--ink-mute);margin-top:1px}
+.lbtn .go{flex:none;width:26px;height:26px;border-radius:50%;background:#f0f2f4;display:grid;place-items:center;color:var(--ink-dim);transition:background .15s,color .15s}
+.lbtn:hover .go{background:var(--u,var(--gc));color:#fff}
+.lbtn .nb{font-size:11.5px;font-weight:700;color:#fff;background:#d6453d;border-radius:999px;padding:1px 7px;margin-left:6px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ph h2{font-size:17px;font-weight:800;letter-spacing:-.02em}
+
+/* ── 첫 화면 3단 ── */
+.h2top{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr) minmax(0,.95fr);gap:16px;margin-top:4px}
+@media(max-width:1100px){.h2top{grid-template-columns:1fr 1fr}#today{grid-column:1/-1}}
+@media(max-width:700px){.h2top{grid-template-columns:1fr}}
+/* 오늘 수업 — 단원 색 칸 */
+#today{position:relative;overflow:hidden;display:flex;flex-direction:column;margin:0;border:0;border-radius:20px;background:var(--u,#2f7d55);color:#fff;box-shadow:none;padding:28px 30px;min-height:300px}
+#today[hidden]{display:flex}
+#today .deco{position:absolute;right:0;top:0;width:58%;height:100%;pointer-events:none}
+#today .deco.corner{top:auto;bottom:14px;right:14px;width:36%;height:46%;opacity:.85}
+#today>*:not(.deco){position:relative}
+.tdk{font-size:14px;font-weight:700;color:rgba(255,255,255,.8)}
+.tdh{font-size:34px;font-weight:800;letter-spacing:-.035em;line-height:1.22;margin-top:8px;word-break:keep-all;max-width:620px}
+.tds{font-size:15.5px;color:rgba(255,255,255,.82);margin-top:8px}
+.tda{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:22px}
+.tda a{display:inline-flex;align-items:center;gap:8px;font:700 15px var(--body);padding:12px 18px;border-radius:12px;text-decoration:none;cursor:pointer;
+ border:1.5px solid rgba(255,255,255,.55);color:#fff;background:rgba(255,255,255,.08);transition:background .15s}
+.tda a:hover{background:rgba(255,255,255,.2)}
+.tda a.pri{background:#fff;border-color:#fff;color:var(--u,#2f7d55)}
+.tda a.pri:hover{background:#f2f4f7}
+.tda a .arr{font-weight:800}
+.tdf{font-size:14.5px;line-height:1.65;color:rgba(255,255,255,.78);margin-top:16px;max-width:560px;word-break:keep-all}
+.tdn{font-size:14.5px;color:rgba(255,255,255,.88);margin-top:16px}
+.tdn b{font-weight:800;color:#fff}
+.tdhint{font-size:14px;color:rgba(255,255,255,.85);margin-top:14px}
+.tdhint button{font:inherit;font-weight:700;color:var(--u,#2f7d55);background:#fff;border:0;border-radius:8px;padding:4px 10px;cursor:pointer;margin-right:4px}
+@media(max-width:700px){#today{padding:22px 20px;min-height:0}.tdh{font-size:26px}.tda a{padding:11px 14px;font-size:14.5px}}
+/* 시험 D-day 칸 */
+.h2exam{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}
+.exk{font-size:14px;font-weight:700;color:var(--ink-dim)}
+.exd{font-size:46px;font-weight:900;letter-spacing:-.04em;line-height:1;color:#c2410c;font-variant-numeric:tabular-nums}
+.exdate{font-size:13.5px;color:var(--ink-mute);padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.h2exam .lbtn{padding:11px 12px}
 /* 나의 공간 */
-.hmine{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.hmine a,.hmine button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);text-decoration:none;font-family:inherit;text-align:left;cursor:pointer}
-.hmine .hic{color:var(--leaf)}
-.hmine b{font-size:15px;font-weight:700}.hmine small{font-size:12.5px;color:var(--ink-mute)}
-@media(max-width:560px){.hmine{grid-template-columns:1fr 1fr;gap:8px}.hmine a,.hmine button{padding:12px}}
-/* 더 보기 — 원래 방들을 글자 줄로 */
-.more-h2{font-size:15px;font-weight:700;color:var(--ink-mute);margin:26px 0 6px}
-#v-home .rooms{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin:0}
-#v-home .room{display:flex;align-items:center;gap:10px;padding:11px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none}
-#v-home .room:hover{transform:none}
-#v-home .room .ic{display:none}
-#v-home .room .tt{font-family:var(--body);font-size:15px;font-weight:700}
-#v-home .room .dd{font-size:12.5px}
+.h2mine{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}
+.h2mine .ph{margin-bottom:4px}
+
+/* ── 바로가기 아이콘 줄 (원래 방 버튼을 그대로 다시 꾸밈) ── */
+#v-home .rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:4px;margin:16px 0 0;padding:16px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+#v-home .room{display:flex;flex-direction:column;align-items:center;gap:9px;padding:8px 4px 6px;border:0;border-radius:14px;background:none;box-shadow:none;text-align:center;cursor:pointer;color:var(--ink)}
+#v-home .room:hover{transform:none;background:none}
+#v-home .room .ic{display:grid;place-items:center;width:60px;height:60px;border-radius:50%;background:#f0f2f4;border:0;color:var(--ink-dim);font-size:0;box-shadow:none;transition:background .15s,color .15s,transform .15s}
+#v-home .room .ic .hic{width:26px;height:26px}
+#v-home .room:hover .ic,#v-home .room:focus-visible .ic{background:var(--gc);color:#fff;transform:translateY(-2px)}
+#v-home .room .tx{flex:none}
+#v-home .room .tt{font-family:var(--body);font-size:13.5px;font-weight:600;line-height:1.3;color:var(--ink-dim);word-break:keep-all}
+#v-home .room .dd,#v-home .room .arw,#v-home .room .no{display:none}
 #v-home .room.r-tree,#v-home .room.r-stamp,#v-home .room.r-mine,#v-home .room.r-exam,#v-home .room.r-recall,#v-home .room.r-sgh{display:none!important}
-@media(max-width:560px){#v-home .rooms{grid-template-columns:1fr}}
-.forestbtn{display:inline-flex;align-items:center;gap:8px;margin:18px 0 0;font:600 14px var(--body);color:var(--ink-dim);background:none;border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer}
-.forestbtn i{width:10px;height:10px;border-radius:50%;background:#e8bd68;box-shadow:0 0 8px rgba(232,189,104,.9)}
-.install{margin-top:26px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:none}
-.install h3{font-family:var(--body);font-weight:700;color:var(--ink);font-size:16px}
-/* 다른 방(하위 화면) — 머리 글자 정리 */
-.vhead h2{font-family:var(--body);font-weight:800;letter-spacing:-.02em}
 #v-home .room[hidden]{display:none!important}
 body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,body:not(.teacher) #v-home #roomAbsent{display:none!important}
-.hrows .hic.go{color:var(--ink-mute)}
+body.teacher #v-home #roomProgress .ic,body.teacher #v-home #roomTools .ic,body.teacher #v-home #roomAbsent .ic{background:#eef0f6}
+@media(max-width:700px){#v-home .rooms{grid-template-columns:repeat(4,1fr);padding:12px 4px}#v-home .room .ic{width:50px;height:50px}#v-home .room .tt{font-size:12.5px}}
+
+/* ── 학년 배너(FEATURE) — 카드 줄 ── */
+#featBox{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:16px}
+#featBox:empty{display:none}
+#featBox .feat{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0;padding:20px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:none;transition:border-color .15s}
+#featBox .feat:hover{transform:none;border-color:var(--gc)}
+#featBox .feat .fi{display:none}
+#featBox .feat .kick{font-size:13px;font-weight:700;color:var(--gc);letter-spacing:0}
+#featBox .feat b{font-family:var(--body);font-weight:800;font-size:17px;line-height:1.35}
+#featBox .feat small{font-size:13.5px}
+#featBox .feat .fgo{margin-top:auto;font:700 14px var(--body);padding:9px 16px;border-radius:10px;background:var(--gc);color:#fff}
+
+/* ── 단원 탭 + 차시 카드 ── */
+#h2unit{margin-top:16px}
+.utabs{display:flex;gap:6px;flex-wrap:wrap}
+.utab{display:inline-flex;align-items:center;gap:8px;font:700 15.5px var(--body);padding:12px 20px;border-radius:14px 14px 0 0;border:1px solid var(--line);border-bottom:0;background:#eceef1;color:var(--ink-mute);cursor:pointer}
+.utab small{font-size:12.5px;font-weight:600;opacity:.8}
+.utab:hover{color:var(--ink);background:#e4e7eb}
+.utab[aria-selected="true"]{background:var(--u);border-color:var(--u);color:#fff}
+.upanel{background:#fff;border:1px solid var(--line);border-top:4px solid var(--u);border-radius:0 18px 18px 18px;padding:22px}
+.utabs.one+.upanel{border-radius:18px}
+.uhead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.uhead h2{font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.uhead .pn{font-size:13.5px;color:var(--ink-mute);font-weight:600}
+.prog{display:inline-block;width:140px;height:8px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle}
+.prog i{display:block;height:100%;background:var(--u)}
+.ubtns{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.lcard{display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.lcard:hover{border-color:var(--u);box-shadow:0 6px 18px -12px rgba(0,0,0,.3)}
+.lcard.now{border:2px solid var(--u);padding:15px}
+.lc-top{display:flex;align-items:center;gap:8px}
+.lno{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:800;border:2px solid var(--u);color:var(--u);font-variant-numeric:tabular-nums}
+.lcard.done .lno,.lcard.now .lno{background:var(--u);color:#fff}
+.lst{font-size:12.5px;font-weight:700;color:var(--ink-mute);display:inline-flex;align-items:center;gap:3px}
+.lst.now{color:#fff;background:var(--u);border-radius:999px;padding:2px 9px}
+.lcard h3{font-size:16.5px;font-weight:700;line-height:1.4;letter-spacing:-.01em;word-break:keep-all;flex:1}
+.lacts{display:flex;gap:6px;flex-wrap:wrap}
+.sbtn{display:inline-flex;align-items:center;gap:5px;font:600 13px var(--body);padding:7px 11px;border-radius:9px;border:1px solid var(--line);background:#fafbfc;color:var(--ink-dim);text-decoration:none;cursor:pointer;transition:all .15s}
+.sbtn:hover{background:var(--u);border-color:var(--u);color:#fff}
+.sbtn.pri{background:var(--ul);border-color:transparent;color:var(--u)}
+.sbtn.pri:hover{background:var(--u);color:#fff}
+.uext{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.uext .lab{font-size:13.5px;font-weight:700;color:var(--ink-mute);margin-right:4px}
+@media(max-width:700px){.wrap{padding-left:14px;padding-right:14px}.upanel{padding:14px}.utab{padding:10px 14px;font-size:14px}.ubtns{margin-left:0}
+ .lgrid{grid-template-columns:1fr 1fr;gap:8px}.lcard{padding:12px;gap:8px}.lcard.now{padding:11px}.lcard h3{font-size:15px}.sbtn{padding:6px 8px;font-size:12.5px}}
+
+/* 설치 안내 — 휴대폰에서만 */
+.install{margin-top:16px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:none}
+.install h3{font-family:var(--body);font-weight:700;color:var(--ink);font-size:16px}
+@media(min-width:901px){#install{display:none}}
+/* 다른 방 머리 글자 */
+.vhead h2{font-family:var(--body);font-weight:800;letter-spacing:-.02em}
+
+/* ── 진도표: 달력 칸 차시 이름을 자르지 않고 줄바꿈 ── */
+.cslot i{white-space:normal;overflow:visible;text-overflow:clip;word-break:keep-all;line-height:1.35;margin-top:1px}
+.cslot i em{font-style:normal;font-weight:700;color:var(--ink-mute);margin-right:3px;font-variant-numeric:tabular-nums}
+.calmenu button{white-space:normal;word-break:keep-all;line-height:1.4}
 </style>
 <script id="home2">
-/* ══════════ 2026-11-08 메인 개편 — 첫 화면 ══════════
+/* ══════════ 2026-11-08 메인 개편 2판 — 첫 화면 ══════════
    · 오늘 수업: 선생님이 수업 시간에 칠판 강의 화면을 열면 lesson-log.js 가 lesson_log 에 한 줄을 남긴다.
      여기서 그 시각을 종 시간표(BELL)·시간표(TT2026·CAL.swap)로 「몇 반 몇 교시」로 바꿔, 로그인한 학생에겐 우리 반 수업을,
      로그인 전이면 그 학년의 가장 최근 수업을 보여 준다. 따로 등록할 것이 없다.
-   · 차시표: 칠판 다시보기(TALKS)에서 「학습지 N」이 붙은 줄 = 차시. 개념 노트 묶음의 「노트 N」은 같은 번호 차시에 붙는다.
-     새 차시·새 단원은 TALKS 에 줄만 더하면 여기에도 저절로 생긴다.
-   · 숲(fz-hero)은 「숲으로 보기」를 누를 때만 전체 화면으로 열린다. 원래 방(.rooms)은 「더 보기」에 글자 줄로 남는다. */
+   · 차시 카드: 칠판 다시보기(TALKS)에서 「학습지 N」이 붙은 줄 = 차시. 개념 노트 묶음의 「노트 N」은 같은 번호 차시에 붙는다.
+     새 차시·새 단원은 TALKS 에 줄만 더하면 여기에도 저절로 생긴다. 단원 색은 아래 UC 에서.
+   · 아이콘 줄 = 원래 방 버튼(.rooms)을 그대로 다시 꾸민 것 — 새 방을 .rooms 에 넣으면 아이콘 줄에도 생긴다(아이콘은 RIC 에).
+   · 숲(fz-hero)은 「숲으로 보기」를 누를 때만 전체 화면으로 열린다. */
 (function(){
   const q = s => document.querySelector(s);
   const home = q('#v-home'); if(!home || typeof TALKS === 'undefined') return;
@@ -3281,9 +3338,16 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
   const mm = hm => { const a = hm.split(':'); return +a[0] * 60 + +a[1]; };
   const perOf = d => { const m = d.getHours() * 60 + d.getMinutes(); for(let i = 0; i < BELL.length; i++) if(m >= mm(BELL[i][0]) - 10 && m <= mm(BELL[i][1])) return i + 1; return 0; };
   const wdOf = (ymd, d) => { const s = CAL.swap && CAL.swap[ymd]; return s ? s[0] : d.getDay(); };
-  /* (요일-교시) → 반 */
-  const SLOT = {};
+  const SLOT = {};   /* (요일-교시) → 반 */
   Object.keys(TT2026).forEach(c => Object.keys(TT2026[c]).forEach(wd => TT2026[c][wd].forEach(p => { SLOT[wd + '-' + p] = c; })));
+
+  /* 단원 색 — 진한 색(c) · 옅은 색(lo) · 오늘 수업 칸 무늬(deco) */
+  const UC = {
+    '별과 우주':   { c:'#26386f', lo:'#eceffa', deco:'star' },
+    '전기와 자기': { c:'#c4570b', lo:'#fff1e4', deco:'circuit' },
+    '기체의 성질': { c:'#0a74a8', lo:'#e6f3fa', deco:'gas' }
+  };
+  const ucOf = u => (u && UC[u.key]) || { c:'#2f7d55', lo:'#e8f3ec', deco:'' };
 
   /* 선 아이콘 */
   const I = {
@@ -3298,10 +3362,20 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
     leaf:'<path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14z"/><path d="M5 19l8-8"/>',
     stamp:'<circle cx="12" cy="9.5" r="5.5"/><path d="M8.5 14l-1.5 7 5-3 5 3-1.5-7"/>',
     mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/>',
-    code:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5.5l-3 13"/>'
+    code:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5.5l-3 13"/>',
+    cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    flask:'<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/>',
+    book:'<path d="M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v15h-6a2 2 0 0 0-2 2 2 2 0 0 0-2-2H4z"/><path d="M12 5v16"/>',
+    map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
+    chart:'<path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/>',
+    grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+    clip:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/>',
+    tree:'<path d="M12 3l6 8h-3l4 5H5l4-5H6z"/><path d="M12 16v5"/>'
   };
   const ic = (k, sm) => '<svg class="hic' + (sm ? ' sm' : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + I[k] + '</svg>';
   const A = (href, inner, cls) => '<a' + (cls ? ' class="' + cls + '"' : '') + ' href="' + esc(href) + '" target="_blank" rel="noopener">' + inner + '</a>';
+  const GO = '<span class="go">' + ic('arrow', 1) + '</span>';
+  const lbtn = (href, k, b, s, extra) => A(href, ic(k) + '<span class="t"><b>' + b + (extra || '') + '</b>' + (s ? '<small>' + s + '</small>' : '') + '</span>' + GO, 'lbtn');
 
   /* ── 학년별 단원·차시 (TALKS 에서) ── */
   const clean = s => String(s || '').replace(/^[^A-Za-z0-9가-힣]+/, '').replace(/\s*\([^)]*\)\s*$/, '').trim();
@@ -3316,8 +3390,8 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
       if(!les.length) return;
       const key = keyOf(gr.unit), U = (UNITS[g] || []).find(u => u.name === key) || {};
       const F = ((SHEETS[g] || {}).folders || []).find(f => f.t.includes(key) && f.url);
-      units.push({ name:clean(gr.unit), key, hub:U.url || '', act:U.activity || null, folder:F ? F.url : '',
-        lessons:les.map(it => ({ n:+it.sheet.match(/\d+/)[0], t:it.t, url:it.url, path:pathOf(it.url), note:null })),
+      units.push({ name:clean(gr.unit), key, hub:U.url || '', desc:U.desc || '', act:U.activity || null, folder:F ? F.url : '',
+        lessons:les.map(it => ({ n:+it.sheet.match(/\d+/)[0], t:it.t, d:it.d || '', url:it.url, path:pathOf(it.url), note:null })),
         extra:gr.items.filter(it => !/^학습지\s*\d+/.test(it.sheet || '')) });
     });
     (TALKS[g] || []).forEach(gr => {
@@ -3327,8 +3401,8 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
         if(L) L.note = it; else u.extra.push(it); });
     });
     units.forEach(u => {
-      u.lessons.forEach(L => { PATHS[L.path] = { g, u, L, t:L.t, url:L.url }; if(L.note) PATHS[pathOf(L.note.url)] = { g, u, L, t:L.note.t + ' (개념 노트)', url:L.note.url }; });
-      u.extra.forEach(it => { PATHS[pathOf(it.url)] = { g, u, L:null, t:it.t, url:it.url }; });
+      u.lessons.forEach(L => { PATHS[L.path] = { g, u, L, t:L.t, d:L.d, url:L.url }; if(L.note) PATHS[pathOf(L.note.url)] = { g, u, L, t:L.note.t + ' (개념 노트)', d:L.note.d || '', url:L.note.url }; });
+      u.extra.forEach(it => { PATHS[pathOf(it.url)] = { g, u, L:null, t:it.t, d:it.d || '', url:it.url }; });
     });
     return (MODEL[g] = units);
   }
@@ -3359,8 +3433,7 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
     loadedAt = Date.now();
   }
   const clsOf = p => p && p.grade && p.class_no ? String(p.grade) + p2(p.class_no) + '반' : '';
-  /* 이 반의 다음 과학 시간 */
-  function nextSlot(cls){
+  function nextSlot(cls){   /* 이 반의 다음 과학 시간 */
     const T = TT2026[cls]; if(!T) return null;
     const now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
     for(let i = 0; i < 28; i++){
@@ -3379,44 +3452,78 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
     if(cls && String(prof.grade) === g){ const mine = all.filter(x => x.cls === cls); if(mine.length) return { rows:mine, cls, own:true }; }
     return { rows:all, cls, own:false };
   }
+  const curUnit = (g, rows) => rows[0] ? rows[0].hit.u : (model(g).slice(-1)[0] || null);
 
-  /* ── 그리기 ── */
-  const H2 = window.H2 = { prof:null };
-  let wrapEl = null;
-  function ensureWrap(){
-    if(wrapEl) return wrapEl;
-    wrapEl = document.createElement('div'); wrapEl.id = 'h2main';
-    q('#featBox').after(wrapEl);
-    const more = document.createElement('h2'); more.className = 'more-h2'; more.textContent = '더 보기';
-    home.querySelector('.rooms').before(more);
-    const fb = document.createElement('button'); fb.type = 'button'; fb.className = 'forestbtn'; fb.innerHTML = '<i></i>숲으로 보기';
-    fb.addEventListener('click', openForest);
-    home.querySelector('.rooms').after(fb);
-    return wrapEl;
+  /* 오늘 수업 칸 무늬 — 별(밝기 다른 점) · 기체(같은 크기 입자) · 회로(전지·저항 한 바퀴) */
+  function deco(kind){
+    let s = '', seed = 7;
+    const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    if(kind === 'star'){
+      for(let i = 0; i < 46; i++){ const r = .6 + rnd() * rnd() * 2.4; s += '<circle cx="' + (40 + rnd() * 360).toFixed(1) + '" cy="' + (rnd() * 300).toFixed(1) + '" r="' + r.toFixed(2) + '" fill="#fff" opacity="' + (.25 + rnd() * .6).toFixed(2) + '"/>'; }
+    } else if(kind === 'gas'){
+      const pts = []; let tries = 0;
+      while(pts.length < 13 && tries++ < 400){ const x = 30 + rnd() * 350, y = 25 + rnd() * 250; if(pts.every(p => (p[0] - x) ** 2 + (p[1] - y) ** 2 > 900)) pts.push([x, y]); }
+      s = pts.map(p => '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="9" fill="#fff" fill-opacity=".1" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>').join('');
+    } else if(kind === 'circuit'){
+      s = '<g fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'
+        + '<path d="M150 70H215M241 70H360V120M360 180V230H269M241 230H150V70"/>'   /* 도선 — 전지·저항·전구 자리는 비움 */
+        + '<path d="M215 52v36M241 60v20"/>'                                      /* 전지: 긴 선 · 짧은 선 */
+        + '<path d="M360 120l12 6-24 12 24 12-24 12 24 12-12 6"/>'                 /* 저항 */
+        + '<circle cx="255" cy="230" r="14"/><path d="M245 220l20 20M265 220l-20 20"/>'   /* 전구 */
+        + '</g>';
+    }
+    return '<svg class="deco' + (kind === 'star' ? '' : ' corner') + '" viewBox="0 0 400 300" preserveAspectRatio="' + (kind === 'star' ? 'xMaxYMid slice' : 'xMaxYMax meet') + '" aria-hidden="true">' + s + '</svg>';
   }
 
+  /* ── 자리 만들기 ── */
+  const H2 = window.H2 = { prof:null };
+  const SEL = {};   /* 학년 → 고른 단원 key (탭) */
+  let built = false;
+  function build(){
+    if(built) return; built = true;
+    const top = document.createElement('div'); top.className = 'h2top'; top.id = 'h2top';
+    home.insertBefore(top, home.firstChild);
+    top.appendChild(q('#today'));
+    top.insertAdjacentHTML('beforeend', '<section class="h2exam" id="h2exam" aria-label="시험 대비"></section><section class="h2mine" id="h2mine" aria-label="나의 공간"></section>');
+    const rooms = home.querySelector('.rooms');
+    top.after(rooms);
+    rooms.after(q('#featBox'));
+    q('#featBox').insertAdjacentHTML('afterend', '<section id="h2unit" aria-label="단원 차시"></section>');
+    /* 방 버튼 → 아이콘 */
+    const RIC = { 'r-sheet':'doc', 'r-eval':'cal', 'r-less':'page', 'r-lab':'flask', 'r-talk':'board', 'r-guide':'book', 'r-map':'map', 'r-prog':'chart', 'r-tools':'grid', 'r-absent':'clip' };
+    rooms.querySelectorAll('.room').forEach(r => {
+      const c = Object.keys(RIC).find(x => r.classList.contains(x)), k = c ? RIC[c] : 'doc', i = r.querySelector('.ic');
+      if(i) i.innerHTML = ic(k);
+      const dd = r.querySelector('.dd'); if(dd && !r.title) r.title = dd.textContent;
+    });
+    const fb = document.createElement('button'); fb.type = 'button'; fb.className = 'room r-forest'; fb.title = '과학 시간 숲 — 방들이 어떻게 이어지는지';
+    fb.innerHTML = '<span class="ic">' + ic('tree') + '</span><span class="tx"><span class="tt">숲으로 보기</span></span>';
+    fb.addEventListener('click', openForest); rooms.appendChild(fb);
+  }
+
+  /* ── 오늘 수업 ── */
   H2.today = function(){
     const box = q('#today'); if(!box) return;
-    if(LOGS === null){ box.hidden = true; return; }
-    const g = grade, M = model(g), prof = H2.prof, { rows, cls, own } = rowsFor(g, prof);
-    const last = rows[0], td = today();
-    let h = '';
+    const g = grade, prof = H2.prof, { rows, cls, own } = rowsFor(g, prof), last = rows[0], td = today();
+    const u0 = curUnit(g, rows), C = ucOf(u0);
+    box.style.setProperty('--u', C.c); box.hidden = false;
+    if(LOGS === null){ box.innerHTML = deco(C.deco); return; }
+    let h = deco(C.deco);
     if(last){
       const hit = last.hit, L = hit.L, isToday = last.ymd === td;
       const kick = isToday ? '오늘 ' + (last.per ? last.per + '교시' : '') + (last.cls ? ' · ' + last.cls + (own ? '' : ' 수업') : '')
         : (own ? cls + ' 지난 수업 · ' : g + '학년 최근 수업 · ') + md(last.ymd) + (last.per ? ' ' + last.per + '교시' : '') + (!own && last.cls ? ' ' + last.cls : '');
       h += '<div class="tdk">' + esc(kick) + '</div><h1 class="tdh">' + esc(hit.t) + '</h1>'
-        + '<div class="tds">' + esc(hit.u.name) + (L ? ' · ' + L.n + '차시' : '') + '</div><div class="tda">'
-        + A(hit.url, ic('board') + '칠판 화면 다시 보기', 'pri');
+        + '<div class="tds">' + esc(hit.u.name) + (L ? ' · ' + L.n + '차시' : '') + '</div>' + (hit.d ? '<div class="tdf">' + esc(hit.d) + '</div>' : '') + '<div class="tda">'
+        + A(hit.url, ic('board') + '칠판 화면 다시 보기 <span class="arr">›</span>', 'pri');
       if(L){ const pg = pageOf(L, !!prof); if(pg) h += A(pg, ic('page') + '수업 페이지');
              if(L.note && hit.url !== L.note.url) h += A(L.note.url, ic('note') + '개념 노트'); }
-      if(hit.u.folder) h += A(hit.u.folder, ic('folder') + '학습지 폴더');
+      if(hit.u.folder) h += A(hit.u.folder, ic('folder') + '학습지');
       h += '</div>';
-    } else {
-      const u = M[M.length - 1]; if(!u){ box.hidden = true; return; }
-      h += '<div class="tdk">' + g + '학년 · 지금 배우는 단원</div><h1 class="tdh">' + esc(u.name) + '</h1>'
-        + '<div class="tds">' + u.lessons.length + '차시</div><div class="tda">'
-        + (u.hub ? A(u.hub, ic('page') + '단원 수업 페이지', 'pri') : '') + (u.folder ? A(u.folder, ic('folder') + '학습지 폴더') : '') + '</div>';
+    } else if(u0){
+      h += '<div class="tdk">' + g + '학년 · 지금 배우는 단원</div><h1 class="tdh">' + esc(u0.name) + '</h1>'
+        + '<div class="tds">' + u0.lessons.length + '차시' + (u0.desc ? ' · ' + esc(u0.desc) : '') + '</div><div class="tdf">수업 시간에 선생님이 칠판 화면을 열면 여기에 그날 수업이 떠요.</div><div class="tda">'
+        + (u0.hub ? A(u0.hub, ic('page') + '단원 수업 페이지 <span class="arr">›</span>', 'pri') : '') + (u0.folder ? A(u0.folder, ic('folder') + '학습지') : '') + '</div>';
     }
     if(prof && String(prof.grade) === g){
       const nx = nextSlot(cls);
@@ -3425,78 +3532,84 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
     } else if(!prof){
       h += '<div class="tdhint"><button type="button" data-stu="in">로그인</button>하면 우리 반 수업과 다음 과학 시간이 떠요.</div>';
     }
-    box.innerHTML = h; box.hidden = false;
+    box.innerHTML = h;
   };
 
-  H2.units = function(){
-    const W = ensureWrap(), g = grade, M = model(g), { rows } = rowsFor(g, H2.prof);
-    const done = new Set(rows.map(x => x.hit.L && x.hit.L.path).filter(Boolean));
-    const nowL = rows[0] && rows[0].ymd === today() && rows[0].hit.L;
-    const cur = rows[0] ? rows[0].hit.u : M[M.length - 1];
-    const row = (L) => {
-      const st = nowL === L ? '<span class="now-tag">오늘</span>' : done.has(L.path) ? ic('check', 1) : '';
-      const pg = pageOf(L, !!H2.prof);
-      return '<li class="' + (nowL === L ? 'now' : done.has(L.path) ? 'done' : '') + '"><span class="no">' + L.n + '</span><span class="lt">' + esc(L.t) + '</span>'
-        + '<span class="st">' + st + '</span><span class="acts">'
-        + A(L.url, ic('board', 1) + '<span>칠판</span>')
-        + (L.note ? A(L.note.url, ic('note', 1) + '<span>노트</span>') : '')
-        + (pg ? A(pg, ic('page', 1) + '<span>수업</span>') : '') + '</span></li>';
-    };
-    const ext = u => {
-      const xs = [];
-      if(u.folder) xs.push(A(u.folder, '학습지 폴더'));
-      if(u.act) xs.push(A(u.act.url, esc(clean(u.act.title))));
-      u.extra.forEach(it => xs.push(A(it.url, esc(it.t))));
-      return xs.length ? '<div class="uext">' + xs.join('') + '</div>' : '';
-    };
-    let h = '';
-    if(cur){
-      const n = cur.lessons.filter(L => done.has(L.path)).length, tot = cur.lessons.length;
-      h += '<section class="hsec" aria-label="' + esc(cur.name) + ' 차시"><div class="hsh"><h2>' + (rows.length ? esc(cur.name) : '차시별 자료') + '</h2>'
-        + (n ? '<span class="pn">' + n + ' / ' + tot + '차시</span><span class="prog"><i style="width:' + Math.round(n / tot * 100) + '%"></i></span>' : '<span class="pn">' + tot + '차시</span>')
-        + (cur.hub ? A(cur.hub, '단원 페이지', 'lnk') : '') + '</div><ol class="lsn">' + cur.lessons.map(row).join('') + '</ol>' + ext(cur) + '</section>';
-    }
-    M.filter(u => u !== cur).reverse().forEach(u => {
-      h += '<section class="hsec past" data-open="0"><div class="hsh"><h2>' + esc(u.name) + '</h2><span class="pn">' + u.lessons.length + '차시</span>'
-        + '<button type="button" class="lnk" data-past>펼치기</button></div><ol class="lsn">' + u.lessons.map(row).join('') + '</ol>' + ext(u) + '</section>';
-    });
-    /* 시험 대비 */
-    const td = today(), ex = (typeof EXAM_DAYS !== 'undefined' ? EXAM_DAYS : []).find(e => e.when >= td);
+  /* ── 시험 D-day ── */
+  const nextExam = () => { const td = today(); return (typeof EXAM_DAYS !== 'undefined' ? EXAM_DAYS : []).find(e => e.when >= td) || null; };
+  const ddayOf = ex => Math.round((new Date(ex.when + 'T00:00:00') - new Date(today() + 'T00:00:00')) / 864e5);
+  H2.exam = function(){
+    const box = q('#h2exam'); if(!box) return;
+    const g = grade, ex = nextExam();
     const items = ((typeof EXAM_PACK !== 'undefined' && EXAM_PACK[g]) || []).filter(it => (it.url || '').trim())
-      .map(it => A(it.url, ic('doc') + '<span class="t"><b>' + esc(it.t.replace(/^시험 대비\s*·\s*/, '')) + '</b><small>문제와 핵심 정리 받기</small></span>' + ic('arrow', 1).replace('hic', 'hic go')));
+      .map(it => lbtn(it.url, 'doc', esc(it.t.replace(/^시험 대비\s*·\s*/, '')), '문제와 핵심 정리 받기'));
     const rc = q('#roomRecall');
-    if(g === '2' && rc) items.push(A(rc.href, ic('pen') + '<span class="t"><b>단권화 빈칸 복습</b><small>전기와 자기 손글씨 노트로 모르는 개념 체크</small></span>' + ic('arrow', 1).replace('hic', 'hic go')));
-    if(items.length){
-      const dd = ex ? Math.round((new Date(ex.when + 'T00:00:00') - new Date(td + 'T00:00:00')) / 864e5) : null;
-      h += '<section class="hsec"><div class="hsh"><h2>' + esc(ex ? ex.t + ' 대비' : '시험 대비') + '</h2>'
-        + (ex ? '<span class="dday">' + (dd === 0 ? 'D-DAY' : 'D-' + dd) + '</span><span class="pn">' + esc(ex.d) + '</span>' : '') + '</div><div class="hrows">' + items.join('') + '</div></section>';
-    }
-    h += '<section class="hsec" id="h2mine"></section>';
-    W.innerHTML = h;
-    H2.mine();
+    if(g === '2' && rc) items.push(lbtn(rc.href, 'pen', '단권화 빈칸 복습', '전기와 자기 손글씨 노트'));
+    let h = '';
+    if(ex){ const dd = ddayOf(ex); h += '<div class="exk">' + esc(ex.t) + '까지</div><div class="exd">' + (dd === 0 ? 'D-DAY' : 'D-' + dd) + '</div><div class="exdate">' + esc(ex.d) + '</div>'; }
+    else h += '<div class="exk">시험 대비</div><div class="exdate">다음 시험 일정은 아직 없어요</div>';
+    h += items.length ? items.join('') : '<button type="button" class="lbtn" data-h2go="eval">' + ic('cal') + '<span class="t"><b>평가 계획과 일정</b><small>시험 범위 · 수행평가 · 준비물</small></span>' + GO + '</button>';
+    box.innerHTML = h;
+    const t = q('#tdd'); if(t) t.textContent = ex ? ex.t.replace('고사', '') + ' D-' + ddayOf(ex) : '';
   };
 
+  /* ── 나의 공간 ── */
   H2.mine = function(){
     const box = q('#h2mine'); if(!box) return;
     const hrefOf = s => { const a = q('#v-home .room.' + s); return a ? a.getAttribute('href') : ''; };
     const badge = q('#mineBadge'), unseen = badge && !badge.hidden ? +badge.textContent || 0 : 0;
-    const card = (href, k, b, s) => A(href, ic(k) + '<b>' + b + '</b><small>' + s + '</small>');
-    let h = '<div class="hsh"><h2>나의 공간</h2></div><div class="hmine">'
-      + card(hrefOf('r-tree'), 'leaf', '질문나무', '궁금한 것을 질문으로 키우기')
-      + card(hrefOf('r-stamp'), 'stamp', '칭찬 도장판', '내 도장 · 교환소');
+    let h = '<div class="ph"><h2>나의 공간</h2></div>'
+      + lbtn(hrefOf('r-tree'), 'leaf', '질문나무', '궁금한 것을 질문으로')
+      + lbtn(hrefOf('r-stamp'), 'stamp', '칭찬 도장판', '내 도장 · 교환소');
     h += H2.prof
-      ? '<button type="button" data-h2go="mine">' + ic('mail') + '<b>피드백 우편함</b><small>' + (unseen ? '안 읽은 피드백 ' + unseen + '개' : '피드백 · 내 제출물') + '</small></button>'
-      : '<button type="button" data-stu="in">' + ic('mail') + '<b>피드백 우편함</b><small>로그인하면 열려요</small></button>';
-    if(grade === '1') h += card(hrefOf('r-sgh'), 'code', 'Studentgithub', '만든 시뮬레이터 올리기 · 친구 것 평가');
-    box.innerHTML = h + '</div>';
+      ? '<button type="button" class="lbtn" data-h2go="mine">' + ic('mail') + '<span class="t"><b>피드백 우편함' + (unseen ? '<span class="nb">' + unseen + '</span>' : '') + '</b><small>피드백 · 내 제출물</small></span>' + GO + '</button>'
+      : '<button type="button" class="lbtn" data-stu="in">' + ic('mail') + '<span class="t"><b>피드백 우편함</b><small>로그인하면 열려요</small></span>' + GO + '</button>';
+    if(grade === '1') h += lbtn(hrefOf('r-sgh'), 'code', 'Studentgithub', '만든 시뮬레이터 올리기');
+    box.innerHTML = h;
   };
 
-  H2.render = function(){ ensureWrap(); H2.today(); H2.units(); };
+  /* ── 단원 탭 + 차시 카드 ── */
+  H2.units = function(){
+    const box = q('#h2unit'); if(!box) return;
+    const g = grade, M = model(g), { rows } = rowsFor(g, H2.prof);
+    if(!M.length){ box.innerHTML = ''; return; }
+    const done = new Set(rows.map(x => x.hit.L && x.hit.L.path).filter(Boolean));
+    const nowL = rows[0] && rows[0].ymd === today() && rows[0].hit.L;
+    const cur = curUnit(g, rows), sel = M.find(u => u.key === SEL[g]) || cur || M[M.length - 1], C = ucOf(sel);
+    const tabs = '<div class="utabs' + (M.length < 2 ? ' one' : '') + '" role="tablist">' + (M.length < 2 ? '' : M.map(u => '<button type="button" class="utab" role="tab" data-unit="' + esc(u.key) + '" aria-selected="' + (u === sel) + '" style="--u:' + ucOf(u).c + '">'
+      + esc(u.name) + '<small>' + u.lessons.length + '차시</small></button>').join('')) + '</div>';
+    const n = sel.lessons.filter(L => done.has(L.path)).length, tot = sel.lessons.length;
+    const card = L => {
+      const isNow = nowL === L, isDone = done.has(L.path), pg = pageOf(L, !!H2.prof);
+      return '<article class="lcard' + (isNow ? ' now' : isDone ? ' done' : '') + '"><div class="lc-top"><span class="lno">' + L.n + '</span>'
+        + (isNow ? '<span class="lst now">오늘</span>' : isDone ? '<span class="lst">' + ic('check', 1) + '수업함</span>' : '') + '</div>'
+        + '<h3>' + esc(L.t) + '</h3><div class="lacts">'
+        + A(L.url, ic('board', 1) + '칠판', 'sbtn pri')
+        + (L.note ? A(L.note.url, ic('note', 1) + '노트', 'sbtn') : '')
+        + (pg ? A(pg, ic('page', 1) + '수업', 'sbtn') : '') + '</div></article>';
+    };
+    const ub = [];
+    if(sel.hub) ub.push(A(sel.hub, ic('page', 1) + '단원 페이지 <span class="arr">›</span>', 'obtn'));
+    if(sel.folder) ub.push(A(sel.folder, ic('folder', 1) + '학습지 폴더 <span class="arr">›</span>', 'obtn'));
+    const ext = [];
+    if(sel.act) ext.push(A(sel.act.url, esc(clean(sel.act.title)) + ' <span class="arr">›</span>', 'obtn'));
+    sel.extra.forEach(it => ext.push(A(it.url, esc(it.t) + ' <span class="arr">›</span>', 'obtn')));
+    box.innerHTML = tabs + '<div class="upanel" role="tabpanel" style="--u:' + C.c + ';--ul:' + C.lo + '"><div class="uhead"><h2>' + esc(sel.name) + '</h2>'
+      + (n ? '<span class="pn">' + n + ' / ' + tot + '차시 수업함</span><span class="prog"><i style="width:' + Math.round(n / tot * 100) + '%"></i></span>' : '<span class="pn">' + tot + '차시</span>')
+      + '<div class="ubtns">' + ub.join('') + '</div></div><div class="lgrid">' + sel.lessons.map(card).join('') + '</div>'
+      + (ext.length ? '<div class="uext"><span class="lab">함께 보기</span>' + ext.join('') + '</div>' : '') + '</div>';
+  };
+
+  H2.render = function(){
+    build();
+    const g = grade, { rows } = rowsFor(g, H2.prof), C = ucOf(curUnit(g, rows));
+    document.documentElement.style.setProperty('--gc', C.c);
+    H2.today(); H2.exam(); H2.mine(); H2.units();
+  };
   H2.reload = () => loadLogs().then(() => H2.render());
 
   home.addEventListener('click', e => {
-    const b = e.target.closest('[data-past]');
-    if(b){ const s = b.closest('.past'), o = s.dataset.open === '1'; s.dataset.open = o ? '0' : '1'; b.textContent = o ? '펼치기' : '접기'; return; }
+    const t = e.target.closest('[data-unit]'); if(t){ SEL[grade] = t.dataset.unit; H2.units(); return; }
     const m = e.target.closest('[data-h2go]'); if(m && typeof show === 'function') show(m.dataset.h2go);
   });
   const mo = new MutationObserver(() => H2.mine());
@@ -3509,10 +3622,13 @@ body:not(.teacher) #v-home #roomProgress,body:not(.teacher) #v-home #roomTools,b
   const tb = document.createElement('div'); tb.className = 'topbar';
   tb.innerHTML = '<div class="topin"><a class="brand" href="./"><span class="mk" aria-hidden="true"></span><b>해누리 과학 시간</b></a></div>';
   document.body.insertBefore(tb, document.body.firstChild);
-  const tin = tb.firstChild; ['#grade', '#stubar'].forEach(s => { const el = q(s); if(el) tin.appendChild(el); });
+  const tin = tb.firstChild;
+  const gr = q('#grade'); if(gr) tin.appendChild(gr);
+  tin.insertAdjacentHTML('beforeend', '<span class="tsp"></span><span class="tdd" id="tdd"></span>');
+  const sb = q('#stubar'); if(sb) tin.appendChild(sb);
   tb.querySelector('.brand').addEventListener('click', e => { if(typeof show === 'function'){ e.preventDefault(); show('home'); } });
 
-  /* 다른 방 머리 제목의 그림 글자 빼기 */
+  /* 다른 방 머리 제목·설치 안내의 그림 글자 빼기 */
   document.querySelectorAll('.vhead h2, #install h3').forEach(h => { h.textContent = h.textContent.replace(/^[^A-Za-z0-9가-힣]+/, ''); });
 
   /* ── 숲 — 누를 때만 ── */
