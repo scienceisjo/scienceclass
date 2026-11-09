@@ -725,7 +725,7 @@ body:not(:has(#v-home.on)) .fz-hero{display:none}
       <span class="tx"><span class="tt">칠판 다시보기</span><span class="dd">수업 때 띄운 설명을 한 장씩 넘기며 복습</span></span>
       <span class="arw" aria-hidden="true"></span>
     </button>
-    <a class="room r-tree ext" href="https://scienceisjo.github.io/questionuri/" target="_blank" rel="noopener">
+    <a class="room r-tree ext" href="https://scienceisjo.github.io/questionuri/v2/" target="_blank" rel="noopener">
       <span class="ic">🌳</span>
       <span class="tx"><span class="tt">질문나무</span><span class="dd">궁금한 것을 질문으로 키우기</span></span>
       <span class="arw" aria-hidden="true"></span>
@@ -1270,6 +1270,9 @@ const TOOLS = [
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let grade = localStorage.getItem('sc_grade') || '2';
+/* 질문과수원 — 2학년은 질문과수원 2(2026-11 전환), 1학년은 그대로 질문과수원 1 */
+const QURI1 = 'https://scienceisjo.github.io/questionuri/', QURI2 = 'https://scienceisjo.github.io/questionuri/v2/';
+function quriFor(g){ return String(g) === '2' ? QURI2 : QURI1; }
 
 function drawUnits(){
   const list = UNITS[grade] || [];
@@ -1490,6 +1493,7 @@ function drawExam(){
     $('#' + ids[2]).textContent = u ? '기말고사 대비 문제와 핵심 정리본을 받아 가세요' : '곧 열려요 — 선생님이 올리면 여기서 받을 수 있어요';
   });
   const rc = $('#roomRecall'); if(rc) rc.hidden = grade !== '2';      // 전기와 자기 단권화 빈칸 복습 — 2학년 홈에만
+  document.querySelectorAll('#v-home .room.r-tree').forEach(a => { a.href = quriFor(grade); });   // 질문과수원: 2학년 → 2, 1학년 → 1
 }
 function drawFeature(){
   const box = $('#featBox'); if(!box) return;
@@ -3134,7 +3138,7 @@ if(document.querySelector('#pCal .pcal-h')) drawCal();   /* 이 스크립트보�
 /* 🌳 첫 화면 숲 — 학생이 쓰는 방 여섯 그루 (자세한 연결은 forest.html) */
 (function(){
   if(!window.Forest || !document.getElementById('fzHero')) return;
-  const EXT = { tree:'https://scienceisjo.github.io/questionuri/', stamp:'https://scienceisjo.github.io/class-tools/stamp-board/', map:'https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/' };
+  const EXT = { get tree(){ return quriFor(localStorage.getItem('sc_grade') || '2'); }, stamp:'https://scienceisjo.github.io/class-tools/stamp-board/', map:'https://scienceisjo.github.io/teacher-toolkit/science-curriculum-map/' };
   Forest({ box:document.getElementById('fzHero'), canvas:document.getElementById('fzCv'), lays:document.getElementById('fzLays'), mode:'hero',
     trees:[
       { id:'sheet',  f:.09, s:1.04, name:'학습지',      sub:'차시별 학습지',     go:'sheet', hue:[160,34] },
@@ -3854,7 +3858,7 @@ function paintMineBadge(){
   const unseen=MINE.fb.filter(f=>!f.seen_at).length+MINE.qs.filter(q=>q.fb_unread).length;
   b.hidden=!unseen; b.textContent=unseen;
 }
-const QURI='https://scienceisjo.github.io/questionuri/';
+const QURI = QURI2;   // 아래 링크는 quriFor(grade) 로 학년에 맞춤
 const STAMP_MSG={observe:{e:'👀',s:'본 것을 정확히 적었어요'},testable:{e:'🎯',s:'이건 확인해볼 수 있는 질문이에요'},unknown:{e:'🤔',s:'선생님도 몰라요. 같이 찾아봐요'},connect:{e:'🔗',s:'지난 시간이랑 이어졌어요'},onemore:{e:'🌱',s:'한 걸음만 더 가볼까요?'},pick:{e:'⭐',s:'수업에서 다룰게요'}};
 function paintMineQ(){
   const box=$('#mineQList'), n=$('#mineQN'); if(!box)return;
@@ -3867,7 +3871,7 @@ function paintMineQ(){
     const st=hasTxt(q.teacher_stamp)?STAMP_MSG[q.teacher_stamp.trim()]:null;
     const refined=hasTxt(q.refined_text)&&q.refined_text.trim()!==String(q.text||'').trim();
     const ans=q.solve&&hasTxt(q.solve.answer)?q.solve.answer.trim():'';
-    const link=QURI+'?q='+q.id, nb=q.fb_unread?NEW:'';
+    const link=quriFor(grade)+'?q='+q.id, nb=q.fb_unread?NEW:'';
     let h='<div class="mine-q'+(q.fb_unread?' new':'')+'" data-qid="'+q.id+'"><div class="qh"><span>📅 '+esc(q.question_date||'')+'</span>'+(q.unit?'<span class="unit">📑 '+esc(q.unit)+'</span>':'')+(q.fb_unread?'<span style="color:#d8432f;font-weight:800">새 피드백</span>':'')+'</div>';
     h+='<div class="qt">❓ '+esc(refined?q.refined_text.trim():(q.text||''))+(refined?'<span class="was">✨ 다듬기 전 — '+esc(q.text||'')+'</span>':'')+'</div>';
     if(ans&&hasTxt(q.teacher_solve_note)) h+='<div class="qsol"><b>🔬 내가 쓴 해결 답변</b> — '+esc(ans.length>160?ans.slice(0,160)+'…':ans)+'</div>';
