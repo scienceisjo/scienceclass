@@ -1545,18 +1545,32 @@ if(standalone){
 }
 let deferred = null;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferred = e; $('#installBtn').classList.add('show');
+  e.preventDefault(); deferred = e; const ib = $('#installBtn'); if(ib) ib.classList.add('show');
 });
-$('#installBtn').addEventListener('click', async () => {
+/* 홈 화면 앱(standalone)에선 위에서 #install 칸을 갈아 끼워 버튼이 없다 — 없으면 건너뛴다.
+   (2026-11-10: 여기서 멈추면 아래 SB 정의까지 못 가서 로그인이 「SB is not defined」로 막혔다) */
+$('#installBtn')?.addEventListener('click', async () => {
   if(!deferred) return;
   deferred.prompt();
   await deferred.userChoice;
-  deferred = null; $('#installBtn').classList.remove('show');
+  deferred = null; $('#installBtn')?.classList.remove('show');
 });
 
 /* ══════════════ 오프라인 대비 ══════════════ */
 if('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(reg => {
+    /* 홈 화면 앱은 잘 안 닫혀서 새 버전 확인이 늦다 — 다시 화면에 올 때마다 확인 */
+    document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') reg.update().catch(() => {}); });
+  }).catch(() => {}));
+  /* 새 버전이 자리 잡으면 새로 고침. 열자마자면 바로, 쓰는 중이면 다음에 화면에 돌아올 때(입력하던 글 보호) */
+  const hadSW = !!navigator.serviceWorker.controller, openedAt = Date.now();
+  let swReloaded = false;
+  const swReload = () => { if(swReloaded) return; swReloaded = true; location.reload(); };
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(!hadSW) return;                                   // 첫 설치는 새로 고칠 필요 없음
+    if(Date.now() - openedAt < 8000) swReload();
+    else document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') swReload(); });
+  });
 }
 
 
